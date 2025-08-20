@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Social Studio | Digital Marketing & Development Agency</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -19,6 +18,73 @@
             dark: "#1e293b",
             light: "#f8fafc",
           },
+          animation: {
+            'fade-in-up': 'fadeInUp 0.6s ease-out',
+            'fade-in-down': 'fadeInDown 0.6s ease-out',
+            'fade-in-left': 'fadeInLeft 0.6s ease-out',
+            'fade-in-right': 'fadeInRight 0.6s ease-out',
+            'scale-in': 'scaleIn 0.6s ease-out',
+            'float': 'float 3s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s ease-in-out infinite',
+            'wiggle': 'wiggle 1s ease-in-out infinite',
+            'gradient-x': 'gradient-x 3s ease infinite',
+            'gradient-xy': 'gradient-xy 3s ease infinite',
+            'bounce-in': 'bounceIn 0.8s ease-out',
+            'slide-up': 'slideUp 0.8s ease-out',
+            'rotate-in': 'rotateIn 0.8s ease-out',
+          },
+          keyframes: {
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            fadeInDown: {
+              '0%': { opacity: '0', transform: 'translateY(-30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            fadeInLeft: {
+              '0%': { opacity: '0', transform: 'translateX(-30px)' },
+              '100%': { opacity: '1', transform: 'translateX(0)' }
+            },
+            fadeInRight: {
+              '0%': { opacity: '0', transform: 'translateX(30px)' },
+              '100%': { opacity: '1', transform: 'translateX(0)' }
+            },
+            scaleIn: {
+              '0%': { opacity: '0', transform: 'scale(0.8)' },
+              '100%': { opacity: '1', transform: 'scale(1)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            },
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-3deg)' },
+              '50%': { transform: 'rotate(3deg)' }
+            },
+            'gradient-x': {
+              '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+              '50%': { 'background-size': '200% 200%', 'background-position': 'right center' }
+            },
+            'gradient-xy': {
+              '0%, 100%': { 'background-size': '400% 400%', 'background-position': 'left center' },
+              '50%': { 'background-size': '200% 200%', 'background-position': 'right center' }
+            },
+            bounceIn: {
+              '0%': { opacity: '0', transform: 'scale(0.3)' },
+              '50%': { opacity: '1', transform: 'scale(1.05)' },
+              '70%': { transform: 'scale(0.9)' },
+              '100%': { opacity: '1', transform: 'scale(1)' }
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(50px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            rotateIn: {
+              '0%': { opacity: '0', transform: 'rotate(-200deg)' },
+              '100%': { opacity: '1', transform: 'rotate(0deg)' }
+            }
+          }
         },
       },
     };
@@ -40,6 +106,7 @@
       bottom: 0;
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
       opacity: 0.3;
+      animation: gradient-xy 8s ease infinite;
     }
     
     .hero-content {
@@ -50,9 +117,10 @@
     .service-card {
       background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
       border: 1px solid rgba(37, 99, 235, 0.1);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
     
     .service-card::before {
@@ -63,13 +131,13 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
-      transition: left 0.5s;
+      transition: left 0.6s;
     }
     
     .service-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
-      border-color: rgba(37, 99, 235, 0.3);
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
+      border-color: rgba(37, 99, 235, 0.4);
     }
     
     .service-card:hover::before {
@@ -80,30 +148,30 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border-radius: 16px;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
     }
     
     .service-card:hover .service-icon {
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+      transform: scale(1.15) rotate(8deg);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
     }
     
     .testimonial-card {
       background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       border: 1px solid rgba(37, 99, 235, 0.1);
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
     }
     
     .testimonial-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(37, 99, 235, 0.2);
     }
     
     .cta-button {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border: none;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
     }
@@ -115,8 +183,8 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s;
     }
     
     .cta-button:hover::before {
@@ -124,8 +192,8 @@
     }
     
     .cta-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
     }
     
     .nav-link {
@@ -154,12 +222,19 @@
       outline: none;
       border-color: #667eea;
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
     }
     
     .form-container {
       background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
       border: 1px solid rgba(37, 99, 235, 0.1);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .form-container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
     }
     
     /* Typing animation styles */
@@ -171,68 +246,293 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: gradient-x 3s ease infinite;
     }
     
     /* Floating animation for elements */
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    
     .float-animation {
       animation: float 3s ease-in-out infinite;
     }
     
     /* Pulse animation for CTA */
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    .pulse-animation {
+      animation: pulse-slow 2s ease-in-out infinite;
     }
     
-    .pulse-animation {
-      animation: pulse 2s ease-in-out infinite;
+    /* Interactive cursor effects */
+    .cursor-glow {
+      position: relative;
+    }
+    
+    .cursor-glow::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .cursor-glow:hover::before {
+      width: 200px;
+      height: 200px;
+    }
+    
+    /* Scroll progress indicator */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      z-index: 9999;
+      transition: width 0.1s ease;
+    }
+    
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .back-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+    }
+    
+    /* Enhanced industry cards */
+    .industry-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .industry-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    .industry-card:hover::before {
+      opacity: 1;
+    }
+    
+    .industry-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Animated background particles */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(37, 99, 235, 0.3);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+    .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+    .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+    .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+    .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+    .particle:nth-child(7) { left: 70%; animation-delay: 6s; }
+    .particle:nth-child(8) { left: 80%; animation-delay: 7s; }
+    .particle:nth-child(9) { left: 90%; animation-delay: 8s; }
+    
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    }
+    
+    /* Loading animation */
+    .loading-dots {
+      display: inline-block;
+    }
+    
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+    
+    @keyframes dots {
+      0%, 20% { content: ''; }
+      40% { content: '.'; }
+      60% { content: '..'; }
+      80%, 100% { content: '...'; }
+    }
+    
+    /* Parallax scrolling effect */
+    .parallax {
+      transform: translateZ(0);
+      will-change: transform;
+    }
+    
+    /* Enhanced navbar */
+    .navbar-scrolled {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Interactive form elements */
+    .form-input {
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+    }
+    
+    /* Animated counters */
+    .counter {
+      transition: all 0.3s ease;
+    }
+    
+    .counter.animate {
+      animation: bounceIn 0.8s ease-out;
+    }
+    
+    /* Enhanced buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
     }
   </style>
 </head>
 <body class="font-sans antialiased text-dark bg-light">
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+  
+  <!-- Back to Top Button -->
+  <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
   <!-- Navigation -->
-      <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between items-center py-2">
-            <div class="flex items-center">
-              <div class="flex-shrink-0 flex items-center">
-                <img
-                  src="C.jpeg"
-                  alt="Social Studio Logo"
-                  class="h-[40px] max-h-[40px] w-auto object-contain mr-4"
-                />
-              </div>
-            </div>
-            <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+  <nav class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-2">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <img
+              src="C.jpeg"
+              alt="Social Studio Logo"
+              class="h-[40px] max-h-[40px] w-auto object-contain mr-4 transition-transform duration-300 hover:scale-110"
+            />
+          </div>
+        </div>
+        <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
           <a
             href="#services"
-            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link"
+            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow"
             >Services</a
           >
           <a
             href="#industries"
-            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link"
+            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow"
             >Industries</a
           >
           <a
             href="#why-us"
-            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link"
+            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow"
             >Why Us</a
           >
           <a
             href="#prototype"
-            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link"
+            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow"
             >Free Prototype</a
           >
-          <a href="interns.html" class="text-dark hover:text-primary px-3 py-2 font-medium nav-link">Internships</a>
+          <a href="interns.html" class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow">Internships</a>
           <a
             href="#contact"
-            class="bg-primary text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition"
+            class="bg-primary text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-all duration-300 transform hover:scale-105"
             >Contact</a
           >
         </div>
@@ -240,7 +540,7 @@
           <button
             type="button"
             id="mobile-menu-button"
-            class="inline-flex items-center justify-center p-2 rounded-md text-dark hover:text-primary focus:outline-none"
+            class="inline-flex items-center justify-center p-2 rounded-md text-dark hover:text-primary focus:outline-none transition-all duration-300"
           >
             <i class="fas fa-bars text-xl"></i>
           </button>
@@ -252,32 +552,32 @@
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <a
           href="#services"
-          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50"
+          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
           >Services</a
         >
         <a
           href="#industries"
-          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50"
+          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
           >Industries</a
         >
         <a
           href="#why-us"
-          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50"
+          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
           >Why Us</a
         >
         <a
           href="#prototype"
-          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50"
+          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
           >Free Prototype</a
         >
         <a
           href="interns.html"
-          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50"
+          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
           >Internships</a
         >
         <a
           href="#contact"
-          class="block px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-blue-700"
+          class="block px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-blue-700 transition-all duration-300"
           >Contact</a
         >
       </div>
@@ -285,32 +585,51 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero-gradient">
+  <section class="hero-gradient relative">
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
       <div class="text-center hero-content">
         <h1
           class="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6"
+          data-aos="fade-in-down"
+          data-aos-duration="800"
         >
           Design. Develop.
           <span id="dominate-typing"></span>
         </h1>
         <p
           class="text-xl md:text-2xl text-black opacity-90 mb-10 max-w-3xl mx-auto"
+          data-aos="fade-in-up"
+          data-aos-duration="800"
+          data-aos-delay="200"
         >
           From digital campaigns to powerful websites and apps — we help
           businesses scale online affordably.
         </p>
         <div
           class="flex flex-col sm:flex-row justify-center gap-4"
+          data-aos="fade-in-up"
+          data-aos-duration="800"
+          data-aos-delay="400"
         >
           <a
             href="#prototype"
-            class="cta-button text-white font-bold py-3 px-8 rounded-lg text-lg pulse-animation"
+            class="cta-button text-white font-bold py-3 px-8 rounded-lg text-lg pulse-animation cursor-glow"
             >Get a Free Prototype</a
           >
           <a
             href="#services"
-            class="bg-white hover:bg-gray-100 text-dark font-bold py-3 px-8 rounded-lg text-lg border border-gray-200 transition duration-300 transform hover:scale-105 float-animation"
+            class="bg-white hover:bg-gray-100 text-dark font-bold py-3 px-8 rounded-lg text-lg border border-gray-200 transition duration-300 transform hover:scale-105 float-animation cursor-glow"
             >Our Services</a
           >
         </div>
@@ -321,7 +640,7 @@
   <!-- Services Section -->
   <section id="services" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
+      <div class="text-center mb-16" data-aos="fade-in-up">
         <h2 class="text-3xl font-bold text-dark mb-4">What We Offer</h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
           Comprehensive digital solutions tailored to grow your business
@@ -333,6 +652,8 @@
         <!-- Service 1 -->
         <div
           class="service-card p-8 rounded-xl"
+          data-aos="fade-in-up"
+          data-aos-delay="100"
         >
           <div
             class="w-14 h-14 service-icon flex items-center justify-center mb-6"
@@ -343,18 +664,20 @@
             Social Media Marketing
           </h3>
             <p class="text-gray-600 mb-4">
-              Data-backed social media campaigns designed to grow your brand’s visibility, drive engagement, and convert followers into loyal customers.
+              Data-backed social media campaigns designed to grow your brand's visibility, drive engagement, and convert followers into loyal customers.
             </p>
           <a
             href="#"
-            class="text-primary font-medium inline-flex items-center"
-            >Learn more <i class="fas fa-arrow-right ml-2"></i
+            class="text-primary font-medium inline-flex items-center group"
+            >Learn more <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i
           ></a>
         </div>
 
         <!-- Service 2 -->
         <div
           class="service-card p-8 rounded-xl"
+          data-aos="fade-in-up"
+          data-aos-delay="200"
         >
           <div
             class="w-14 h-14 service-icon flex items-center justify-center mb-6"
@@ -367,14 +690,16 @@
             </p>
           <a
             href="#"
-            class="text-primary font-medium inline-flex items-center"
-            >Learn more <i class="fas fa-arrow-right ml-2"></i
+            class="text-primary font-medium inline-flex items-center group"
+            >Learn more <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i
           ></a>
         </div>
 
         <!-- Service 3 -->
         <div
           class="service-card p-8 rounded-xl"
+          data-aos="fade-in-up"
+          data-aos-delay="300"
         >
           <div
             class="w-14 h-14 service-icon flex items-center justify-center mb-6"
@@ -387,14 +712,16 @@
             </p>
           <a
             href="#"
-            class="text-primary font-medium inline-flex items-center"
-            >Learn more <i class="fas fa-arrow-right ml-2"></i
+            class="text-primary font-medium inline-flex items-center group"
+            >Learn more <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i
           ></a>
         </div>
 
         <!-- Service 4 -->
         <div
           class="service-card p-8 rounded-xl"
+          data-aos="fade-in-up"
+          data-aos-delay="400"
         >
           <div
             class="w-14 h-14 service-icon flex items-center justify-center mb-6"
@@ -407,14 +734,16 @@
             </p>
           <a
             href="#"
-            class="text-primary font-medium inline-flex items-center"
-            >Learn more <i class="fas fa-arrow-right ml-2"></i
+            class="text-primary font-medium inline-flex items-center group"
+            >Learn more <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i
           ></a>
         </div>
 
         <!-- Service 5 -->
         <div
           class="service-card p-8 rounded-xl"
+          data-aos="fade-in-up"
+          data-aos-delay="500"
         >
           <div
             class="w-14 h-14 service-icon flex items-center justify-center mb-6"
@@ -427,14 +756,16 @@
             </p>
           <a
             href="#"
-            class="text-primary font-medium inline-flex items-center"
-            >Learn more <i class="fas fa-arrow-right ml-2"></i
+            class="text-primary font-medium inline-flex items-center group"
+            >Learn more <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i
           ></a>
         </div>
 
         <!-- Service 6 -->
         <div
           class="service-card p-8 rounded-xl"
+          data-aos="fade-in-up"
+          data-aos-delay="600"
         >
           <div
             class="w-14 h-14 service-icon flex items-center justify-center mb-6"
@@ -447,8 +778,8 @@
             </p>
           <a
             href="#"
-            class="text-primary font-medium inline-flex items-center"
-            >Learn more <i class="fas fa-arrow-right ml-2"></i
+            class="text-primary font-medium inline-flex items-center group"
+            >Learn more <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i
           ></a>
         </div>
       </div>
@@ -456,79 +787,225 @@
   </section>
 
   <!-- Industries Section -->
-  <section id="industries" class="py-16 bg-gray-50">
+  <section id="industries" class="py-20 bg-gradient-to-br from-gray-50 via-white to-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl font-bold text-dark mb-4">Industries We Serve</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          We have ready-to-go solutions tailored for these industries
+      <div class="text-center mb-16" data-aos="fade-in-up">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Industries We Serve</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Transforming businesses across diverse sectors with cutting-edge digital solutions tailored to your industry's unique needs
         </p>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        <!-- Industry 1 -->
-        <div
-          class="bg-white p-6 rounded-lg shadow-sm text-center hover:shadow-md transition"
-        >
-          <div
-            class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4"
-          >
-            <i class="fas fa-user-tie text-primary text-2xl"></i>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Personal Portfolios -->
+        <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden industry-card" data-aos="fade-in-up" data-aos-delay="100">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative p-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-user-tie text-blue-600 text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-white transition-colors duration-300">Personal Portfolios</h3>
+            <p class="text-gray-600 group-hover:text-blue-100 transition-colors duration-300 mb-4">
+              Showcase your talent with stunning, interactive portfolio websites that captivate potential clients and employers.
+            </p>
+            <div class="space-y-2 mb-6">
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-blue-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Responsive design</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-blue-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Portfolio galleries</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-blue-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Contact integration</span>
+              </div>
+            </div>
+            <div class="flex items-center text-blue-600 group-hover:text-white transition-colors duration-300">
+              <span class="text-sm font-semibold">Explore Solutions</span>
+              <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+            </div>
           </div>
-          <h3 class="font-bold text-dark mb-2">Personal Portfolios</h3>
-          <p class="text-sm text-gray-600">Showcase your talent with elegance.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
         </div>
 
-        <!-- Industry 2 -->
-        <div
-          class="bg-white p-6 rounded-lg shadow-sm text-center hover:shadow-md transition"
-        >
-          <div
-            class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4"
-          >
-            <i class="fas fa-home text-secondary text-2xl"></i>
+        <!-- Realtors -->
+        <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden industry-card" data-aos="fade-in-up" data-aos-delay="200">
+          <div class="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative p-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-home text-orange-600 text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-white transition-colors duration-300">Realtors</h3>
+            <p class="text-gray-600 group-hover:text-orange-100 transition-colors duration-300 mb-4">
+              List properties that attract and convert with powerful real estate websites featuring virtual tours and lead capture systems.
+            </p>
+            <div class="space-y-2 mb-6">
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-orange-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Property listings</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-orange-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Virtual tours</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-orange-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Lead generation</span>
+              </div>
+            </div>
+            <div class="flex items-center text-orange-600 group-hover:text-white transition-colors duration-300">
+              <span class="text-sm font-semibold">Explore Solutions</span>
+              <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+            </div>
           </div>
-          <h3 class="font-bold text-dark mb-2">Realtors</h3>
-          <p class="text-sm text-gray-600">List properties that attract and convert.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 to-red-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
         </div>
 
-        <!-- Industry 3 -->
-        <div
-          class="bg-white p-6 rounded-lg shadow-sm text-center hover:shadow-md transition"
-        >
-          <div
-            class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4"
-          >
-            <i class="fas fa-dumbbell text-primary text-2xl"></i>
+        <!-- Gyms & Fitness -->
+        <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden industry-card" data-aos="fade-in-up" data-aos-delay="300">
+          <div class="absolute inset-0 bg-gradient-to-br from-green-500 via-green-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative p-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-dumbbell text-green-600 text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-white transition-colors duration-300">Gyms & Fitness</h3>
+            <p class="text-gray-600 group-hover:text-green-100 transition-colors duration-300 mb-4">
+              Grow memberships and manage your fitness business easily with integrated booking systems and member management tools.
+            </p>
+            <div class="space-y-2 mb-6">
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-green-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Class scheduling</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-green-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Membership management</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-green-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Payment processing</span>
+              </div>
+            </div>
+            <div class="flex items-center text-green-600 group-hover:text-white transition-colors duration-300">
+              <span class="text-sm font-semibold">Explore Solutions</span>
+              <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+            </div>
           </div>
-          <h3 class="font-bold text-dark mb-2">Gyms & Fitness</h3>
-          <p class="text-sm text-gray-600">Grow memberships and manage easily.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-teal-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
         </div>
 
-        <!-- Industry 4 -->
-        <div
-          class="bg-white p-6 rounded-lg shadow-sm text-center hover:shadow-md transition"
-        >
-          <div
-            class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4"
-          >
-            <i class="fas fa-clinic-medical text-secondary text-2xl"></i>
+        <!-- Clinics -->
+        <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden industry-card" data-aos="fade-in-up" data-aos-delay="400">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative p-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-clinic-medical text-purple-600 text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-white transition-colors duration-300">Clinics</h3>
+            <p class="text-gray-600 group-hover:text-purple-100 transition-colors duration-300 mb-4">
+              Streamline bookings and care tools with HIPAA-compliant healthcare websites featuring appointment scheduling and telemedicine capabilities.
+            </p>
+            <div class="space-y-2 mb-6">
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-purple-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Appointment booking</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-purple-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Patient portals</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-purple-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>HIPAA compliance</span>
+              </div>
+            </div>
+            <div class="flex items-center text-purple-600 group-hover:text-white transition-colors duration-300">
+              <span class="text-sm font-semibold">Explore Solutions</span>
+              <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+            </div>
           </div>
-          <h3 class="font-bold text-dark mb-2">Clinics</h3>
-          <p class="text-sm text-gray-600">Streamline bookings and care tools.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-400 to-pink-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
         </div>
 
-        <!-- Industry 5 -->
-        <div
-          class="bg-white p-6 rounded-lg shadow-sm text-center hover:shadow-md transition"
-        >
-          <div
-            class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4"
-          >
-            <i class="fas fa-cut text-primary text-2xl"></i>
+        <!-- Salons & Spas -->
+        <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden industry-card" data-aos="fade-in-up" data-aos-delay="500">
+          <div class="absolute inset-0 bg-gradient-to-br from-pink-500 via-pink-600 to-rose-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative p-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-pink-100 to-pink-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-cut text-pink-600 text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-white transition-colors duration-300">Salons & Spas</h3>
+            <p class="text-gray-600 group-hover:text-pink-100 transition-colors duration-300 mb-4">
+              Boost appointments and build customer loyalty with beautiful salon websites featuring online booking and service menus.
+            </p>
+            <div class="space-y-2 mb-6">
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-pink-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Online booking</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-pink-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Service menus</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-pink-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Review integration</span>
+              </div>
+            </div>
+            <div class="flex items-center text-pink-600 group-hover:text-white transition-colors duration-300">
+              <span class="text-sm font-semibold">Explore Solutions</span>
+              <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+            </div>
           </div>
-          <h3 class="font-bold text-dark mb-2">Salons & Spas</h3>
-          <p class="text-sm text-gray-600">Boost appointments and loyalty.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-400 to-rose-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+        </div>
+
+        <!-- Restaurants -->
+        <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden industry-card" data-aos="fade-in-up" data-aos-delay="600">
+          <div class="absolute inset-0 bg-gradient-to-br from-red-500 via-red-600 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative p-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-utensils text-red-600 text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-white transition-colors duration-300">Restaurants</h3>
+            <p class="text-gray-600 group-hover:text-red-100 transition-colors duration-300 mb-4">
+              Drive more diners with appetizing restaurant websites featuring online ordering, table reservations, and photo galleries.
+            </p>
+            <div class="space-y-2 mb-6">
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-red-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Online ordering</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-red-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Table reservations</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500 group-hover:text-red-100 transition-colors">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Menu management</span>
+              </div>
+            </div>
+            <div class="flex items-center text-red-600 group-hover:text-white transition-colors duration-300">
+              <span class="text-sm font-semibold">Explore Solutions</span>
+              <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+            </div>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 to-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="mt-16 text-center" data-aos="fade-in-up" data-aos-delay="700">
+        <div class="bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 md:p-12 text-white">
+          <h3 class="text-2xl md:text-3xl font-bold mb-4">Don't See Your Industry?</h3>
+          <p class="text-lg mb-6 opacity-90">
+            We create custom solutions for businesses across all sectors. Let's discuss your unique needs.
+          </p>
+          <a href="#contact" class="bg-white text-primary font-bold py-3 px-8 rounded-lg text-lg inline-block hover:bg-gray-100 transition transform hover:scale-105">
+            Get Custom Solution
+          </a>
         </div>
       </div>
     </div>
@@ -537,7 +1014,7 @@
   <!-- Why Choose Us Section -->
   <section id="why-us" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
+      <div class="text-center mb-16" data-aos="fade-in-up">
         <h2 class="text-3xl font-bold text-dark mb-4">Why Businesses Trust Social Studio</h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
           Transparent, budget-friendly pricing — no hidden fees, just professional results.
@@ -546,9 +1023,9 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Reason 1 -->
-        <div class="text-center px-6">
+        <div class="text-center px-6" data-aos="fade-in-up" data-aos-delay="100">
           <div
-            class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6"
+            class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110"
           >
             <i class="fas fa-dollar-sign text-primary text-3xl"></i>
           </div>
@@ -559,9 +1036,9 @@
         </div>
 
         <!-- Reason 2 -->
-        <div class="text-center px-6">
+        <div class="text-center px-6" data-aos="fade-in-up" data-aos-delay="200">
           <div
-            class="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-6"
+            class="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110"
           >
             <i class="fas fa-bolt text-secondary text-3xl"></i>
           </div>
@@ -572,9 +1049,9 @@
         </div>
 
         <!-- Reason 3 -->
-        <div class="text-center px-6">
+        <div class="text-center px-6" data-aos="fade-in-up" data-aos-delay="300">
           <div
-            class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6"
+            class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110"
           >
             <i class="fas fa-award text-primary text-3xl"></i>
           </div>
@@ -585,17 +1062,17 @@
         </div>
       </div>
 
-      <div class="mt-16 bg-primary rounded-xl p-8 md:p-12 text-white">
+      <div class="mt-16 bg-primary rounded-xl p-8 md:p-12 text-white" data-aos="fade-in-up" data-aos-delay="400">
         <div class="max-w-4xl mx-auto text-center">
           <h3 class="text-2xl md:text-3xl font-bold mb-6">
-            Let’s Build Something Great — On Us.
+            Let's Build Something Great — On Us.
           </h3>
           <p class="text-lg mb-8 opacity-90">
             Try a risk-free prototype and see how our process delivers results.
           </p>
           <a
             href="#prototype"
-            class="bg-white text-primary font-bold py-3 px-8 rounded-lg text-lg inline-block hover:bg-gray-100 transition"
+            class="bg-white text-primary font-bold py-3 px-8 rounded-lg text-lg inline-block hover:bg-gray-100 transition transform hover:scale-105"
             >Get Your Free Prototype</a
           >
         </div>
@@ -607,7 +1084,7 @@
   <section id="prototype" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div>
+        <div data-aos="fade-in-right">
           <h2 class="text-3xl font-bold text-dark mb-6">Get a Custom Homepage — Free in 3 Days</h2>
           <p class="text-lg text-gray-600 mb-6">
             See what we can build for you — at zero cost. Get a custom homepage that gives you a head start.
@@ -615,7 +1092,7 @@
           <ul class="space-y-3 mb-8">
             <li class="flex items-start">
               <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
-              <span>Preview your site’s potential</span>
+              <span>Preview your site's potential</span>
             </li>
             <li class="flex items-start">
               <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
@@ -631,24 +1108,24 @@
           </p>
         </div>
 
-        <div class="form-container p-8 rounded-xl">
+        <div class="form-container p-8 rounded-xl" data-aos="fade-in-left">
           <h3 class="text-xl font-bold text-dark mb-6">Request Your Free Prototype</h3>
           <form id="prototype-form" class="space-y-4">
             <div>
               <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
-              <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required />
+              <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input" required />
             </div>
             <div>
               <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-              <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required />
+              <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input" required />
             </div>
             <div>
               <label for="business" class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
-              <input type="text" id="business" name="business" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required />
+              <input type="text" id="business" name="business" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input" required />
             </div>
             <div>
               <label for="industry" class="block text-sm font-medium text-gray-700 mb-1">Industry</label>
-              <select id="industry" name="industry" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
+              <select id="industry" name="industry" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input" required>
                 <option value="">Select your industry</option>
                 <option value="portfolio">Personal Portfolio</option>
                 <option value="realtor">Realtor</option>
@@ -660,18 +1137,18 @@
             </div>
             <div>
               <label for="website" class="block text-sm font-medium text-gray-700 mb-1">Website (Optional)</label>
-              <input type="url" id="website" name="website" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+              <input type="url" id="website" name="website" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input" />
             </div>
             <div>
               <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message (Optional)</label>
-              <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+              <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input"></textarea>
             </div>
             <div class="hidden">
               <label for="company_website" class="block text-sm font-medium text-gray-700 mb-1">Company Website (Leave empty)</label>
               <input type="text" id="company_website" name="company_website" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
             </div>
             <div>
-              <button type="submit" id="prototype-submit" class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition">
+              <button type="submit" id="prototype-submit" class="w-full btn-primary text-white font-bold py-3 px-4 rounded-lg transition">
                 Submit Request
               </button>
             </div>
@@ -686,7 +1163,7 @@
   <!-- Testimonials Section -->
   <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
+      <div class="text-center mb-16" data-aos="fade-in-up">
         <h2 class="text-3xl font-bold text-dark mb-4">What Our Clients Say</h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
           Don't just take our word for it - hear from businesses we've helped grow
@@ -695,7 +1172,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Testimonial 1 -->
-        <div class="testimonial-card p-8 rounded-xl">
+        <div class="testimonial-card p-8 rounded-xl" data-aos="fade-in-up" data-aos-delay="100">
           <div class="flex items-center mb-6">
             <div
               class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mr-4"
@@ -720,7 +1197,7 @@
         </div>
 
         <!-- Testimonial 2 -->
-        <div class="testimonial-card p-8 rounded-xl">
+        <div class="testimonial-card p-8 rounded-xl" data-aos="fade-in-up" data-aos-delay="200">
           <div class="flex items-center mb-6">
             <div
               class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mr-4"
@@ -745,7 +1222,7 @@
         </div>
 
         <!-- Testimonial 3 -->
-        <div class="testimonial-card p-8 rounded-xl">
+        <div class="testimonial-card p-8 rounded-xl" data-aos="fade-in-up" data-aos-delay="300">
           <div class="flex items-center mb-6">
             <div
               class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mr-4"
@@ -776,7 +1253,7 @@
   <section id="contact" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div>
+        <div data-aos="fade-in-right">
           <h2 class="text-3xl font-bold text-dark mb-6">Get In Touch</h2>
           <p class="text-lg text-gray-600 mb-8">
             Got a project in mind or questions to ask? Reach out — we typically reply within 24 hours, no matter where you are.
@@ -825,7 +1302,7 @@
           </div>
         </div>
 
-        <div class="form-container p-8 rounded-xl">
+        <div class="form-container p-8 rounded-xl" data-aos="fade-in-left">
           <h3 class="text-xl font-bold text-dark mb-6">Send Us a Message</h3>
           <form id="contact-form" class="space-y-4">
             <div>
@@ -836,7 +1313,7 @@
                 type="text"
                 id="contact-name"
                 name="name"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input"
                 required
               />
             </div>
@@ -848,7 +1325,7 @@
                 type="email"
                 id="contact-email"
                 name="email"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input"
                 required
               />
             </div>
@@ -860,7 +1337,7 @@
                 type="text"
                 id="contact-subject"
                 name="subject"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input"
                 required
               />
             </div>
@@ -872,14 +1349,14 @@
                 id="contact-message"
                 name="message"
                 rows="4"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent form-input"
                 required
               ></textarea>
             </div>
             <div>
               <button
                 type="submit"
-                class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition"
+                class="w-full btn-primary text-white font-bold py-3 px-4 rounded-lg transition"
               >
                 Send Message
               </button>
@@ -902,16 +1379,16 @@
             Your trusted partner for digital marketing and development solutions.
           </p>
           <div class="flex space-x-4">
-            <a href="#" class="text-gray-300 hover:text-white"
+            <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300"
               ><i class="fab fa-facebook-f"></i
             ></a>
-            <a href="#" class="text-gray-300 hover:text-white"
+            <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300"
               ><i class="fab fa-twitter"></i
             ></a>
-            <a href="#" class="text-gray-300 hover:text-white"
+            <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300"
               ><i class="fab fa-instagram"></i
             ></a>
-            <a href="#" class="text-gray-300 hover:text-white"
+            <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300"
               ><i class="fab fa-linkedin-in"></i
             ></a>
           </div>
@@ -920,31 +1397,31 @@
         <div>
           <h4 class="text-lg font-semibold mb-4">Services</h4>
           <ul class="space-y-2">
-            <li><a href="#" class="text-gray-300 hover:text-white">Social Media Marketing</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Google Ads</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">SEO</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Website Design</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Web Apps</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Social Media Marketing</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Google Ads</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">SEO</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Website Design</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Web Apps</a></li>
           </ul>
         </div>
 
         <div>
           <h4 class="text-lg font-semibold mb-4">Company</h4>
           <ul class="space-y-2">
-            <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Case Studies</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Careers</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Blog</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Contact</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">About Us</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Case Studies</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Careers</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Blog</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Contact</a></li>
           </ul>
         </div>
 
         <div>
           <h4 class="text-lg font-semibold mb-4">Legal</h4>
           <ul class="space-y-2">
-            <li><a href="#" class="text-gray-300 hover:text-white">Privacy Policy</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Terms of Service</a></li>
-            <li><a href="#" class="text-gray-300 hover:text-white">Cookie Policy</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Privacy Policy</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Terms of Service</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Cookie Policy</a></li>
           </ul>
         </div>
       </div>
@@ -952,15 +1429,23 @@
       <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
         <p class="text-gray-400 mb-4 md:mb-0">© 2023 Social Studio. All rights reserved.</p>
         <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 hover:text-white">Privacy</a>
-          <a href="#" class="text-gray-400 hover:text-white">Terms</a>
-          <a href="#" class="text-gray-400 hover:text-white">Sitemap</a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Privacy</a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Terms</a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Sitemap</a>
         </div>
       </div>
     </div>
   </footer>
 
   <script>
+    // Initialize AOS (Animate On Scroll)
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true,
+      offset: 100
+    });
+
     // Mobile menu toggle
     document.getElementById("mobile-menu-button").addEventListener("click", function () {
       const mobileMenu = document.getElementById("mobile-menu");
@@ -982,6 +1467,42 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       type();
+    });
+
+    // Scroll progress indicator
+    window.addEventListener('scroll', () => {
+      const scrollProgress = document.getElementById('scrollProgress');
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.body.offsetHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      scrollProgress.style.width = scrollPercent + '%';
+    });
+
+    // Back to top button
+    window.addEventListener('scroll', () => {
+      const backToTop = document.getElementById('backToTop');
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.pageYOffset > 50) {
+        navbar.classList.add('navbar-scrolled');
+      } else {
+        navbar.classList.remove('navbar-scrolled');
+      }
     });
 
     // Prototype form submission handling
@@ -1106,6 +1627,11 @@
         return;
       }
       
+      if (!subject) {
+        alert("Please enter a subject");
+        return;
+      }
+      
       if (!message) {
         alert("Please enter a message");
         return;
@@ -1134,7 +1660,7 @@
           form.reset();
         } else {
           const data = await response.json();
-          const errorMessage = data.errors ? data.errors[0].msg : data.message || "Something went wrong. Please try again.";
+          const errorMessage = data.error || data.message || "Something went wrong. Please try again.";
           alert(errorMessage);
         }
       } catch (error) {
@@ -1167,6 +1693,69 @@
           }
         }
       });
+    });
+
+    // Parallax scrolling effect
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallaxElements = document.querySelectorAll('.parallax');
+      
+      parallaxElements.forEach(element => {
+        const speed = 0.5;
+        element.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+    });
+
+    // Interactive cursor effects
+    document.addEventListener('mousemove', (e) => {
+      const cursorGlow = document.querySelector('.cursor-glow:hover::before');
+      if (cursorGlow) {
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+      }
+    });
+
+    // Counter animation
+    function animateCounters() {
+      const counters = document.querySelectorAll('.counter');
+      counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const increment = target / 100;
+        let current = 0;
+        
+        const updateCounter = () => {
+          if (current < target) {
+            current += increment;
+            counter.textContent = Math.ceil(current);
+            setTimeout(updateCounter, 10);
+          } else {
+            counter.textContent = target;
+            counter.classList.add('animate');
+          }
+        };
+        
+        updateCounter();
+      });
+    }
+
+    // Intersection Observer for counters
+    const observerOptions = {
+      threshold: 0.5
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe counter sections
+    const counterSections = document.querySelectorAll('.counter-section');
+    counterSections.forEach(section => {
+      observer.observe(section);
     });
   </script>
 </body>

@@ -1,227 +1,208 @@
 # Social Studio Website
 
-A modern website for Social Studio digital marketing and development agency, featuring a landing page and internship application system.
+A modern, interactive website for Social Studio - a digital marketing and development agency. Built with Node.js, Express, and enhanced with beautiful animations and interactive features.
 
-## Features
+## 🚀 Features
 
-- **Landing Page**: Marketing content with services, industries, testimonials, and contact forms
-- **Internship Application**: Complete application system with form validation and spam protection
-- **API Backend**: Express.js server with endpoints for form submissions
-- **N8N Integration**: Webhook integration for automated email notifications and data storage
+### Frontend
+- **Modern Design**: Clean, professional design with gradient backgrounds and modern typography
+- **Interactive Animations**: Scroll-triggered animations using AOS (Animate On Scroll)
+- **Responsive Design**: Fully responsive across all devices
+- **Interactive Elements**: Hover effects, 3D transforms, and smooth transitions
+- **Form Validation**: Client-side and server-side validation for all forms
+- **Loading States**: Beautiful loading animations and feedback
 
-## Project Structure
+### Backend
+- **Express.js Server**: RESTful API endpoints for form submissions
+- **Email Notifications**: Automatic email notifications for all form submissions
+- **Rate Limiting**: Protection against spam and abuse
+- **Security**: Helmet.js for security headers and CSP
+- **Environment Configuration**: Secure environment variable management
+
+## 📋 Pages
+
+1. **Home Page** (`index.html`)
+   - Hero section with animated typing effect
+   - Services showcase with interactive cards
+   - Industry solutions with hover effects
+   - Testimonials with animated cards
+   - Contact form with validation
+
+2. **Internships Page** (`interns.html`)
+   - Internship opportunities with detailed descriptions
+   - Application form with comprehensive validation
+   - Benefits and role descriptions
+   - Interactive elements and animations
+
+## 🛠️ Technologies Used
+
+### Frontend
+- **HTML5**: Semantic markup
+- **Tailwind CSS**: Utility-first CSS framework
+- **JavaScript**: ES6+ for interactivity
+- **AOS**: Animate On Scroll library
+- **Font Awesome**: Icon library
+
+### Backend
+- **Node.js**: JavaScript runtime
+- **Express.js**: Web framework
+- **Nodemailer**: Email sending
+- **Helmet**: Security middleware
+- **CORS**: Cross-origin resource sharing
+- **Express Rate Limit**: Rate limiting middleware
+
+## 📦 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repository-url>
+   cd sswebfv1
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp env.example .env
+   ```
+   
+   Edit `.env` file with your configuration:
+   ```env
+   PORT=3000
+   CONTACT_EMAIL=your-email@gmail.com
+   GMAIL_USER=your-gmail@gmail.com
+   GMAIL_APP_PASSWORD=your-gmail-app-password
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**
+   Navigate to `http://localhost:3000`
+
+## 🔧 Configuration
+
+### Email Setup
+1. Enable 2-Factor Authentication on your Gmail account
+2. Generate an App Password:
+   - Go to Google Account settings
+   - Security → App passwords
+   - Select "Mail" and generate password
+3. Add the app password to your `.env` file
+
+### Environment Variables
+- `PORT`: Server port (default: 3000)
+- `CONTACT_EMAIL`: Email address for notifications
+- `GMAIL_USER`: Gmail address for sending emails
+- `GMAIL_APP_PASSWORD`: Gmail app password
+
+## 📁 Project Structure
 
 ```
-├── client/                 # Static site files
-│   ├── index.html         # Main landing page
-│   ├── interns.html       # Internship application page
-│   ├── C.jpeg            # Header logo
-│   └── C.png             # Footer logo
-├── server/                # Express.js API server
-│   └── index.js          # Main server file
-├── package.json          # Dependencies and scripts
-├── env.example           # Environment variables template
-└── README.md            # This file
+sswebfv1/
+├── client/                 # Frontend files
+│   ├── index.html         # Home page
+│   ├── interns.html       # Internships page
+│   ├── C.png             # Logo
+│   └── C.jpeg            # Logo
+├── server/                # Backend files
+│   └── index.js          # Express server
+├── package.json           # Dependencies and scripts
+├── .env                   # Environment variables (not in repo)
+├── .gitignore            # Git ignore rules
+└── README.md             # Project documentation
 ```
 
-## Quick Start
+## 🚀 API Endpoints
 
-### Prerequisites
+### POST `/api/prototype-request`
+Submit a prototype request form
+- **Body**: `{ name, email, business, industry, message }`
+- **Response**: Email notification sent
 
-- Node.js (v16 or higher)
-- npm or yarn
+### POST `/api/internship-application`
+Submit an internship application
+- **Body**: `{ name, email, phone, track, portfolio_or_linkedin, availability, location, about }`
+- **Response**: Email notification sent
 
-### Installation
+### POST `/api/contact-message`
+Submit a contact form message
+- **Body**: `{ name, email, subject, message }`
+- **Response**: Email notification sent
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd social-studio
-```
+## 🎨 Design Features
 
-2. Install dependencies:
-```bash
-npm install
-```
+### Animations
+- **Scroll-triggered animations** using AOS library
+- **Hover effects** with 3D transforms and shadows
+- **Typing animation** in hero section
+- **Floating particles** background effect
+- **Smooth transitions** throughout the site
 
-3. Set up environment variables:
-```bash
-cp env.example .env
-```
+### Interactive Elements
+- **Service cards** with hover elevation
+- **Industry cards** with interactive effects
+- **Form inputs** with focus animations
+- **Navigation** with scroll effects
+- **Back-to-top button** with smooth scroll
 
-Edit `.env` with your configuration:
-```env
-PORT=3000
-N8N_BASE_URL=https://your-n8n-domain.app.n8n.cloud
-CONTACT_EMAIL=hello@socialstudio.in
-GOOGLE_SHEET_ID=your_google_sheet_id_here
-GMAIL_FROM=your_gmail@gmail.com
-```
+### Responsive Design
+- **Mobile-first** approach
+- **Flexible grid** layouts
+- **Adaptive typography**
+- **Touch-friendly** interactions
 
-4. Start development server:
+## 🔒 Security Features
+
+- **Content Security Policy** (CSP) headers
+- **Rate limiting** on API endpoints
+- **Input validation** and sanitization
+- **Honeypot fields** for spam prevention
+- **CORS** configuration
+- **Security headers** via Helmet.js
+
+## 📧 Email Notifications
+
+All form submissions trigger email notifications to the configured contact email address, including:
+- Form submission details
+- Timestamp
+- User information
+- Form-specific data
+
+## 🚀 Deployment
+
+### Local Development
 ```bash
 npm run dev
 ```
 
-This will start:
-- Express server on port 3000
-- Live server for client files on port 5173
+### Production
+1. Set up environment variables for production
+2. Install dependencies: `npm install`
+3. Start server: `node server/index.js`
+4. Configure reverse proxy (nginx/Apache) if needed
 
-## API Endpoints
+## 🤝 Contributing
 
-### POST /api/prototype-request
-Handles free prototype requests from the landing page.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-**Required fields:**
-- `name` (string, min 2 chars)
-- `email` (valid email format)
-- `business` (string, min 2 chars)
-- `industry` (string)
+## 📄 License
 
-**Optional fields:**
-- `message` (string, max 2000 chars)
-- `website` (string, optional)
+This project is private and proprietary to Social Studio.
 
-**Honeypot:**
-- `company_website` (must be empty)
+## 📞 Contact
 
-### POST /api/internship-application
-Handles internship applications with N8N integration.
+For questions or support, contact: hello@socialstudio.in
 
-**Required fields:**
-- `name` (string, min 2 chars)
-- `email` (valid email format)
-- `track` (string: "Sales" or "Marketing")
-- `availability` (string)
-- `about` (string, min 10 chars)
+---
 
-**Optional fields:**
-- `phone` (string)
-- `portfolio_or_linkedin` (string)
-- `location` (string)
-
-**Honeypot:**
-- `website` (must be empty)
-
-### POST /api/contact-message
-Handles general contact form submissions.
-
-**Required fields:**
-- `name` (string, min 2 chars)
-- `email` (valid email format)
-- `message` (string, min 10 chars)
-
-**Optional fields:**
-- `subject` (string)
-
-## N8N Workflow Integration
-
-The internship application form integrates with an N8N workflow that:
-
-1. **Validates** required fields and honeypot
-2. **Normalizes** data and adds timestamps
-3. **Stores** applications in Google Sheets
-4. **Sends** email notifications to admin and applicant
-5. **Returns** `{ "ok": true }` on success
-
-### Field Mapping
-
-Frontend field names are mapped to N8N expectations:
-
-| Frontend | N8N Field | Description |
-|----------|-----------|-------------|
-| `name` | `name` | Full name |
-| `email` | `email` | Email address |
-| `phone` | `phone` | Phone number (optional) |
-| `track` | `track` | Internship track |
-| `portfolio_or_linkedin` | `portfolio_or_linkedin` | Portfolio/LinkedIn URL |
-| `availability` | `availability` | Availability period |
-| `location` | `location` | Current location (optional) |
-| `about` | `about` | Why you want this internship |
-| `website` | `website` | Honeypot field (must be empty) |
-
-## Development
-
-### Available Scripts
-
-- `npm run dev` - Start development servers (Express + Live Server)
-- `npm run dev:server` - Start Express server only
-- `npm run dev:client` - Start Live Server for client files
-- `npm start` - Start production server
-- `npm run build` - No build step (static site)
-
-### Form Validation
-
-Both client-side and server-side validation are implemented:
-
-**Client-side:**
-- Real-time field validation
-- Character counters
-- Honeypot field protection
-- Loading states and error handling
-
-**Server-side:**
-- Input sanitization
-- Required field validation
-- Email format validation
-- Honeypot detection
-- Rate limiting (10 requests per 15 minutes)
-
-## Deployment
-
-### Option 1: Vercel/Netlify (Static + Serverless)
-
-1. Deploy the `client/` directory as a static site
-2. Deploy the `server/` directory as a serverless function
-3. Set environment variables in your hosting platform
-
-### Option 2: Traditional Hosting
-
-1. Upload `client/` files to your web server
-2. Deploy `server/` to a Node.js hosting service (Heroku, DigitalOcean, etc.)
-3. Configure environment variables
-4. Set up reverse proxy to serve static files from Express
-
-### Option 3: Docker
-
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-## Security Features
-
-- **Helmet.js**: Security headers
-- **CORS**: Cross-origin request handling
-- **Rate Limiting**: Prevents abuse
-- **Input Validation**: Sanitizes all inputs
-- **Honeypot Fields**: Spam protection
-- **HTTPS**: Enforced in production
-
-## Accessibility
-
-- **Focus Management**: Proper focus indicators
-- **ARIA Attributes**: Screen reader support
-- **Keyboard Navigation**: Full keyboard accessibility
-- **Color Contrast**: WCAG compliant
-- **Semantic HTML**: Proper heading structure
-
-## Browser Support
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-## License
-
-Private - All rights reserved
-
-## Support
-
-For questions or issues, email: hello@socialstudio.in
+**Built with ❤️ by Social Studio Team**
