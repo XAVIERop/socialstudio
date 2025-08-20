@@ -6,7 +6,8 @@
     "dev:server": "node server/index.js",
     "dev:client": "live-server client --port=5173 --open=./index.html",
     "start": "node server/index.js",
-    "build": "echo \"static site - no build step\""
+    "build": "echo \"static site - no build step\"",
+    "vercel-build": "echo \"Deploying to Vercel\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
