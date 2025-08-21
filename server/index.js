@@ -24,6 +24,10 @@ const transporter = nodemailer.createTransport({
 // Email sending function
 async function sendEmail(subject, htmlContent) {
   try {
+    console.log('Attempting to send email...');
+    console.log('GMAIL_USER:', process.env.GMAIL_USER);
+    console.log('GMAIL_APP_PASSWORD exists:', !!process.env.GMAIL_APP_PASSWORD);
+    
     const mailOptions = {
       from: process.env.GMAIL_USER || 'pv.socialstudio@gmail.com',
       to: 'pv.socialstudio@gmail.com',
@@ -31,11 +35,15 @@ async function sendEmail(subject, htmlContent) {
       html: htmlContent
     };
 
+    console.log('Mail options:', { from: mailOptions.from, to: mailOptions.to, subject: mailOptions.subject });
+
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.messageId);
+    console.log('Email sent successfully:', info.messageId);
     return true;
   } catch (error) {
-    console.error('Email sending failed:', error);
+    console.error('Email sending failed with error:', error);
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
     return false;
   }
 }
@@ -119,6 +127,7 @@ app.post('/api/prototype-request', async (req, res) => {
     });
 
     // Send email notification
+    console.log('Preparing to send email notification...');
     const emailSubject = `New Prototype Request - ${business.trim()}`;
     const emailHtml = `
       <h2>New Prototype Request</h2>
@@ -131,8 +140,15 @@ app.post('/api/prototype-request', async (req, res) => {
       <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
     `;
 
-    await sendEmail(emailSubject, emailHtml);
-    res.json({ ok: true, message: 'Prototype request submitted successfully' });
+    console.log('Calling sendEmail function...');
+    const emailResult = await sendEmail(emailSubject, emailHtml);
+    console.log('Email send result:', emailResult);
+    
+    if (emailResult) {
+      res.json({ ok: true, message: 'Prototype request submitted successfully' });
+    } else {
+      res.json({ ok: true, message: 'Prototype request submitted successfully (email notification failed)' });
+    }
 
   } catch (error) {
     console.error('Error processing prototype request:', error);
