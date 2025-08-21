@@ -78,7 +78,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 // POST /api/prototype-request
 app.post('/api/prototype-request', async (req, res) => {
   try {
-    const { name, email, business, industry, message, company_website } = req.body;
+    const { name, email, business, industry, message, phone, company_website } = req.body;
 
     // Validation
     if (!name || name.trim().length < 2) {
@@ -113,6 +113,7 @@ app.post('/api/prototype-request', async (req, res) => {
       email: email.trim().toLowerCase(),
       business: business.trim(),
       industry,
+      phone: phone ? phone.trim() : '',
       message: message ? message.trim() : '',
       timestamp: new Date().toISOString()
     });
@@ -125,6 +126,7 @@ app.post('/api/prototype-request', async (req, res) => {
       <p><strong>Email:</strong> ${email.trim().toLowerCase()}</p>
       <p><strong>Business:</strong> ${business.trim()}</p>
       <p><strong>Industry:</strong> ${industry}</p>
+      <p><strong>Phone:</strong> ${phone ? phone.trim() : 'Not provided'}</p>
       <p><strong>Message:</strong> ${message ? message.trim() : 'No message provided'}</p>
       <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
     `;
