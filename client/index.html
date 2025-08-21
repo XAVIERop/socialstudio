@@ -491,12 +491,11 @@
       box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
     }
     
-    /* Enhanced Contact Button */
+    /* Enhanced Contact Button - Color Hierarchy Compliant */
     .contact-btn {
-      background-size: 200% 200%;
-      animation: gradient-shift 3s ease infinite;
       position: relative;
       overflow: hidden;
+      transition: all 0.3s ease;
     }
     
     .contact-btn::before {
@@ -506,7 +505,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
       transition: left 0.6s ease;
     }
     
@@ -514,36 +513,9 @@
       left: 100%;
     }
     
-    .contact-btn::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: width 0.6s ease, height 0.6s ease;
-    }
-    
-    .contact-btn:hover::after {
-      width: 300px;
-      height: 300px;
-    }
-    
-    @keyframes gradient-shift {
-      0%, 100% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-    }
-    
     .contact-btn:hover {
-      background-size: 150% 150%;
-      box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4), 0 5px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
     }
   </style>
 </head>
@@ -593,7 +565,7 @@
           <a href="interns.html" class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow">Internships</a>
           <a
             href="#contact"
-            class="contact-btn relative overflow-hidden bg-gradient-to-r from-primary via-blue-600 to-primary text-white px-6 py-3 rounded-full font-semibold text-sm tracking-wide uppercase shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 cursor-glow group"
+            class="contact-btn relative overflow-hidden bg-white text-primary border-2 border-primary px-6 py-3 rounded-lg font-semibold text-sm tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-glow group hover:bg-primary hover:text-white"
             >Contact</a
           >
         </div>
@@ -638,7 +610,7 @@
         >
         <a
           href="#contact"
-          class="block px-4 py-3 rounded-full text-base font-semibold text-white bg-gradient-to-r from-primary via-blue-600 to-primary hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+          class="block px-4 py-3 rounded-lg text-base font-semibold text-primary bg-white border-2 border-primary hover:bg-primary hover:text-white transition-all duration-300 transform hover:scale-105"
           >Contact</a
         >
       </div>
