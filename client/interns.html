@@ -509,6 +509,22 @@
           box-shadow: 0 8px 25px rgba(37, 99, 235, 0.1);
         }
         
+        /* FAQ content animations */
+        [id^="faq-"] {
+          transition: all 0.3s ease-in-out;
+          max-height: 0;
+          overflow: hidden;
+        }
+        
+        [id^="faq-"]:not(.hidden) {
+          max-height: 500px;
+        }
+        
+        /* FAQ icon animations */
+        [id^="faq-icon-"] {
+          transition: transform 0.3s ease-in-out;
+        }
+        
         /* Timeline animations */
         .timeline-item {
           transition: all 0.4s ease;
@@ -1201,16 +1217,42 @@
         function toggleFAQ(id) {
             const faqContent = document.getElementById(`faq-${id}`);
             const faqIcon = document.getElementById(`faq-icon-${id}`);
+            const button = document.querySelector(`[aria-controls="faq-${id}"]`);
+            
+            if (!faqContent || !faqIcon || !button) {
+                console.error('FAQ elements not found for id:', id);
+                return;
+            }
+            
             const isExpanded = faqContent.classList.contains('hidden');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('[id^="faq-"]').forEach(item => {
+                if (item.id !== `faq-${id}`) {
+                    item.classList.add('hidden');
+                }
+            });
+            
+            document.querySelectorAll('[id^="faq-icon-"]').forEach(icon => {
+                if (icon.id !== `faq-icon-${id}`) {
+                    icon.classList.remove('rotate-180');
+                }
+            });
+            
+            document.querySelectorAll('[aria-controls^="faq-"]').forEach(btn => {
+                if (btn.getAttribute('aria-controls') !== `faq-${id}`) {
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+            });
             
             if (isExpanded) {
                 faqContent.classList.remove('hidden');
                 faqIcon.classList.add('rotate-180');
-                document.querySelector(`[aria-controls="faq-${id}"]`).setAttribute('aria-expanded', 'true');
+                button.setAttribute('aria-expanded', 'true');
             } else {
                 faqContent.classList.add('hidden');
                 faqIcon.classList.remove('rotate-180');
-                document.querySelector(`[aria-controls="faq-${id}"]`).setAttribute('aria-expanded', 'false');
+                button.setAttribute('aria-expanded', 'false');
             }
         }
         
