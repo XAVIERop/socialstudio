@@ -286,6 +286,11 @@ app.post('/api/contact-message', async (req, res) => {
   }
 });
 
+// Redirect /interns to /interns.html
+app.get('/interns', (req, res) => {
+  res.redirect('/interns.html');
+});
+
 // Catch-all route to serve index.html for SPA routing
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
