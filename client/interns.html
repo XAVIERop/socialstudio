@@ -512,12 +512,15 @@
         /* FAQ content animations */
         [id^="faq-"] {
           transition: all 0.3s ease-in-out;
-          max-height: 0;
           overflow: hidden;
         }
         
+        [id^="faq-"].hidden {
+          display: none;
+        }
+        
         [id^="faq-"]:not(.hidden) {
-          max-height: 500px;
+          display: block;
         }
         
         /* FAQ icon animations */
@@ -1215,9 +1218,13 @@
 
         // Toggle FAQ items
         function toggleFAQ(id) {
+            console.log('toggleFAQ called with id:', id);
+            
             const faqContent = document.getElementById(`faq-${id}`);
             const faqIcon = document.getElementById(`faq-icon-${id}`);
             const button = document.querySelector(`[aria-controls="faq-${id}"]`);
+            
+            console.log('FAQ elements found:', { faqContent, faqIcon, button });
             
             if (!faqContent || !faqIcon || !button) {
                 console.error('FAQ elements not found for id:', id);
@@ -1225,6 +1232,7 @@
             }
             
             const isExpanded = faqContent.classList.contains('hidden');
+            console.log('Is expanded:', isExpanded);
             
             // Close all other FAQ items
             document.querySelectorAll('[id^="faq-"]').forEach(item => {
@@ -1246,10 +1254,12 @@
             });
             
             if (isExpanded) {
+                console.log('Expanding FAQ item');
                 faqContent.classList.remove('hidden');
                 faqIcon.classList.add('rotate-180');
                 button.setAttribute('aria-expanded', 'true');
             } else {
+                console.log('Collapsing FAQ item');
                 faqContent.classList.add('hidden');
                 faqIcon.classList.remove('rotate-180');
                 button.setAttribute('aria-expanded', 'false');
