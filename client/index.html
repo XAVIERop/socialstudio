@@ -1529,6 +1529,7 @@
       const email = form.email.value.trim();
       const business = form.business.value.trim();
       const industry = form.industry.value;
+      const phone = form.phone.value.trim();
       const message = form.message.value.trim();
       const companyWebsite = form.company_website.value.trim();
       
@@ -1572,19 +1573,24 @@
       submitBtn.textContent = "Submitting...";
       
       try {
+        const requestData = {
+          name,
+          email,
+          business,
+          industry,
+          phone,
+          message,
+          company_website: companyWebsite
+        };
+        
+        console.log('Sending form data:', requestData);
+        
         const response = await fetch('/api/prototype-request', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            name,
-            email,
-            business,
-            industry,
-            message,
-            company_website: companyWebsite
-          })
+          body: JSON.stringify(requestData)
         });
         
         const result = await response.json();
