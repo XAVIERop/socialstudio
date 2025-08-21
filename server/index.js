@@ -180,8 +180,16 @@ app.post('/api/internship-application', async (req, res) => {
       return res.status(400).json({ error: 'Please provide a valid email address' });
     }
 
+    if (!phone || phone.trim().length < 10) {
+      return res.status(400).json({ error: 'Please provide a valid phone number (at least 10 digits)' });
+    }
+
     if (!track) {
       return res.status(400).json({ error: 'Please select a track' });
+    }
+
+    if (!portfolio_or_linkedin || portfolio_or_linkedin.trim() === '') {
+      return res.status(400).json({ error: 'Please provide your Portfolio or LinkedIn profile URL' });
     }
 
     if (!availability) {
