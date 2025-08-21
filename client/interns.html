@@ -546,6 +546,20 @@
             outline: 2px solid #3B82F6;
             outline-offset: 2px;
         }
+        
+        /* Remove blue outline for FAQ buttons specifically */
+        button[aria-controls^="faq-"]:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* Alternative: Remove focus ring for all FAQ buttons */
+        .faq-item button:focus,
+        button[onclick^="toggleFAQ"]:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            ring: none !important;
+        }
     </style>
 </head>
 <body class="smooth-scroll font-sans antialiased text-gray-800">
@@ -963,7 +977,7 @@
                 <div class="space-y-4">
                     <!-- FAQ Item 1 -->
                     <div class="border border-gray-200 rounded-xl overflow-hidden">
-                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg" onclick="toggleFAQ(1)" aria-expanded="false" aria-controls="faq-1">
+                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none rounded-lg" onclick="toggleFAQ(1)" aria-expanded="false" aria-controls="faq-1">
                             <h3 class="text-lg font-medium text-gray-900">What's the stipend amount?</h3>
                             <svg id="faq-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -976,7 +990,7 @@
                     
                     <!-- FAQ Item 2 -->
                     <div class="border border-gray-200 rounded-xl overflow-hidden">
-                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg" onclick="toggleFAQ(2)" aria-expanded="false" aria-controls="faq-2">
+                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none rounded-lg" onclick="toggleFAQ(2)" aria-expanded="false" aria-controls="faq-2">
                             <h3 class="text-lg font-medium text-gray-900">Is this internship completely remote?</h3>
                             <svg id="faq-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -989,7 +1003,7 @@
                     
                     <!-- FAQ Item 3 -->
                     <div class="border border-gray-200 rounded-xl overflow-hidden">
-                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg" onclick="toggleFAQ(3)" aria-expanded="false" aria-controls="faq-3">
+                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none rounded-lg" onclick="toggleFAQ(3)" aria-expanded="false" aria-controls="faq-3">
                             <h3 class="text-lg font-medium text-gray-900">Are there any prerequisites?</h3>
                             <svg id="faq-icon-3" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -1002,7 +1016,7 @@
                     
                     <!-- FAQ Item 4 -->
                     <div class="border border-gray-200 rounded-xl overflow-hidden">
-                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg" onclick="toggleFAQ(4)" aria-expanded="false" aria-controls="faq-4">
+                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none rounded-lg" onclick="toggleFAQ(4)" aria-expanded="false" aria-controls="faq-4">
                             <h3 class="text-lg font-medium text-gray-900">What's the time commitment?</h3>
                             <svg id="faq-icon-4" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -1015,7 +1029,7 @@
                     
                     <!-- FAQ Item 5 -->
                     <div class="border border-gray-200 rounded-xl overflow-hidden">
-                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg" onclick="toggleFAQ(5)" aria-expanded="false" aria-controls="faq-5">
+                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none rounded-lg" onclick="toggleFAQ(5)" aria-expanded="false" aria-controls="faq-5">
                             <h3 class="text-lg font-medium text-gray-900">How long is the internship?</h3>
                             <svg id="faq-icon-5" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -1028,7 +1042,7 @@
                     
                     <!-- FAQ Item 6 -->
                     <div class="border border-gray-200 rounded-xl overflow-hidden">
-                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg" onclick="toggleFAQ(6)" aria-expanded="false" aria-controls="faq-6">
+                        <button class="w-full flex justify-between items-center p-4 md:p-6 text-left focus:outline-none rounded-lg" onclick="toggleFAQ(6)" aria-expanded="false" aria-controls="faq-6">
                             <h3 class="text-lg font-medium text-gray-900">Who can apply?</h3>
                             <svg id="faq-icon-6" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
