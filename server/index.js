@@ -299,6 +299,31 @@ app.get('/interns', (req, res) => {
   res.redirect('/interns.html');
 });
 
+// Service page redirects
+app.get('/social-media-marketing', (req, res) => {
+  res.redirect('/social-media-marketing.html');
+});
+
+app.get('/google-ads-management', (req, res) => {
+  res.redirect('/google-ads-management.html');
+});
+
+app.get('/seo-optimization', (req, res) => {
+  res.redirect('/seo-optimization.html');
+});
+
+app.get('/website-design', (req, res) => {
+  res.redirect('/website-design.html');
+});
+
+app.get('/web-applications', (req, res) => {
+  res.redirect('/web-applications.html');
+});
+
+app.get('/mobile-apps', (req, res) => {
+  res.redirect('/mobile-apps.html');
+});
+
 // Catch-all route to serve index.html for SPA routing
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
