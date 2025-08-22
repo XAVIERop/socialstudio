@@ -344,13 +344,12 @@
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    // Show success modal
-                    document.getElementById('success-modal').classList.remove('hidden');
+                    // Store user data in localStorage
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    localStorage.setItem('token', 'demo-token'); // In production, use actual JWT token
                     
-                    // Reset form
-                    form.reset();
-                    
-                    console.log('Login successful:', result.user);
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
                 } else {
                     // Show error modal
                     document.getElementById('error-message').textContent = result.error || 'Invalid email or password. Please try again.';

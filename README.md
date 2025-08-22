@@ -54,24 +54,24 @@ A modern, interactive website for Social Studio - a digital marketing and develo
 ## 📦 Installation
 
 1. **Clone the repository**
-   ```bash
+```bash
    git clone <your-repository-url>
    cd sswebfv1
-   ```
+```
 
 2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 3. **Set up environment variables**
-   ```bash
-   cp env.example .env
-   ```
-   
+```bash
+cp env.example .env
+```
+
    Edit `.env` file with your configuration:
-   ```env
-   PORT=3000
+```env
+PORT=3000
    CONTACT_EMAIL=your-email@gmail.com
    GMAIL_USER=your-gmail@gmail.com
    GMAIL_APP_PASSWORD=your-gmail-app-password

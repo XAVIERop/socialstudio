@@ -531,6 +531,153 @@ app.post('/api/login', postLimiter, async (req, res) => {
   }
 });
 
+// Dashboard redirect
+app.get('/dashboard', (req, res) => {
+  res.redirect('/dashboard.html');
+});
+
+// User profile endpoint
+app.get('/api/user/profile', (req, res) => {
+  // In production, verify JWT token
+  const userId = req.headers.authorization?.split(' ')[1];
+  
+  if (!userId || userId === 'demo-token') {
+    // Return demo user data
+    const demoUser = users.find(u => u.email === 'demo@socialstudio.com');
+    if (demoUser) {
+      return res.json({
+        fullName: demoUser.fullName,
+        email: demoUser.email,
+        phone: demoUser.phone,
+        profile: demoUser.profile
+      });
+    }
+  }
+  
+  res.status(401).json({ error: 'Unauthorized' });
+});
+
+// Update user profile endpoint
+app.put('/api/user/profile', (req, res) => {
+  const { fullName, email, phone, companyName, industry } = req.body;
+  
+  // In production, verify JWT token and update user
+  const userId = req.headers.authorization?.split(' ')[1];
+  
+  if (!userId || userId === 'demo-token') {
+    // Update demo user
+    const demoUser = users.find(u => u.email === 'demo@socialstudio.com');
+    if (demoUser) {
+      demoUser.fullName = fullName;
+      demoUser.email = email;
+      demoUser.phone = phone;
+      demoUser.profile = {
+        companyName,
+        industry
+      };
+      
+      return res.json({ success: true, message: 'Profile updated successfully' });
+    }
+  }
+  
+  res.status(401).json({ error: 'Unauthorized' });
+});
+
+// Get user prototypes endpoint
+app.get('/api/prototypes', (req, res) => {
+  // In production, verify JWT token and get user-specific prototypes
+  const userId = req.headers.authorization?.split(' ')[1];
+  
+  if (!userId || userId === 'demo-token') {
+    // Return demo prototypes
+    const demoPrototypes = [
+      {
+        id: '1',
+        business: 'Tech Startup',
+        industry: 'Technology',
+        status: 'completed',
+        message: 'Website redesign for our SaaS platform',
+        createdAt: '2024-01-15T10:00:00Z',
+        completedAt: '2024-01-20T15:00:00Z'
+      },
+      {
+        id: '2',
+        business: 'Local Restaurant',
+        industry: 'Food & Beverage',
+        status: 'in_progress',
+        message: 'Social media marketing campaign',
+        createdAt: '2024-01-25T14:00:00Z'
+      }
+    ];
+    
+    return res.json(demoPrototypes);
+  }
+  
+  res.status(401).json({ error: 'Unauthorized' });
+});
+
+// Submit new prototype request endpoint
+app.post('/api/prototype-request', postLimiter, async (req, res) => {
+  const { business, industry, phone, message } = req.body;
+  
+  // Validation
+  if (!business || business.trim().length < 2) {
+    return res.status(400).json({ error: 'Business name must be at least 2 characters' });
+  }
+  
+  if (!industry) {
+    return res.status(400).json({ error: 'Please select an industry' });
+  }
+  
+  if (!phone || phone.trim().length < 10) {
+    return res.status(400).json({ error: 'Please provide a valid phone number' });
+  }
+  
+  if (!message || message.trim().length < 10) {
+    return res.status(400).json({ error: 'Project description must be at least 10 characters' });
+  }
+  
+  try {
+    // In production, get user from JWT token
+    const userId = req.headers.authorization?.split(' ')[1];
+    
+    // Create new prototype request
+    const newPrototype = {
+      id: Date.now().toString(),
+      business: business.trim(),
+      industry,
+      phone: phone.trim(),
+      message: message.trim(),
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    
+    // Send email notification
+    const htmlContent = `
+      <h2>New Prototype Request</h2>
+      <p><strong>Business:</strong> ${newPrototype.business}</p>
+      <p><strong>Industry:</strong> ${newPrototype.industry}</p>
+      <p><strong>Phone:</strong> ${newPrototype.phone}</p>
+      <p><strong>Project Description:</strong></p>
+      <p>${newPrototype.message}</p>
+      <p><strong>Status:</strong> Pending</p>
+      <p><strong>Request ID:</strong> ${newPrototype.id}</p>
+    `;
+    
+    await sendEmail('New Prototype Request', htmlContent);
+    
+    res.json({ 
+      success: true, 
+      message: 'Prototype request submitted successfully!',
+      prototype: newPrototype
+    });
+    
+  } catch (error) {
+    console.error('Prototype request error:', error);
+    res.status(500).json({ error: 'Something went wrong. Please try again.' });
+  }
+});
+
 // Redirect /interns to /interns.html
 app.get('/interns', (req, res) => {
   res.redirect('/interns.html');

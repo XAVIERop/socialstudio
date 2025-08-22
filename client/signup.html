@@ -665,15 +665,12 @@
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    // Show success modal
-                    document.getElementById('success-modal').classList.remove('hidden');
+                    // Store user data in localStorage
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    localStorage.setItem('token', 'demo-token'); // In production, use actual JWT token
                     
-                    // Reset form
-                    form.reset();
-                    clientFields.classList.add('hidden');
-                    internFields.classList.add('hidden');
-                    
-                    console.log('Account created successfully:', result.user);
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
                 } else {
                     // Show error message
                     const errorMessage = result.error || 'An error occurred during signup. Please try again.';
