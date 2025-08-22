@@ -5,12 +5,57 @@ const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// JWT Configuration
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
+const JWT_EXPIRES_IN = '7d'; // 7 days
+
+// JWT Helper Functions
+function generateToken(user) {
+  return jwt.sign(
+    { 
+      id: user.id, 
+      email: user.email, 
+      userType: user.userType 
+    },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN }
+  );
+}
+
+function verifyToken(token) {
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    return null;
+  }
+}
+
+// Authentication Middleware
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access token required' });
+  }
+
+  const user = verifyToken(token);
+  if (!user) {
+    return res.status(403).json({ error: 'Invalid or expired token' });
+  }
+
+  req.user = user;
+  next();
+}
 
 // Email configuration
 const transporter = nodemailer.createTransport({
@@ -52,13 +97,13 @@ async function sendEmail(subject, htmlContent) {
 // In production, use a proper database like MongoDB, PostgreSQL, or Vercel KV
 let users = [];
 
-// Initialize with demo users
+// Initialize with demo users (passwords will be hashed on first run)
 users.push({
   id: 'demo-client',
   fullName: 'Demo Client',
   email: 'demo@socialstudio.com',
   phone: '+1234567890',
-  password: 'Demo123!',
+  password: '$2a$10$demo.hash.for.Demo123!', // Will be updated with real hash
   userType: 'client',
   profile: {
     companyName: 'Demo Company',
@@ -72,7 +117,7 @@ users.push({
   fullName: 'Demo Intern',
   email: 'intern@socialstudio.com',
   phone: '+1234567890',
-  password: 'Demo123!',
+  password: '$2a$10$demo.hash.for.Demo123!', // Will be updated with real hash
   userType: 'intern',
   profile: {
     university: 'Demo University',
@@ -87,7 +132,7 @@ users.push({
   fullName: 'Admin User',
   email: 'admin@socialstudio.com',
   phone: '+1234567890',
-  password: 'Admin123!',
+  password: '$2a$10$demo.hash.for.Admin123!', // Will be updated with real hash
   userType: 'admin',
   profile: {
     role: 'System Administrator',
@@ -95,6 +140,25 @@ users.push({
   },
   createdAt: new Date().toISOString()
 });
+
+// Hash demo passwords on first run
+async function initializeDemoPasswords() {
+  const demoPasswords = {
+    'demo@socialstudio.com': 'Demo123!',
+    'intern@socialstudio.com': 'Demo123!',
+    'admin@socialstudio.com': 'Admin123!'
+  };
+
+  for (const user of users) {
+    if (demoPasswords[user.email] && user.password.startsWith('$2a$10$demo.hash.for.')) {
+      user.password = await bcrypt.hash(demoPasswords[user.email], 10);
+      console.log(`Hashed password for ${user.email}`);
+    }
+  }
+}
+
+// Initialize passwords
+initializeDemoPasswords();
 
 // Helper function to read users
 function readUsers() {
@@ -419,12 +483,15 @@ app.post('/api/signup', postLimiter, async (req, res) => {
     }
 
     // Create new user (in production, hash the password!)
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = {
       id: Date.now().toString(),
       fullName: fullName.trim(),
       email: email.toLowerCase().trim(),
       phone: phone.trim(),
-      password: password, // In production, use bcrypt to hash passwords
+      password: hashedPassword,
       userType: userType,
       profile: userType === 'client' ? {
         companyName: companyName.trim(),
@@ -497,37 +564,14 @@ app.post('/api/login', postLimiter, async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Check password (in production, use bcrypt to compare hashed passwords)
-    if (user.password !== password) {
+    // Verify password using bcrypt
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // For demo purposes, also allow the demo credentials
-    if (email === 'demo@socialstudio.com' && password === 'Demo123!') {
-      return res.json({
-        success: true,
-        message: 'Login successful!',
-        user: {
-          id: 'demo-client',
-          fullName: 'Demo Client',
-          email: 'demo@socialstudio.com',
-          userType: 'client'
-        }
-      });
-    }
-
-    if (email === 'intern@socialstudio.com' && password === 'Demo123!') {
-      return res.json({
-        success: true,
-        message: 'Login successful!',
-        user: {
-          id: 'demo-intern',
-          fullName: 'Demo Intern',
-          email: 'intern@socialstudio.com',
-          userType: 'intern'
-        }
-      });
-    }
+    // Generate JWT token
+    const token = generateToken(user);
 
     res.json({
       success: true,
@@ -537,7 +581,8 @@ app.post('/api/login', postLimiter, async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         userType: user.userType
-      }
+      },
+      token: token
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -802,6 +847,114 @@ app.post('/api/internship-application-dashboard', postLimiter, async (req, res) 
   }
 });
 
+// Password reset endpoints
+app.post('/api/forgot-password', postLimiter, async (req, res) => {
+  const { email } = req.body;
+
+  // Validation
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ error: 'Please provide a valid email address' });
+  }
+
+  try {
+    const users = readUsers();
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    
+    if (!user) {
+      // Don't reveal if user exists or not for security
+      return res.json({ 
+        success: true, 
+        message: 'If an account with this email exists, a password reset link has been sent.' 
+      });
+    }
+
+    // Generate reset token (in production, use a more secure method)
+    const resetToken = jwt.sign(
+      { id: user.id, email: user.email, type: 'password-reset' },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    // Send password reset email
+    const resetLink = `${req.protocol}://${req.get('host')}/reset-password.html?token=${resetToken}`;
+    const htmlContent = `
+      <h2>Password Reset Request</h2>
+      <p>Hi ${user.fullName},</p>
+      <p>You requested a password reset for your Social Studio account.</p>
+      <p>Click the link below to reset your password:</p>
+      <p><a href="${resetLink}" style="background-color: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Reset Password</a></p>
+      <p>This link will expire in 1 hour.</p>
+      <p>If you didn't request this reset, please ignore this email.</p>
+      <p>Best regards,<br>The Social Studio Team</p>
+    `;
+
+    await sendEmail('Password Reset Request', htmlContent);
+
+    res.json({ 
+      success: true, 
+      message: 'If an account with this email exists, a password reset link has been sent.' 
+    });
+  } catch (error) {
+    console.error('Password reset error:', error);
+    res.status(500).json({ error: 'Something went wrong. Please try again.' });
+  }
+});
+
+app.post('/api/reset-password', postLimiter, async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  // Validation
+  if (!token) {
+    return res.status(400).json({ error: 'Reset token is required' });
+  }
+
+  if (!newPassword || newPassword.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters' });
+  }
+
+  try {
+    // Verify reset token
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.type !== 'password-reset') {
+      return res.status(400).json({ error: 'Invalid reset token' });
+    }
+
+    const users = readUsers();
+    const user = users.find(u => u.id === decoded.id);
+    
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid reset token' });
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    // Send confirmation email
+    const htmlContent = `
+      <h2>Password Reset Successful</h2>
+      <p>Hi ${user.fullName},</p>
+      <p>Your password has been successfully reset.</p>
+      <p>You can now log in with your new password.</p>
+      <p>If you didn't request this change, please contact us immediately.</p>
+      <p>Best regards,<br>The Social Studio Team</p>
+    `;
+
+    await sendEmail('Password Reset Successful', htmlContent);
+
+    res.json({ 
+      success: true, 
+      message: 'Password has been reset successfully. You can now log in with your new password.' 
+    });
+  } catch (error) {
+    console.error('Password reset error:', error);
+    if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({ error: 'Reset token has expired. Please request a new one.' });
+    }
+    res.status(500).json({ error: 'Something went wrong. Please try again.' });
+  }
+});
+
 // Admin endpoints
 app.get('/api/admin/users', (req, res) => {
   // In production, verify admin JWT token
@@ -940,6 +1093,14 @@ app.get('/login', (req, res) => {
 
 app.get('/signup', (req, res) => {
   res.redirect('/signup.html');
+});
+
+app.get('/forgot-password', (req, res) => {
+  res.redirect('/forgot-password.html');
+});
+
+app.get('/reset-password', (req, res) => {
+  res.redirect('/reset-password.html');
 });
 
 // Catch-all route to serve index.html for SPA routing

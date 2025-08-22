@@ -176,6 +176,13 @@
 
 
 
+                <!-- Forgot Password Link -->
+                <div class="mt-6 text-center">
+                    <a href="forgot-password.html" class="text-primary hover:text-secondary text-sm font-medium">
+                        Forgot your password?
+                    </a>
+                </div>
+
                 <!-- Sign Up Link -->
                 <div class="mt-8 text-center bg-gray-50 rounded-lg p-4">
                     <p class="text-sm text-gray-600 mb-2">
@@ -346,7 +353,7 @@
                 if (response.ok && result.success) {
                     // Store user data in localStorage
                     localStorage.setItem('user', JSON.stringify(result.user));
-                    localStorage.setItem('token', 'demo-token'); // In production, use actual JWT token
+                    localStorage.setItem('token', result.token); // Store JWT token
                     
                     // Redirect based on user type
                     if (result.user.userType === 'admin') {

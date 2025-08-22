@@ -667,7 +667,7 @@
                 if (response.ok && result.success) {
                     // Store user data in localStorage
                     localStorage.setItem('user', JSON.stringify(result.user));
-                    localStorage.setItem('token', 'demo-token'); // In production, use actual JWT token
+                    localStorage.setItem('token', result.token); // Store JWT token
                     
                     // Redirect based on user type
                     if (result.user.userType === 'admin') {
