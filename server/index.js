@@ -16,9 +16,18 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Environment Configuration
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const isProduction = NODE_ENV === 'production';
+
 // JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
-const JWT_EXPIRES_IN = '7d'; // 7 days
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const BCRYPT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS) || 12;
+
+// Security Configuration
+const RATE_LIMIT_WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000; // 15 minutes
+const RATE_LIMIT_MAX_REQUESTS = parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100;
 
 // 2FA Configuration
 const TWO_FACTOR_APP_NAME = 'Social Studio';
@@ -186,7 +195,7 @@ async function initializeDemoPasswords() {
 
   for (const user of users) {
     if (demoPasswords[user.email] && user.password.startsWith('$2a$10$demo.hash.for.')) {
-      user.password = await bcrypt.hash(demoPasswords[user.email], 10);
+      user.password = await bcrypt.hash(demoPasswords[user.email], BCRYPT_ROUNDS);
       console.log(`Hashed password for ${user.email}`);
     }
   }
@@ -206,7 +215,7 @@ function writeUsers(newUsers) {
   return true;
 }
 
-// Middleware
+// Enhanced Security Middleware
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -219,22 +228,89 @@ app.use(helmet({
       connectSrc: ["'self'"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
-      upgradeInsecureRequests: []
+      upgradeInsecureRequests: isProduction ? [] : undefined
     }
-  }
+  },
+  hsts: {
+    maxAge: parseInt(process.env.HELMET_HSTS_MAX_AGE) || 31536000,
+    includeSubDomains: process.env.HELMET_HSTS_INCLUDE_SUBDOMAINS === 'true',
+    preload: true
+  },
+  noSniff: true,
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+  frameguard: { action: 'deny' },
+  xssFilter: true,
+  hidePoweredBy: true
 }));
-app.use(cors());
+// Enhanced CORS Configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'https://socialstudio.in', 'https://www.socialstudio.in'],
+  credentials: process.env.CORS_CREDENTIALS === 'true',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+// Input sanitization and validation middleware
 app.use(express.json({ limit: '10mb' }));
 
-// Rate limiting for POST routes
-const postLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 50, // limit each IP to 50 requests per windowMs (increased for testing)
-  message: { error: 'Too many requests, please try again later.' }
+// Input sanitization middleware
+app.use((req, res, next) => {
+  if (req.body) {
+    // Sanitize string inputs
+    Object.keys(req.body).forEach(key => {
+      if (typeof req.body[key] === 'string') {
+        req.body[key] = req.body[key]
+          .trim()
+          .replace(/[<>]/g, '') // Remove potential HTML tags
+          .replace(/javascript:/gi, '') // Remove javascript: protocol
+          .replace(/on\w+=/gi, ''); // Remove event handlers
+      }
+    });
+  }
+  next();
 });
 
-// Apply rate limiting to POST routes
+// Request logging middleware
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString();
+  const method = req.method;
+  const url = req.url;
+  const ip = req.ip || req.connection.remoteAddress;
+  
+  console.log(`[${timestamp}] ${method} ${url} - IP: ${ip}`);
+  next();
+});
+
+// Enhanced Rate Limiting Configuration
+const postLimiter = rateLimit({
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: RATE_LIMIT_MAX_REQUESTS,
+  message: { error: 'Too many requests, please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: false,
+  skipFailedRequests: false
+});
+
+// Stricter rate limiting for authentication routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 auth attempts per 15 minutes
+  message: { error: 'Too many authentication attempts, please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: false,
+  skipFailedRequests: false
+});
+
+// Apply rate limiting
 app.use('/api', postLimiter);
+app.use('/api/login', authLimiter);
+app.use('/api/signup', authLimiter);
+app.use('/api/forgot-password', authLimiter);
+app.use('/api/reset-password', authLimiter);
 
 // Serve static files from client directory
 app.use(express.static(path.join(__dirname, '../client')));
@@ -519,7 +595,7 @@ app.post('/api/signup', postLimiter, async (req, res) => {
 
     // Create new user (in production, hash the password!)
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS);
 
     const newUser = {
       id: Date.now().toString(),
@@ -976,7 +1052,7 @@ app.post('/api/reset-password', postLimiter, async (req, res) => {
     }
 
     // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(newPassword, BCRYPT_ROUNDS);
     user.password = hashedPassword;
 
     // Send confirmation email
@@ -1456,13 +1532,63 @@ app.post('/api/messaging/send', authenticateToken, (req, res) => {
   }
 });
 
+// Additional security headers middleware
+app.use((req, res, next) => {
+  // Security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  
+  // Remove server information
+  res.removeHeader('X-Powered-By');
+  
+  next();
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// Global error handling middleware
+app.use((error, req, res, next) => {
+  console.error('Global error handler:', error);
+  
+  // Don't leak error details in production
+  const errorMessage = isProduction ? 'Internal server error' : error.message;
+  const statusCode = error.statusCode || 500;
+  
+  res.status(statusCode).json({
+    error: errorMessage,
+    ...(isProduction ? {} : { stack: error.stack })
+  });
+});
+
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully');
+  process.exit(0);
+});
+
 // Catch-all route to serve index.html for SPA routing
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Email notifications: ${process.env.GMAIL_APP_PASSWORD ? 'Configured' : 'Not configured'}`);
-  console.log(`Contact Email: ${process.env.CONTACT_EMAIL || 'pv.socialstudio@gmail.com'}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${NODE_ENV}`);
+  console.log(`🔒 Security: Enhanced security features enabled`);
+  console.log(`📧 Email notifications: ${process.env.GMAIL_APP_PASSWORD ? 'Configured' : 'Not configured'}`);
+  console.log(`📞 Contact Email: ${process.env.CONTACT_EMAIL || 'pv.socialstudio@gmail.com'}`);
+  console.log(`⚡ Rate limiting: ${RATE_LIMIT_MAX_REQUESTS} requests per ${RATE_LIMIT_WINDOW_MS/1000/60} minutes`);
+  console.log(`🔐 JWT expiry: ${JWT_EXPIRES_IN}`);
+  console.log(`🛡️ Bcrypt rounds: ${BCRYPT_ROUNDS}`);
 });
