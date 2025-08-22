@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
 
 // Load environment variables
 dotenv.config();
@@ -44,6 +45,36 @@ async function sendEmail(subject, htmlContent) {
     console.error('Email sending failed with error:', error);
     console.error('Error code:', error.code);
     console.error('Error message:', error.message);
+    return false;
+  }
+}
+
+// User storage (in production, use a proper database)
+const USERS_FILE = path.join(__dirname, 'users.json');
+
+// Initialize users file if it doesn't exist
+if (!fs.existsSync(USERS_FILE)) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify([], null, 2));
+}
+
+// Helper function to read users
+function readUsers() {
+  try {
+    const data = fs.readFileSync(USERS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading users file:', error);
+    return [];
+  }
+}
+
+// Helper function to write users
+function writeUsers(users) {
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+    return true;
+  } catch (error) {
+    console.error('Error writing users file:', error);
     return false;
   }
 }
@@ -291,6 +322,138 @@ app.post('/api/contact-message', async (req, res) => {
   } catch (error) {
     console.error('Error processing contact message:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Signup endpoint
+app.post('/api/signup', postLimiter, async (req, res) => {
+  const { fullName, email, phone, password } = req.body;
+
+  // Validation
+  if (!fullName || fullName.trim().length < 2) {
+    return res.status(400).json({ error: 'Please provide your full name (at least 2 characters)' });
+  }
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Please provide a valid email address' });
+  }
+
+  if (!phone || phone.trim().length < 10) {
+    return res.status(400).json({ error: 'Please provide a valid phone number (at least 10 digits)' });
+  }
+
+  if (!password || password.length < 8) {
+    return res.status(400).json({ error: 'Password must be at least 8 characters long' });
+  }
+
+  try {
+    const users = readUsers();
+    
+    // Check if user already exists
+    const existingUser = users.find(user => user.email.toLowerCase() === email.toLowerCase());
+    if (existingUser) {
+      return res.status(400).json({ error: 'An account with this email already exists' });
+    }
+
+    // Create new user (in production, hash the password!)
+    const newUser = {
+      id: Date.now().toString(),
+      fullName: fullName.trim(),
+      email: email.toLowerCase().trim(),
+      phone: phone.trim(),
+      password: password, // In production, use bcrypt to hash passwords
+      createdAt: new Date().toISOString()
+    };
+
+    users.push(newUser);
+    
+    if (writeUsers(users)) {
+      // Send welcome email
+      const htmlContent = `
+        <h2>Welcome to Social Studio!</h2>
+        <p>Hi ${fullName},</p>
+        <p>Thank you for creating your account with Social Studio. You now have access to exclusive digital marketing resources and tools.</p>
+        <p><strong>Account Details:</strong></p>
+        <p><strong>Name:</strong> ${fullName}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p>You can now sign in to your account and start exploring our services.</p>
+        <p>Best regards,<br>The Social Studio Team</p>
+      `;
+
+      await sendEmail('Welcome to Social Studio!', htmlContent);
+
+      res.json({ 
+        success: true, 
+        message: 'Account created successfully! Welcome to Social Studio.',
+        user: {
+          id: newUser.id,
+          fullName: newUser.fullName,
+          email: newUser.email
+        }
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to create account. Please try again.' });
+    }
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({ error: 'Something went wrong. Please try again.' });
+  }
+});
+
+// Login endpoint
+app.post('/api/login', postLimiter, async (req, res) => {
+  const { email, password } = req.body;
+
+  // Validation
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Please provide a valid email address' });
+  }
+
+  if (!password || password.length < 1) {
+    return res.status(400).json({ error: 'Password is required' });
+  }
+
+  try {
+    const users = readUsers();
+    
+    // Find user by email
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Check password (in production, use bcrypt to compare hashed passwords)
+    if (user.password !== password) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // For demo purposes, also allow the demo credentials
+    if (email === 'demo@socialstudio.com' && password === 'Demo123!') {
+      return res.json({
+        success: true,
+        message: 'Login successful!',
+        user: {
+          id: 'demo-user',
+          fullName: 'Demo User',
+          email: 'demo@socialstudio.com'
+        }
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Login successful!',
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Something went wrong. Please try again.' });
   }
 });
 

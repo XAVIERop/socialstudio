@@ -329,19 +329,31 @@
             loginBtn.disabled = true;
 
             try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // For demo purposes, show success for valid credentials
-                // In real implementation, this would check against your backend
-                if (data.email === 'demo@socialstudio.com' && data.password === 'Demo123!') {
+                // Call the login API
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: data.email,
+                        password: data.password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
                     // Show success modal
                     document.getElementById('success-modal').classList.remove('hidden');
                     
                     // Reset form
                     form.reset();
+                    
+                    console.log('Login successful:', result.user);
                 } else {
                     // Show error modal
+                    document.getElementById('error-message').textContent = result.error || 'Invalid email or password. Please try again.';
                     document.getElementById('error-modal').classList.remove('hidden');
                 }
                 

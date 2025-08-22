@@ -454,14 +454,35 @@
             signupBtn.disabled = true;
 
             try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Show success modal
-                document.getElementById('success-modal').classList.remove('hidden');
-                
-                // Reset form
-                form.reset();
+                // Call the signup API
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fullName: data.fullName,
+                        email: data.email,
+                        phone: data.phone,
+                        password: data.password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Show success modal
+                    document.getElementById('success-modal').classList.remove('hidden');
+                    
+                    // Reset form
+                    form.reset();
+                    
+                    console.log('Account created successfully:', result.user);
+                } else {
+                    // Show error message
+                    const errorMessage = result.error || 'An error occurred during signup. Please try again.';
+                    alert(errorMessage);
+                }
                 
             } catch (error) {
                 console.error('Signup error:', error);
