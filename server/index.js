@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const speakeasy = require('speakeasy');
 const QRCode = require('qrcode');
+const emailTemplates = require('./email-templates');
 
 // Load environment variables
 dotenv.config();
@@ -101,18 +102,19 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Email sending function
-async function sendEmail(subject, htmlContent) {
+// Enhanced Email sending function with templates
+async function sendEmail(subject, htmlContent, to = null) {
   try {
     console.log('Attempting to send email...');
     console.log('GMAIL_USER:', process.env.GMAIL_USER);
     console.log('GMAIL_APP_PASSWORD exists:', !!process.env.GMAIL_APP_PASSWORD);
     
     const mailOptions = {
-      from: process.env.GMAIL_USER || 'pv.socialstudio@gmail.com',
-      to: 'pv.socialstudio@gmail.com',
+      from: `"Social Studio" <${process.env.GMAIL_USER || 'pv.socialstudio@gmail.com'}>`,
+      to: to || process.env.CONTACT_EMAIL || 'pv.socialstudio@gmail.com',
       subject: subject,
-      html: htmlContent
+      html: htmlContent,
+      replyTo: process.env.CONTACT_EMAIL || 'pv.socialstudio@gmail.com'
     };
 
     console.log('Mail options:', { from: mailOptions.from, to: mailOptions.to, subject: mailOptions.subject });
@@ -126,6 +128,37 @@ async function sendEmail(subject, htmlContent) {
     console.error('Error message:', error.message);
     return false;
   }
+}
+
+// Template-based email functions
+async function sendWelcomeEmail(userData) {
+  const template = emailTemplates.welcome(userData);
+  return await sendEmail(template.subject, template.html, userData.email);
+}
+
+async function sendPasswordResetEmail(userData) {
+  const template = emailTemplates.passwordReset(userData);
+  return await sendEmail(template.subject, template.html, userData.email);
+}
+
+async function sendPrototypeRequestEmail(data) {
+  const template = emailTemplates.prototypeRequest(data);
+  return await sendEmail(template.subject, template.html);
+}
+
+async function sendInternshipApplicationEmail(data) {
+  const template = emailTemplates.internshipApplication(data);
+  return await sendEmail(template.subject, template.html);
+}
+
+async function sendVerificationSuccessEmail(userData) {
+  const template = emailTemplates.verificationSuccess(userData);
+  return await sendEmail(template.subject, template.html, userData.email);
+}
+
+async function sendTwoFactorSetupEmail(userData) {
+  const template = emailTemplates.twoFactorSetup(userData);
+  return await sendEmail(template.subject, template.html, userData.email);
 }
 
 // In-memory user storage (for serverless compatibility)
@@ -360,22 +393,16 @@ app.post('/api/prototype-request', async (req, res) => {
       timestamp: new Date().toISOString()
     });
 
-    // Send email notification
+    // Send email notification using template
     console.log('Preparing to send email notification...');
-    const emailSubject = `New Prototype Request - ${business.trim()}`;
-    const emailHtml = `
-      <h2>New Prototype Request</h2>
-      <p><strong>Name:</strong> ${name.trim()}</p>
-      <p><strong>Email:</strong> ${email.trim().toLowerCase()}</p>
-      <p><strong>Business:</strong> ${business.trim()}</p>
-      <p><strong>Industry:</strong> ${industry}</p>
-      <p><strong>Phone:</strong> ${phone ? phone.trim() : 'Not provided'}</p>
-      <p><strong>Message:</strong> ${message ? message.trim() : 'No message provided'}</p>
-      <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
-    `;
-
-    console.log('Calling sendEmail function...');
-    const emailResult = await sendEmail(emailSubject, emailHtml);
+    const emailResult = await sendPrototypeRequestEmail({
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      business: business.trim(),
+      industry: industry,
+      phone: phone ? phone.trim() : 'Not provided',
+      message: message ? message.trim() : 'No message provided'
+    });
     console.log('Email send result:', emailResult);
     
     if (emailResult) {
@@ -456,22 +483,15 @@ app.post('/api/internship-application', async (req, res) => {
     // Log the application
     console.log('Internship application received:', n8nData);
 
-    // Send email notification
-    const emailSubject = `New Internship Application - ${n8nData.name}`;
-    const emailHtml = `
-      <h2>New Internship Application</h2>
-      <p><strong>Name:</strong> ${n8nData.name}</p>
-      <p><strong>Email:</strong> ${n8nData.email}</p>
-      <p><strong>Phone:</strong> ${n8nData.phone || 'Not provided'}</p>
-      <p><strong>Track:</strong> ${n8nData.track}</p>
-      <p><strong>Availability:</strong> ${n8nData.availability}</p>
-      <p><strong>Location:</strong> ${n8nData.location || 'Not provided'}</p>
-      <p><strong>Portfolio/LinkedIn:</strong> ${n8nData.portfolio_or_linkedin || 'Not provided'}</p>
-      <p><strong>About:</strong> ${n8nData.about}</p>
-      <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
-    `;
-
-    await sendEmail(emailSubject, emailHtml);
+    // Send email notification using template
+    await sendInternshipApplicationEmail({
+      name: n8nData.name,
+      email: n8nData.email,
+      phone: n8nData.phone,
+      track: n8nData.track,
+      portfolio_or_linkedin: n8nData.portfolio_or_linkedin,
+      why_you: n8nData.about
+    });
     res.json({ ok: true });
 
   } catch (error) {
@@ -631,24 +651,15 @@ app.post('/api/signup', postLimiter, async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    // Send welcome and verification email
+    // Send welcome and verification email using template
     const verificationLink = `${req.protocol}://${req.get('host')}/verify-email.html?token=${verificationToken}`;
-    const htmlContent = `
-      <h2>Welcome to Social Studio!</h2>
-      <p>Hi ${fullName},</p>
-      <p>Thank you for creating your account with Social Studio. You now have access to exclusive digital marketing resources and tools.</p>
-      <p><strong>Account Details:</strong></p>
-      <p><strong>Name:</strong> ${fullName}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Phone:</strong> ${phone}</p>
-      <p><strong>Please verify your email address by clicking the link below:</strong></p>
-      <p><a href="${verificationLink}" style="background-color: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Verify Email Address</a></p>
-      <p>This verification link will expire in 24 hours.</p>
-      <p>Once verified, you can sign in to your account and start exploring our services.</p>
-      <p>Best regards,<br>The Social Studio Team</p>
-    `;
-
-    await sendEmail('Welcome to Social Studio! Please Verify Your Email', htmlContent);
+    await sendWelcomeEmail({
+      fullName: fullName,
+      email: email,
+      phone: phone,
+      userType: userType,
+      verificationLink: verificationLink
+    });
 
           res.json({ 
         success: true, 
@@ -1000,20 +1011,12 @@ app.post('/api/forgot-password', postLimiter, async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    // Send password reset email
+    // Send password reset email using template
     const resetLink = `${req.protocol}://${req.get('host')}/reset-password.html?token=${resetToken}`;
-    const htmlContent = `
-      <h2>Password Reset Request</h2>
-      <p>Hi ${user.fullName},</p>
-      <p>You requested a password reset for your Social Studio account.</p>
-      <p>Click the link below to reset your password:</p>
-      <p><a href="${resetLink}" style="background-color: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Reset Password</a></p>
-      <p>This link will expire in 1 hour.</p>
-      <p>If you didn't request this reset, please ignore this email.</p>
-      <p>Best regards,<br>The Social Studio Team</p>
-    `;
-
-    await sendEmail('Password Reset Request', htmlContent);
+    await sendPasswordResetEmail({
+      fullName: user.fullName,
+      resetLink: resetLink
+    });
 
     res.json({ 
       success: true, 
@@ -1055,17 +1058,11 @@ app.post('/api/reset-password', postLimiter, async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, BCRYPT_ROUNDS);
     user.password = hashedPassword;
 
-    // Send confirmation email
-    const htmlContent = `
-      <h2>Password Reset Successful</h2>
-      <p>Hi ${user.fullName},</p>
-      <p>Your password has been successfully reset.</p>
-      <p>You can now log in with your new password.</p>
-      <p>If you didn't request this change, please contact us immediately.</p>
-      <p>Best regards,<br>The Social Studio Team</p>
-    `;
-
-    await sendEmail('Password Reset Successful', htmlContent);
+    // Send confirmation email using template
+    await sendVerificationSuccessEmail({
+      fullName: user.fullName,
+      email: user.email
+    });
 
     res.json({ 
       success: true, 
