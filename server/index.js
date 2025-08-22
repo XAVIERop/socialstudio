@@ -1103,6 +1103,117 @@ app.get('/reset-password', (req, res) => {
   res.redirect('/reset-password.html');
 });
 
+app.get('/analytics', (req, res) => {
+  res.redirect('/analytics-dashboard.html');
+});
+
+app.get('/messaging', (req, res) => {
+  res.redirect('/messaging.html');
+});
+
+// Analytics endpoints
+app.get('/api/analytics/dashboard', authenticateToken, (req, res) => {
+  try {
+    // In production, fetch real analytics data from database
+    const analyticsData = {
+      stats: {
+        totalUsers: users.length,
+        totalApplications: 89, // Demo data
+        totalPrototypes: 156, // Demo data
+        conversionRate: 23.5, // Demo data
+        activeUsers: 342 // Demo data
+      },
+      userGrowth: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        data: [850, 920, 1050, 1120, 1180, users.length]
+      },
+      applicationStatus: {
+        labels: ['Pending', 'Under Review', 'Interview', 'Accepted', 'Rejected'],
+        data: [23, 34, 12, 15, 5]
+      },
+      recentActivity: [
+        { type: 'user', message: 'New user registered: john.doe@example.com', time: '2 minutes ago' },
+        { type: 'application', message: 'Application submitted for Frontend Development', time: '5 minutes ago' },
+        { type: 'prototype', message: 'Prototype request: E-commerce website', time: '12 minutes ago' },
+        { type: 'admin', message: 'Admin reviewed application #1234', time: '1 hour ago' },
+        { type: 'system', message: 'System backup completed successfully', time: '2 hours ago' }
+      ]
+    };
+    
+    res.json(analyticsData);
+  } catch (error) {
+    console.error('Analytics error:', error);
+    res.status(500).json({ error: 'Failed to load analytics data' });
+  }
+});
+
+// Messaging endpoints
+app.get('/api/messaging/conversations', authenticateToken, (req, res) => {
+  try {
+    // In production, fetch real conversations from database
+    const conversations = [
+      {
+        id: 1,
+        name: 'Admin Team',
+        lastMessage: 'Your application has been reviewed',
+        timestamp: '2 minutes ago',
+        unread: 2,
+        avatar: 'fas fa-user-shield'
+      },
+      {
+        id: 2,
+        name: 'Support Team',
+        lastMessage: 'We\'re here to help with any questions',
+        timestamp: '1 hour ago',
+        unread: 0,
+        avatar: 'fas fa-headset'
+      }
+    ];
+    
+    res.json(conversations);
+  } catch (error) {
+    console.error('Messaging error:', error);
+    res.status(500).json({ error: 'Failed to load conversations' });
+  }
+});
+
+app.get('/api/messaging/messages/:conversationId', authenticateToken, (req, res) => {
+  try {
+    const { conversationId } = req.params;
+    
+    // In production, fetch real messages from database
+    const messages = [
+      { id: 1, sender: 'them', message: 'Hello! How can we help you today?', timestamp: '10:30 AM' },
+      { id: 2, sender: 'me', message: 'Hi! I have a question about my application.', timestamp: '10:32 AM' },
+      { id: 3, sender: 'them', message: 'Of course! What would you like to know?', timestamp: '10:33 AM' }
+    ];
+    
+    res.json(messages);
+  } catch (error) {
+    console.error('Messages error:', error);
+    res.status(500).json({ error: 'Failed to load messages' });
+  }
+});
+
+app.post('/api/messaging/send', authenticateToken, (req, res) => {
+  try {
+    const { conversationId, message } = req.body;
+    
+    // In production, save message to database
+    const newMessage = {
+      id: Date.now(),
+      sender: 'me',
+      message: message,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    
+    res.json({ success: true, message: newMessage });
+  } catch (error) {
+    console.error('Send message error:', error);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
 // Catch-all route to serve index.html for SPA routing
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
