@@ -324,11 +324,14 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Initialize AOS
+        // Initialize AOS - Optimized for smooth scrolling
         AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
+            duration: 400, // Reduced from 800ms to 400ms for faster animations
+            easing: 'ease-out', // Changed to ease-out for snappier feel
+            once: true,
+            offset: 50, // Reduced offset for earlier triggering
+            delay: 0, // No delay for immediate response
+            disable: 'mobile' // Disable on mobile for better performance
         });
 
         // Mobile menu toggle

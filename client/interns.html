@@ -1174,13 +1174,15 @@
     </section>
 
     <script>
-        // Initialize AOS (Animate On Scroll)
-        AOS.init({
-          duration: 800,
-          easing: 'ease-in-out',
-          once: true,
-          offset: 100
-        });
+            // Initialize AOS (Animate On Scroll) - Optimized for smooth scrolling
+    AOS.init({
+      duration: 400, // Reduced from 800ms to 400ms for faster animations
+      easing: 'ease-out', // Changed to ease-out for snappier feel
+      once: true,
+      offset: 50, // Reduced offset for earlier triggering
+      delay: 0, // No delay for immediate response
+      disable: 'mobile' // Disable on mobile for better performance
+    });
 
         // Mobile menu toggle
         document.getElementById("mobile-menu-button").addEventListener("click", function () {
