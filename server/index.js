@@ -7,6 +7,8 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const speakeasy = require('speakeasy');
+const QRCode = require('qrcode');
 
 // Load environment variables
 dotenv.config();
@@ -17,6 +19,9 @@ const PORT = process.env.PORT || 3000;
 // JWT Configuration
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
 const JWT_EXPIRES_IN = '7d'; // 7 days
+
+// 2FA Configuration
+const TWO_FACTOR_APP_NAME = 'Social Studio';
 
 // JWT Helper Functions
 function generateToken(user) {
@@ -37,6 +42,27 @@ function verifyToken(token) {
   } catch (error) {
     return null;
   }
+}
+
+// 2FA Helper Functions
+function generateTwoFactorSecret(user) {
+  return speakeasy.generateSecret({
+    name: `${TWO_FACTOR_APP_NAME} (${user.email})`,
+    issuer: TWO_FACTOR_APP_NAME
+  });
+}
+
+function verifyTwoFactorToken(secret, token) {
+  return speakeasy.totp.verify({
+    secret: secret,
+    encoding: 'base32',
+    token: token,
+    window: 2 // Allow 2 time steps for clock skew
+  });
+}
+
+function generateQRCode(otpauthUrl) {
+  return QRCode.toDataURL(otpauthUrl);
 }
 
 // Authentication Middleware
@@ -105,6 +131,9 @@ users.push({
   phone: '+1234567890',
   password: '$2a$10$demo.hash.for.Demo123!', // Will be updated with real hash
   userType: 'client',
+  emailVerified: true,
+  twoFactorEnabled: false,
+  twoFactorSecret: null,
   profile: {
     companyName: 'Demo Company',
     industry: 'Technology'
@@ -119,6 +148,9 @@ users.push({
   phone: '+1234567890',
   password: '$2a$10$demo.hash.for.Demo123!', // Will be updated with real hash
   userType: 'intern',
+  emailVerified: true,
+  twoFactorEnabled: false,
+  twoFactorSecret: null,
   profile: {
     university: 'Demo University',
     graduationYear: '2025',
@@ -134,6 +166,9 @@ users.push({
   phone: '+1234567890',
   password: '$2a$10$demo.hash.for.Admin123!', // Will be updated with real hash
   userType: 'admin',
+  emailVerified: true,
+  twoFactorEnabled: true,
+  twoFactorSecret: 'demo-secret-key-for-admin', // In production, this would be generated
   profile: {
     role: 'System Administrator',
     permissions: ['users', 'applications', 'prototypes', 'settings']
@@ -493,6 +528,9 @@ app.post('/api/signup', postLimiter, async (req, res) => {
       phone: phone.trim(),
       password: hashedPassword,
       userType: userType,
+      emailVerified: false,
+      twoFactorEnabled: false,
+      twoFactorSecret: null,
       profile: userType === 'client' ? {
         companyName: companyName.trim(),
         industry: industry
@@ -510,7 +548,15 @@ app.post('/api/signup', postLimiter, async (req, res) => {
     // Log the new user for debugging
     console.log('New user created:', { id: newUser.id, email: newUser.email, fullName: newUser.fullName });
     
-    // Send welcome email
+    // Generate verification token
+    const verificationToken = jwt.sign(
+      { id: newUser.id, email: newUser.email, type: 'email-verification' },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // Send welcome and verification email
+    const verificationLink = `${req.protocol}://${req.get('host')}/verify-email.html?token=${verificationToken}`;
     const htmlContent = `
       <h2>Welcome to Social Studio!</h2>
       <p>Hi ${fullName},</p>
@@ -519,15 +565,18 @@ app.post('/api/signup', postLimiter, async (req, res) => {
       <p><strong>Name:</strong> ${fullName}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Phone:</strong> ${phone}</p>
-      <p>You can now sign in to your account and start exploring our services.</p>
+      <p><strong>Please verify your email address by clicking the link below:</strong></p>
+      <p><a href="${verificationLink}" style="background-color: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Verify Email Address</a></p>
+      <p>This verification link will expire in 24 hours.</p>
+      <p>Once verified, you can sign in to your account and start exploring our services.</p>
       <p>Best regards,<br>The Social Studio Team</p>
     `;
 
-    await sendEmail('Welcome to Social Studio!', htmlContent);
+    await sendEmail('Welcome to Social Studio! Please Verify Your Email', htmlContent);
 
           res.json({ 
         success: true, 
-        message: 'Account created successfully! Welcome to Social Studio.',
+        message: 'Account created successfully! Please check your email for verification.',
         user: {
           id: newUser.id,
           fullName: newUser.fullName,
@@ -1103,12 +1152,205 @@ app.get('/reset-password', (req, res) => {
   res.redirect('/reset-password.html');
 });
 
+app.get('/verify-email', (req, res) => {
+  res.redirect('/verify-email.html');
+});
+
+app.get('/2fa-setup', (req, res) => {
+  res.redirect('/2fa-setup.html');
+});
+
 app.get('/analytics', (req, res) => {
   res.redirect('/analytics-dashboard.html');
 });
 
 app.get('/messaging', (req, res) => {
   res.redirect('/messaging.html');
+});
+
+// 2FA endpoints
+app.post('/api/2fa/setup', authenticateToken, async (req, res) => {
+  try {
+    const users = readUsers();
+    const user = users.find(u => u.id === req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Generate new 2FA secret
+    const secret = generateTwoFactorSecret(user);
+    const qrCode = await generateQRCode(secret.otpauth_url);
+
+    res.json({
+      success: true,
+      secret: secret.base32,
+      qrCode: qrCode,
+      otpauthUrl: secret.otpauth_url
+    });
+  } catch (error) {
+    console.error('2FA setup error:', error);
+    res.status(500).json({ error: 'Failed to setup 2FA' });
+  }
+});
+
+app.post('/api/2fa/verify', authenticateToken, async (req, res) => {
+  try {
+    const { token } = req.body;
+    const users = readUsers();
+    const user = users.find(u => u.id === req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (!user.twoFactorSecret) {
+      return res.status(400).json({ error: '2FA not set up' });
+    }
+
+    const isValid = verifyTwoFactorToken(user.twoFactorSecret, token);
+    
+    if (!isValid) {
+      return res.status(400).json({ error: 'Invalid 2FA token' });
+    }
+
+    res.json({ success: true, message: '2FA token verified' });
+  } catch (error) {
+    console.error('2FA verification error:', error);
+    res.status(500).json({ error: 'Failed to verify 2FA token' });
+  }
+});
+
+app.post('/api/2fa/enable', authenticateToken, async (req, res) => {
+  try {
+    const { token, secret } = req.body;
+    const users = readUsers();
+    const user = users.find(u => u.id === req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Verify the token
+    const isValid = verifyTwoFactorToken(secret, token);
+    
+    if (!isValid) {
+      return res.status(400).json({ error: 'Invalid 2FA token' });
+    }
+
+    // Enable 2FA
+    user.twoFactorEnabled = true;
+    user.twoFactorSecret = secret;
+
+    res.json({ success: true, message: '2FA enabled successfully' });
+  } catch (error) {
+    console.error('2FA enable error:', error);
+    res.status(500).json({ error: 'Failed to enable 2FA' });
+  }
+});
+
+app.post('/api/2fa/disable', authenticateToken, async (req, res) => {
+  try {
+    const { token } = req.body;
+    const users = readUsers();
+    const user = users.find(u => u.id === req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (!user.twoFactorEnabled || !user.twoFactorSecret) {
+      return res.status(400).json({ error: '2FA not enabled' });
+    }
+
+    // Verify the token
+    const isValid = verifyTwoFactorToken(user.twoFactorSecret, token);
+    
+    if (!isValid) {
+      return res.status(400).json({ error: 'Invalid 2FA token' });
+    }
+
+    // Disable 2FA
+    user.twoFactorEnabled = false;
+    user.twoFactorSecret = null;
+
+    res.json({ success: true, message: '2FA disabled successfully' });
+  } catch (error) {
+    console.error('2FA disable error:', error);
+    res.status(500).json({ error: 'Failed to disable 2FA' });
+  }
+});
+
+// Email verification endpoints
+app.post('/api/email/verify', async (req, res) => {
+  try {
+    const { token } = req.body;
+    
+    // Verify verification token
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.type !== 'email-verification') {
+      return res.status(400).json({ error: 'Invalid verification token' });
+    }
+
+    const users = readUsers();
+    const user = users.find(u => u.id === decoded.id);
+    
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    // Mark email as verified
+    user.emailVerified = true;
+
+    res.json({ success: true, message: 'Email verified successfully' });
+  } catch (error) {
+    console.error('Email verification error:', error);
+    if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({ error: 'Verification token has expired' });
+    }
+    res.status(500).json({ error: 'Failed to verify email' });
+  }
+});
+
+app.post('/api/email/resend-verification', authenticateToken, async (req, res) => {
+  try {
+    const users = readUsers();
+    const user = users.find(u => u.id === req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (user.emailVerified) {
+      return res.status(400).json({ error: 'Email already verified' });
+    }
+
+    // Generate verification token
+    const verificationToken = jwt.sign(
+      { id: user.id, email: user.email, type: 'email-verification' },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // Send verification email
+    const verificationLink = `${req.protocol}://${req.get('host')}/verify-email.html?token=${verificationToken}`;
+    const htmlContent = `
+      <h2>Email Verification</h2>
+      <p>Hi ${user.fullName},</p>
+      <p>Please verify your email address by clicking the link below:</p>
+      <p><a href="${verificationLink}" style="background-color: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Verify Email</a></p>
+      <p>This link will expire in 24 hours.</p>
+      <p>If you didn't create an account, please ignore this email.</p>
+      <p>Best regards,<br>The Social Studio Team</p>
+    `;
+
+    await sendEmail('Verify Your Email Address', htmlContent);
+
+    res.json({ success: true, message: 'Verification email sent' });
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    res.status(500).json({ error: 'Failed to send verification email' });
+  }
 });
 
 // Analytics endpoints

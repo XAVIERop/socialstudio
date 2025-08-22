@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email | Social Studio</title>
+    <meta name="description" content="Verify your email address for your Social Studio account.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        dark: '#2d3748'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="ssl.jpeg" alt="Social Studio Logo" class="h-10 w-auto">
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Home</a>
+                    <a href="index.html#services" class="text-gray-600 hover:text-primary transition-colors">Services</a>
+                    <a href="index.html#about" class="text-gray-600 hover:text-primary transition-colors">About</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-primary transition-colors">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="login.html" class="text-gray-600 hover:text-primary transition-colors">Sign In</a>
+                    <a href="signup.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8" data-aos="fade-in-up">
+            <div class="text-center">
+                <div class="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-envelope text-white text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
+                <p class="text-gray-600">We're verifying your email address...</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p class="text-gray-600">Verifying your email address...</p>
+            </div>
+
+            <!-- Success State -->
+            <div id="success-state" class="text-center hidden">
+                <div class="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-check text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Email Verified!</h3>
+                <p class="text-gray-600 mb-6">Your email address has been successfully verified. You can now sign in to your account.</p>
+                <a href="login.html" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors inline-block">
+                    Sign In
+                </a>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="text-center hidden">
+                <div class="mx-auto h-16 w-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Verification Failed</h3>
+                <p id="error-message" class="text-gray-600 mb-6">Something went wrong with the verification process.</p>
+                <div class="space-y-3">
+                    <a href="login.html" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors inline-block">
+                        Go to Sign In
+                    </a>
+                    <br>
+                    <a href="signup.html" class="text-primary hover:text-secondary text-sm font-medium">
+                        Create New Account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        // Check if token exists
+        if (!token) {
+            showError('No verification token found. Please check your email for the correct verification link.');
+            return;
+        }
+
+        // Verify email
+        verifyEmail(token);
+
+        async function verifyEmail(token) {
+            try {
+                const response = await fetch('/api/email/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showSuccess();
+                } else {
+                    showError(result.error || 'Verification failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                showError('Network error. Please check your connection and try again.');
+            }
+        }
+
+        function showSuccess() {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('success-state').classList.remove('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error-state').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
