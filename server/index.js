@@ -261,7 +261,7 @@ app.use(helmet({
       connectSrc: ["'self'"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
-      upgradeInsecureRequests: isProduction ? [] : undefined
+      upgradeInsecureRequests: isProduction ? true : false
     }
   },
   hsts: {

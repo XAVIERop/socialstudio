@@ -1,752 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Social Studio</title>
-    <meta name="description" content="Manage your Social Studio account, track prototypes, and view service history.">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
-    <link rel="shortcut icon" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#667eea',
-                        secondary: '#764ba2',
-                        dark: '#2d3748'
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Client Dashboard | Social Studio</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="ssl.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="ssl.jpeg">
+  <link rel="shortcut icon" href="ssl.jpeg">
+  <link rel="apple-touch-icon" href="ssl.jpeg">
+  
+  <!-- Stylesheets -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="mobile-optimization.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex items-center">
-                        <img src="ssl.jpeg" alt="Social Studio Logo" class="h-10 w-auto">
-                    </a>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Home</a>
-                    <a href="index.html#services" class="text-gray-600 hover:text-primary transition-colors">Services</a>
-                    <a href="analytics-dashboard.html" class="text-gray-600 hover:text-primary transition-colors">Analytics</a>
-                    <a href="messaging.html" class="text-gray-600 hover:text-primary transition-colors">Messaging</a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="relative" id="user-menu-container">
-                        <button id="user-menu-btn" class="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors">
-                            <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-sm"></i>
-                            </div>
-                            <span id="user-name">Loading...</span>
-                            <i class="fas fa-chevron-down text-xs"></i>
-                        </button>
-                        <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                            <a href="#profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
-                            <a href="#settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                            <hr class="my-1">
-                            <button onclick="logout()" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<body class="bg-gray-50">
+  <!-- Navigation Bar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto">
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Welcome Section -->
-        <div class="bg-gradient-to-r from-primary to-secondary rounded-xl p-8 text-white mb-8" data-aos="fade-in-up">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold mb-2">Welcome back, <span id="welcome-name">User</span>! 👋</h1>
-                    <p class="text-lg opacity-90">Manage your prototypes, track services, and stay updated with your projects.</p>
-                </div>
-                <div class="hidden md:block">
-                    <div class="text-right">
-                        <div class="text-2xl font-bold" id="prototype-count">0</div>
-                        <div class="text-sm opacity-90">Active Prototypes</div>
-                    </div>
-                </div>
-            </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+          <a href="index.html#services" class="text-gray-700 hover:text-primary font-medium">Services</a>
+          <a href="index.html#about" class="text-gray-700 hover:text-primary font-medium">About</a>
+          <a href="index.html#contact" class="text-gray-700 hover:text-primary font-medium">Contact</a>
+          <a href="index.html#careers" class="text-gray-700 hover:text-primary font-medium">Careers</a>
         </div>
-
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-lg p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="100">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-                        <i class="fas fa-clock text-xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-2xl font-bold text-gray-900" id="pending-count">0</div>
-                        <div class="text-sm text-gray-500">Pending</div>
-                    </div>
-                </div>
-            </div>
+        
+        <!-- User Menu -->
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <button id="userMenuButton" class="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:border-primary transition-colors">
+              <img id="userAvatar" src="https://ui-avatars.com/api/?name=Client&background=667eea&color=fff" alt="User" class="w-6 h-6 rounded-full">
+              <span id="userName" class="text-gray-700 font-medium">Client</span>
+              <i class="fas fa-chevron-down text-gray-500"></i>
+            </button>
             
-            <div class="bg-white rounded-lg p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="200">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                        <i class="fas fa-cogs text-xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-2xl font-bold text-gray-900" id="progress-count">0</div>
-                        <div class="text-sm text-gray-500">In Progress</div>
-                    </div>
-                </div>
+            <!-- Dropdown Menu -->
+            <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200">
+              <a href="#profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-t-lg">
+                <i class="fas fa-user mr-2"></i>Profile
+              </a>
+              <a href="#settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-cog mr-2"></i>Settings
+              </a>
+              <hr class="my-1">
+              <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-50 rounded-b-lg">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+              </button>
             </div>
-            
-            <div class="bg-white rounded-lg p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="300">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-green-100 text-green-600">
-                        <i class="fas fa-check text-xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-2xl font-bold text-gray-900" id="completed-count">0</div>
-                        <div class="text-sm text-gray-500">Completed</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-white rounded-lg p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="400">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-                        <i class="fas fa-star text-xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-2xl font-bold text-gray-900" id="rating">4.8</div>
-                        <div class="text-sm text-gray-500">Avg Rating</div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-
-        <!-- Main Content Tabs -->
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <!-- Tab Navigation -->
-            <div class="border-b border-gray-200">
-                <nav class="flex space-x-8 px-6" aria-label="Tabs">
-                    <button class="tab-btn active py-4 px-1 border-b-2 border-primary text-sm font-medium text-primary" data-tab="overview">
-                        <i class="fas fa-home mr-2"></i>Overview
-                    </button>
-                    <button class="tab-btn py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="prototypes">
-                        <i class="fas fa-cube mr-2"></i>Prototypes
-                    </button>
-                    <button class="tab-btn py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="services">
-                        <i class="fas fa-briefcase mr-2"></i>Services
-                    </button>
-                    <button class="tab-btn py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="profile">
-                        <i class="fas fa-user mr-2"></i>Profile
-                    </button>
-                </nav>
-            </div>
-
-            <!-- Tab Content -->
-            <div class="p-6">
-                <!-- Overview Tab -->
-                <div id="overview-tab" class="tab-content active">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Recent Activity -->
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-                            <div class="space-y-4" id="recent-activity">
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                                    <div class="flex-1">
-                                        <p class="text-sm text-gray-900">New prototype request submitted</p>
-                                        <p class="text-xs text-gray-500">2 hours ago</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                                    <div class="flex-1">
-                                        <p class="text-sm text-gray-900">Website design prototype completed</p>
-                                        <p class="text-xs text-gray-500">1 day ago</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
-                                    <div class="flex-1">
-                                        <p class="text-sm text-gray-900">SEO optimization in progress</p>
-                                        <p class="text-xs text-gray-500">3 days ago</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Quick Actions -->
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                            <div class="space-y-3">
-                                <a href="#prototypes" class="block w-full bg-primary text-white py-3 px-4 rounded-lg text-center hover:bg-secondary transition-colors">
-                                    <i class="fas fa-plus mr-2"></i>Request New Prototype
-                                </a>
-                                <a href="index.html#contact" class="block w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg text-center hover:bg-gray-200 transition-colors">
-                                    <i class="fas fa-headset mr-2"></i>Get Support
-                                </a>
-                                <a href="#profile" class="block w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg text-center hover:bg-gray-200 transition-colors">
-                                    <i class="fas fa-edit mr-2"></i>Update Profile
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Prototypes Tab -->
-                <div id="prototypes-tab" class="tab-content hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900">My Prototypes</h3>
-                        <button onclick="openNewPrototypeModal()" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">
-                            <i class="fas fa-plus mr-2"></i>New Request
-                        </button>
-                    </div>
-                    
-                    <div class="space-y-4" id="prototypes-list">
-                        <!-- Prototype items will be loaded here -->
-                        <div class="bg-gray-50 rounded-lg p-6 text-center text-gray-500">
-                            <i class="fas fa-cube text-3xl mb-3"></i>
-                            <p>No prototypes yet. Start by requesting your first prototype!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Services Tab -->
-                <div id="services-tab" class="tab-content hidden">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Service History</h3>
-                    <div class="space-y-4" id="services-list">
-                        <!-- Service items will be loaded here -->
-                        <div class="bg-gray-50 rounded-lg p-6 text-center text-gray-500">
-                            <i class="fas fa-briefcase text-3xl mb-3"></i>
-                            <p>No services yet. Your completed projects will appear here.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Profile Tab -->
-                <div id="profile-tab" class="tab-content hidden">
-                    <div class="max-w-2xl">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-6">Profile Information</h3>
-                        
-                        <form id="profile-form" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="profile-fullName" class="block text-sm font-medium text-gray-700 mb-2">
-                                        Full Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        id="profile-fullName" 
-                                        name="fullName" 
-                                        required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    >
-                                </div>
-                                
-                                <div>
-                                    <label for="profile-email" class="block text-sm font-medium text-gray-700 mb-2">
-                                        Email Address <span class="text-red-500">*</span>
-                                    </label>
-                                    <input 
-                                        type="email" 
-                                        id="profile-email" 
-                                        name="email" 
-                                        required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    >
-                                </div>
-                                
-                                <div>
-                                    <label for="profile-phone" class="block text-sm font-medium text-gray-700 mb-2">
-                                        Phone Number <span class="text-red-500">*</span>
-                                    </label>
-                                    <input 
-                                        type="tel" 
-                                        id="profile-phone" 
-                                        name="phone" 
-                                        required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    >
-                                </div>
-                                
-                                <div>
-                                    <label for="profile-companyName" class="block text-sm font-medium text-gray-700 mb-2">
-                                        Company Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        id="profile-companyName" 
-                                        name="companyName" 
-                                        required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    >
-                                </div>
-                                
-                                <div class="md:col-span-2">
-                                    <label for="profile-industry" class="block text-sm font-medium text-gray-700 mb-2">
-                                        Industry <span class="text-red-500">*</span>
-                                    </label>
-                                    <select 
-                                        id="profile-industry" 
-                                        name="industry" 
-                                        required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    >
-                                        <option value="">Select your industry</option>
-                                        <option value="Technology">Technology</option>
-                                        <option value="Healthcare">Healthcare</option>
-                                        <option value="Finance">Finance</option>
-                                        <option value="Education">Education</option>
-                                        <option value="Retail">Retail</option>
-                                        <option value="Manufacturing">Manufacturing</option>
-                                        <option value="Real Estate">Real Estate</option>
-                                        <option value="Food & Beverage">Food & Beverage</option>
-                                        <option value="Fashion">Fashion</option>
-                                        <option value="Entertainment">Entertainment</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="flex justify-end space-x-3">
-                                <button type="button" onclick="resetProfileForm()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                                    Reset
-                                </button>
-                                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors">
-                                    Save Changes
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+  </nav>
 
-    <!-- New Prototype Modal -->
-    <div id="new-prototype-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-xl p-8 max-w-2xl w-full max-h-screen overflow-y-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-gray-900">Request New Prototype</h3>
-                    <button onclick="closeNewPrototypeModal()" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                
-                <form id="new-prototype-form" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="prototype-business" class="block text-sm font-medium text-gray-700 mb-2">
-                                Business Name <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                id="prototype-business" 
-                                name="business" 
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                placeholder="Enter your business name"
-                            >
-                        </div>
-                        
-                        <div>
-                            <label for="prototype-industry" class="block text-sm font-medium text-gray-700 mb-2">
-                                Industry <span class="text-red-500">*</span>
-                            </label>
-                            <select 
-                                id="prototype-industry" 
-                                name="industry" 
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                            >
-                                <option value="">Select industry</option>
-                                <option value="Technology">Technology</option>
-                                <option value="Healthcare">Healthcare</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Education">Education</option>
-                                <option value="Retail">Retail</option>
-                                <option value="Manufacturing">Manufacturing</option>
-                                <option value="Real Estate">Real Estate</option>
-                                <option value="Food & Beverage">Food & Beverage</option>
-                                <option value="Fashion">Fashion</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label for="prototype-phone" class="block text-sm font-medium text-gray-700 mb-2">
-                            Phone Number <span class="text-red-500">*</span>
-                        </label>
-                        <input 
-                            type="tel" 
-                            id="prototype-phone" 
-                            name="phone" 
-                            required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="Enter your phone number"
-                        >
-                    </div>
-                    
-                    <div>
-                        <label for="prototype-message" class="block text-sm font-medium text-gray-700 mb-2">
-                            Project Description <span class="text-red-500">*</span>
-                        </label>
-                        <textarea 
-                            id="prototype-message" 
-                            name="message" 
-                            required
-                            rows="4"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="Describe your project requirements, goals, and any specific features you need..."
-                        ></textarea>
-                    </div>
-                    
-                    <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeNewPrototypeModal()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors">
-                            Submit Request
-                        </button>
-                    </div>
-                </form>
-            </div>
+  <!-- Main Content -->
+  <main class="pt-20">
+    <!-- Dashboard Header -->
+    <section class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            Welcome Back, <span id="welcomeName">Client</span>! 👋
+          </h1>
+          <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+            Track your prototype requests, manage your profile, and stay updated with your projects
+          </p>
         </div>
-    </div>
+      </div>
+    </section>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
+    <!-- Dashboard Stats -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <!-- Active Requests -->
+          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-clock text-blue-600 text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2" id="activeRequests">3</h3>
+            <p class="text-gray-600">Active Requests</p>
+          </div>
+          
+          <!-- Completed Projects -->
+          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2" id="completedProjects">12</h3>
+            <p class="text-gray-600">Completed Projects</p>
+          </div>
+          
+          <!-- Response Time -->
+          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-stopwatch text-purple-600 text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2" id="avgResponseTime">2.4</h3>
+            <p class="text-gray-600">Avg Response (days)</p>
+          </div>
+          
+          <!-- Satisfaction Rating -->
+          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center">
+            <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-star text-yellow-600 text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2" id="satisfactionRating">4.8</h3>
+            <p class="text-gray-600">Satisfaction Rating</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        // Global variables
-        let currentUser = null;
-        let userPrototypes = [];
+    <!-- Quick Actions -->
+    <section class="py-12 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Quick Actions</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- New Prototype Request -->
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="fas fa-plus text-white text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">New Prototype Request</h3>
+            <p class="text-gray-600 mb-6">Start a new project with our team</p>
+            <a href="#new-request" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+              Get Started
+            </a>
+          </div>
+          
+          <!-- Contact Support -->
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="fas fa-headset text-white text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Contact Support</h3>
+            <p class="text-gray-600 mb-6">Get help with your projects</p>
+            <a href="#support" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+              Contact Us
+            </a>
+          </div>
+          
+          <!-- View All Requests -->
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="fas fa-list text-white text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">View All Requests</h3>
+            <p class="text-gray-600 mb-6">See your complete project history</p>
+            <a href="#requests" class="inline-block bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+              View History
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        // Check authentication on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            loadUserData();
-            loadPrototypes();
-        });
-
-        // Authentication check
-        function checkAuth() {
-            const user = JSON.parse(localStorage.getItem('user'));
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-            currentUser = user;
-            updateUI();
-        }
-
-        // Update UI with user data
-        function updateUI() {
-            if (!currentUser) return;
-            
-            document.getElementById('welcome-name').textContent = currentUser.fullName;
-            document.getElementById('user-name').textContent = currentUser.fullName;
-            
-            // Update profile form
-            document.getElementById('profile-fullName').value = currentUser.fullName;
-            document.getElementById('profile-email').value = currentUser.email;
-            document.getElementById('profile-phone').value = currentUser.phone || '';
-            document.getElementById('profile-companyName').value = currentUser.profile?.companyName || '';
-            document.getElementById('profile-industry').value = currentUser.profile?.industry || '';
-        }
-
-        // Load user data from server
-        async function loadUserData() {
-            try {
-                const response = await fetch('/api/user/profile', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                
-                if (response.ok) {
-                    const userData = await response.json();
-                    currentUser = { ...currentUser, ...userData };
-                    updateUI();
-                }
-            } catch (error) {
-                console.error('Error loading user data:', error);
-            }
-        }
-
-        // Load prototypes
-        async function loadPrototypes() {
-            try {
-                const response = await fetch('/api/prototypes', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                
-                if (response.ok) {
-                    userPrototypes = await response.json();
-                    updatePrototypesUI();
-                }
-            } catch (error) {
-                console.error('Error loading prototypes:', error);
-                // For demo purposes, show sample data
-                userPrototypes = [
-                    {
-                        id: '1',
-                        business: 'Tech Startup',
-                        industry: 'Technology',
-                        status: 'completed',
-                        message: 'Website redesign for our SaaS platform',
-                        createdAt: '2024-01-15T10:00:00Z',
-                        completedAt: '2024-01-20T15:00:00Z'
-                    },
-                    {
-                        id: '2',
-                        business: 'Local Restaurant',
-                        industry: 'Food & Beverage',
-                        status: 'in_progress',
-                        message: 'Social media marketing campaign',
-                        createdAt: '2024-01-25T14:00:00Z'
-                    }
-                ];
-                updatePrototypesUI();
-            }
-        }
-
-        // Update prototypes UI
-        function updatePrototypesUI() {
-            const prototypesList = document.getElementById('prototypes-list');
-            const pendingCount = document.getElementById('pending-count');
-            const progressCount = document.getElementById('progress-count');
-            const completedCount = document.getElementById('completed-count');
-            const prototypeCount = document.getElementById('prototype-count');
-
-            // Update counts
-            const pending = userPrototypes.filter(p => p.status === 'pending').length;
-            const inProgress = userPrototypes.filter(p => p.status === 'in_progress').length;
-            const completed = userPrototypes.filter(p => p.status === 'completed').length;
-
-            pendingCount.textContent = pending;
-            progressCount.textContent = inProgress;
-            completedCount.textContent = completed;
-            prototypeCount.textContent = userPrototypes.length;
-
-            // Update prototypes list
-            if (userPrototypes.length === 0) {
-                prototypesList.innerHTML = `
-                    <div class="bg-gray-50 rounded-lg p-6 text-center text-gray-500">
-                        <i class="fas fa-cube text-3xl mb-3"></i>
-                        <p>No prototypes yet. Start by requesting your first prototype!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            prototypesList.innerHTML = userPrototypes.map(prototype => `
-                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h4 class="text-lg font-semibold text-gray-900">${prototype.business}</h4>
-                            <p class="text-sm text-gray-500">${prototype.industry}</p>
-                        </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(prototype.status)}">
-                            ${getStatusText(prototype.status)}
-                        </span>
-                    </div>
-                    <p class="text-gray-700 mb-4">${prototype.message}</p>
-                    <div class="flex justify-between items-center text-sm text-gray-500">
-                        <span>Created: ${new Date(prototype.createdAt).toLocaleDateString()}</span>
-                        ${prototype.completedAt ? `<span>Completed: ${new Date(prototype.completedAt).toLocaleDateString()}</span>` : ''}
-                    </div>
+    <!-- Recent Prototype Requests -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-bold text-gray-900">Recent Prototype Requests</h2>
+          <a href="#all-requests" class="text-blue-600 hover:text-blue-700 font-semibold">
+            View All <i class="fas fa-arrow-right ml-1"></i>
+          </a>
+        </div>
+        
+        <div class="space-y-6">
+          <!-- Request 1 -->
+          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+              <div class="flex-1">
+                <div class="flex items-center space-x-4 mb-4">
+                  <h3 class="text-xl font-bold text-gray-900">E-commerce Website</h3>
+                  <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">In Progress</span>
                 </div>
-            `).join('');
-        }
+                <p class="text-gray-600 mb-4">Modern e-commerce platform with payment integration and admin dashboard</p>
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                  <span><i class="fas fa-calendar mr-2"></i>Started: 3 days ago</span>
+                  <span><i class="fas fa-clock mr-2"></i>Updated: 2 hours ago</span>
+                </div>
+              </div>
+              <div class="mt-4 md:mt-0 md:ml-6">
+                <div class="mb-2">
+                  <span class="text-sm text-gray-600">Progress</span>
+                  <span class="text-sm font-semibold text-gray-900 ml-2">75%</span>
+                </div>
+                <div class="w-32 h-2 bg-gray-200 rounded-full">
+                  <div class="w-3/4 h-full bg-blue-600 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Request 2 -->
+          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+              <div class="flex-1">
+                <div class="flex items-center space-x-4 mb-4">
+                  <h3 class="text-xl font-bold text-gray-900">Mobile App Design</h3>
+                  <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">Completed</span>
+                </div>
+                <p class="text-gray-600 mb-4">iOS and Android app design for fitness tracking application</p>
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                  <span><i class="fas fa-calendar mr-2"></i>Started: 2 weeks ago</span>
+                  <span><i class="fas fa-check mr-2"></i>Completed: Yesterday</span>
+                </div>
+              </div>
+              <div class="mt-4 md:mt-0 md:ml-6">
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-green-600 mb-1">⭐ 5.0</div>
+                  <span class="text-sm text-gray-600">Rating</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-        // Get status color
-        function getStatusColor(status) {
-            switch (status) {
-                case 'pending': return 'bg-yellow-100 text-yellow-800';
-                case 'in_progress': return 'bg-blue-100 text-blue-800';
-                case 'completed': return 'bg-green-100 text-green-800';
-                default: return 'bg-gray-100 text-gray-800';
-            }
-        }
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center mb-4">
+            <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto mr-3">
+            <span class="text-xl font-bold">Social Studio</span>
+          </div>
+          <p class="text-gray-300 mb-4">
+            Your trusted partner in digital marketing and web development.
+          </p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+            <li><a href="index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a></li>
+            <li><a href="index.html#contact" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><i class="fas fa-phone mr-2"></i>+91 93541 92151</li>
+            <li><i class="fas fa-envelope mr-2"></i>pv.socialstudio@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2024 Social Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
 
-        // Get status text
-        function getStatusText(status) {
-            switch (status) {
-                case 'pending': return 'Pending';
-                case 'in_progress': return 'In Progress';
-                case 'completed': return 'Completed';
-                default: return 'Unknown';
-            }
-        }
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 300,
+      easing: 'ease-out',
+      once: true,
+      offset: 50,
+      delay: 0,
+      disable: 'mobile'
+    });
 
-        // Tab functionality
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const tabName = this.getAttribute('data-tab');
-                
-                // Update active tab button
-                document.querySelectorAll('.tab-btn').forEach(b => {
-                    b.classList.remove('active', 'border-primary', 'text-primary');
-                    b.classList.add('border-transparent', 'text-gray-500');
-                });
-                this.classList.add('active', 'border-primary', 'text-primary');
-                this.classList.remove('border-transparent', 'text-gray-500');
-                
-                // Update active tab content
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.add('hidden');
-                    content.classList.remove('active');
-                });
-                document.getElementById(`${tabName}-tab`).classList.remove('hidden');
-                document.getElementById(`${tabName}-tab`).classList.add('active');
-            });
-        });
+    // User menu toggle
+    document.getElementById("userMenuButton").addEventListener("click", function () {
+      const dropdown = document.getElementById("userDropdown");
+      dropdown.classList.toggle("opacity-0");
+      dropdown.classList.toggle("invisible");
+    });
 
-        // User menu toggle
-        document.getElementById('user-menu-btn').addEventListener('click', function() {
-            document.getElementById('user-menu').classList.toggle('hidden');
-        });
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById("userDropdown");
+      const button = document.getElementById("userMenuButton");
+      
+      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add("opacity-0", "invisible");
+      }
+    });
 
-        // Close user menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const container = document.getElementById('user-menu-container');
-            if (!container.contains(event.target)) {
-                document.getElementById('user-menu').classList.add('hidden');
-            }
-        });
+    // Logout function
+    function logout() {
+      localStorage.removeItem('userData');
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
 
-        // New prototype modal
-        function openNewPrototypeModal() {
-            document.getElementById('new-prototype-modal').classList.remove('hidden');
-        }
+    // Load user data
+    function loadUserData() {
+      const userData = JSON.parse(localStorage.getItem('userData')) || {
+        name: 'Client',
+        email: 'client@example.com'
+      };
+      
+      document.getElementById('welcomeName').textContent = userData.name;
+      document.getElementById('userName').textContent = userData.name;
+    }
 
-        function closeNewPrototypeModal() {
-            document.getElementById('new-prototype-modal').classList.add('hidden');
-            document.getElementById('new-prototype-form').reset();
-        }
-
-        // New prototype form submission
-        document.getElementById('new-prototype-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = {
-                business: formData.get('business'),
-                industry: formData.get('industry'),
-                phone: formData.get('phone'),
-                message: formData.get('message')
-            };
-
-            try {
-                const response = await fetch('/api/prototype-request', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    alert('Prototype request submitted successfully!');
-                    closeNewPrototypeModal();
-                    loadPrototypes(); // Reload prototypes
-                } else {
-                    alert(result.error || 'Failed to submit request. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error submitting prototype request:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-
-        // Profile form submission
-        document.getElementById('profile-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = {
-                fullName: formData.get('fullName'),
-                email: formData.get('email'),
-                phone: formData.get('phone'),
-                companyName: formData.get('companyName'),
-                industry: formData.get('industry')
-            };
-
-            try {
-                const response = await fetch('/api/user/profile', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    alert('Profile updated successfully!');
-                    currentUser = { ...currentUser, ...data };
-                    updateUI();
-                } else {
-                    alert(result.error || 'Failed to update profile. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-
-        // Reset profile form
-        function resetProfileForm() {
-            updateUI();
-        }
-
-        // Logout function
-        function logout() {
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            window.location.href = 'index.html';
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('new-prototype-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeNewPrototypeModal();
-            }
-        });
-    </script>
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserData();
+    });
+  </script>
 </body>
 </html>
