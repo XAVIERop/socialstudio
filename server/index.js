@@ -82,6 +82,20 @@ users.push({
   createdAt: new Date().toISOString()
 });
 
+users.push({
+  id: 'demo-admin',
+  fullName: 'Admin User',
+  email: 'admin@socialstudio.com',
+  phone: '+1234567890',
+  password: 'Admin123!',
+  userType: 'admin',
+  profile: {
+    role: 'System Administrator',
+    permissions: ['users', 'applications', 'prototypes', 'settings']
+  },
+  createdAt: new Date().toISOString()
+});
+
 // Helper function to read users
 function readUsers() {
   return users;
@@ -540,6 +554,10 @@ app.get('/intern-dashboard', (req, res) => {
   res.redirect('/intern-dashboard.html');
 });
 
+app.get('/admin-dashboard', (req, res) => {
+  res.redirect('/admin-dashboard.html');
+});
+
 // User profile endpoint
 app.get('/api/user/profile', (req, res) => {
   // In production, verify JWT token
@@ -782,6 +800,107 @@ app.post('/api/internship-application-dashboard', postLimiter, async (req, res) 
     console.error('Internship application error:', error);
     res.status(500).json({ error: 'Something went wrong. Please try again.' });
   }
+});
+
+// Admin endpoints
+app.get('/api/admin/users', (req, res) => {
+  // In production, verify admin JWT token
+  const userId = req.headers.authorization?.split(' ')[1];
+  
+  if (!userId || userId === 'demo-token') {
+    // Return all users for admin
+    const adminUsers = users.map(user => ({
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      userType: user.userType,
+      createdAt: user.createdAt,
+      status: 'active'
+    }));
+    
+    return res.json(adminUsers);
+  }
+  
+  res.status(401).json({ error: 'Unauthorized' });
+});
+
+app.get('/api/admin/applications', (req, res) => {
+  // In production, verify admin JWT token
+  const userId = req.headers.authorization?.split(' ')[1];
+  
+  if (!userId || userId === 'demo-token') {
+    // Return all applications for admin
+    const adminApplications = [
+      {
+        id: '1',
+        name: 'Sarah Johnson',
+        email: 'sarah@example.com',
+        track: 'Social Media Marketing',
+        status: 'submitted',
+        createdAt: '2024-01-25T10:00:00Z',
+        about: 'Passionate about social media marketing with experience in content creation and analytics.'
+      },
+      {
+        id: '2',
+        name: 'Mike Chen',
+        email: 'mike@example.com',
+        track: 'Web Development',
+        status: 'interview_scheduled',
+        createdAt: '2024-01-24T14:00:00Z',
+        about: 'Computer Science student with strong programming skills in JavaScript, React, and Node.js.'
+      },
+      {
+        id: '3',
+        name: 'Emily Davis',
+        email: 'emily@example.com',
+        track: 'SEO Optimization',
+        status: 'accepted',
+        createdAt: '2024-01-23T09:00:00Z',
+        about: 'Marketing graduate with strong analytical skills and experience in digital marketing.'
+      }
+    ];
+    
+    return res.json(adminApplications);
+  }
+  
+  res.status(401).json({ error: 'Unauthorized' });
+});
+
+app.get('/api/admin/prototypes', (req, res) => {
+  // In production, verify admin JWT token
+  const userId = req.headers.authorization?.split(' ')[1];
+  
+  if (!userId || userId === 'demo-token') {
+    // Return all prototypes for admin
+    const adminPrototypes = [
+      {
+        id: '1',
+        business: 'Tech Startup',
+        industry: 'Technology',
+        status: 'completed',
+        createdAt: '2024-01-15T10:00:00Z',
+        completedAt: '2024-01-20T15:00:00Z'
+      },
+      {
+        id: '2',
+        business: 'Local Restaurant',
+        industry: 'Food & Beverage',
+        status: 'in_progress',
+        createdAt: '2024-01-25T14:00:00Z'
+      },
+      {
+        id: '3',
+        business: 'Healthcare Clinic',
+        industry: 'Healthcare',
+        status: 'pending',
+        createdAt: '2024-01-26T11:00:00Z'
+      }
+    ];
+    
+    return res.json(adminPrototypes);
+  }
+  
+  res.status(401).json({ error: 'Unauthorized' });
 });
 
 // Redirect /interns to /interns.html

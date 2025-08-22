@@ -670,7 +670,9 @@
                     localStorage.setItem('token', 'demo-token'); // In production, use actual JWT token
                     
                     // Redirect based on user type
-                    if (result.user.userType === 'intern') {
+                    if (result.user.userType === 'admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else if (result.user.userType === 'intern') {
                         window.location.href = 'intern-dashboard.html';
                     } else {
                         window.location.href = 'dashboard.html';
