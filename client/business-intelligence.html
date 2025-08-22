@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Business Intelligence | Social Studio</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="ssl.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="ssl.jpeg">
+  <link rel="shortcut icon" href="ssl.jpeg">
+  <link rel="apple-touch-icon" href="ssl.jpeg">
+  
+  <!-- Stylesheets -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="mobile-optimization.css" rel="stylesheet">
+  
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#2563eb",
+            secondary: "#f97316",
+            dark: "#1e293b",
+            light: "#f8fafc",
+          }
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Navigation Bar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 transition-all duration-300 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto">
+          <span class="ml-3 text-xl font-bold text-gray-900">Business Intelligence</span>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+          <a href="analytics-dashboard.html" class="text-gray-700 hover:text-primary font-medium">Analytics</a>
+          <a href="user-analytics.html" class="text-gray-700 hover:text-primary font-medium">Users</a>
+          <a href="communication-center.html" class="text-gray-700 hover:text-primary font-medium">Messages</a>
+        </div>
+        
+        <!-- User Menu -->
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <button id="userMenuButton" class="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:border-primary transition-colors">
+              <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=667eea&color=fff" alt="User" class="w-6 h-6 rounded-full">
+              <span id="userName" class="text-gray-700 font-medium">User</span>
+              <i class="fas fa-chevron-down text-gray-500"></i>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200">
+              <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-t-lg">
+                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+              </a>
+              <a href="security-settings.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-shield-alt mr-2"></i>Security
+              </a>
+              <hr class="my-1">
+              <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-50 rounded-b-lg">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="pt-20">
+    <!-- Header Section -->
+    <section class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          🧠 Business Intelligence
+        </h1>
+        <p class="text-xl text-emerald-100 max-w-2xl mx-auto">
+          Advanced insights, predictive analytics, and strategic recommendations for business growth.
+        </p>
+      </div>
+    </section>
+
+    <!-- Key Business Metrics -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Monthly Recurring Revenue -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">MRR</p>
+                <p class="text-3xl font-bold text-gray-900" id="mrr">$45,847</p>
+                <p class="text-sm text-green-600 flex items-center mt-1">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span id="mrrChange">+12%</span> from last month
+                </p>
+              </div>
+              <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-dollar-sign text-emerald-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer Lifetime Value -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">CLV</p>
+                <p class="text-3xl font-bold text-gray-900" id="clv">$2,847</p>
+                <p class="text-sm text-green-600 flex items-center mt-1">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span id="clvChange">+8%</span> from last month
+                </p>
+              </div>
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Churn Rate -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="200">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Churn Rate</p>
+                <p class="text-3xl font-bold text-gray-900" id="churnRate">3.2%</p>
+                <p class="text-sm text-green-600 flex items-center mt-1">
+                  <i class="fas fa-arrow-down mr-1"></i>
+                  <span id="churnChange">-0.5%</span> from last month
+                </p>
+              </div>
+              <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-chart-line text-red-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Net Promoter Score -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="300">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">NPS</p>
+                <p class="text-3xl font-bold text-gray-900" id="nps">72</p>
+                <p class="text-sm text-green-600 flex items-center mt-1">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span id="npsChange">+5</span> from last month
+                </p>
+              </div>
+              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-star text-purple-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Revenue Analytics -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Revenue Growth -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-semibold text-gray-900">Revenue Growth</h3>
+              <div class="flex space-x-2">
+                <button class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg font-medium" onclick="updateRevenuePeriod('month')">Month</button>
+                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium" onclick="updateRevenuePeriod('quarter')">Quarter</button>
+                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium" onclick="updateRevenuePeriod('year')">Year</button>
+              </div>
+            </div>
+            <div class="h-64">
+              <canvas id="revenueGrowthChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Customer Acquisition Cost -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="100">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-semibold text-gray-900">Customer Acquisition Cost</h3>
+              <div class="flex space-x-2">
+                <button class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-lg font-medium" onclick="updateCACPeriod('month')">Month</button>
+                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium" onclick="updateCACPeriod('quarter')">Quarter</button>
+                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium" onclick="updateCACPeriod('year')">Year</button>
+              </div>
+            </div>
+            <div class="h-64">
+              <canvas id="cacChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Business Performance Dashboard -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Business Performance Dashboard</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Sales Funnel -->
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">Sales Funnel</h4>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Website Visitors</span>
+                  <span class="text-sm font-medium text-gray-900">10,000</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Lead Generation</span>
+                  <span class="text-sm font-medium text-gray-900">1,200</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Qualified Leads</span>
+                  <span class="text-sm font-medium text-gray-900">480</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Proposals Sent</span>
+                  <span class="text-sm font-medium text-gray-900">240</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Closed Deals</span>
+                  <span class="text-sm font-medium text-gray-900">72</span>
+                </div>
+              </div>
+              <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                <p class="text-sm text-blue-800">
+                  <strong>Conversion Rate:</strong> 0.72% (Website to Deal)
+                </p>
+              </div>
+            </div>
+
+            <!-- Customer Segments -->
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">Customer Segments</h4>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Enterprise</span>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-blue-500 rounded-full" style="width: 25%"></div>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">25%</span>
+                  </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Mid-Market</span>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-green-500 rounded-full" style="width: 40%"></div>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">40%</span>
+                  </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">SMB</span>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-purple-500 rounded-full" style="width: 35%"></div>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">35%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 p-3 bg-green-50 rounded-lg">
+                <p class="text-sm text-green-800">
+                  <strong>Revenue Distribution:</strong> Mid-Market leads with 40%
+                </p>
+              </div>
+            </div>
+
+            <!-- Growth Metrics -->
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">Growth Metrics</h4>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">YoY Growth</span>
+                  <span class="text-sm font-medium text-green-600">+28%</span>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">QoQ Growth</span>
+                  <span class="text-sm font-medium text-green-600">+12%</span>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">MoM Growth</span>
+                  <span class="text-sm font-medium text-green-600">+5%</span>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Market Share</span>
+                  <span class="text-sm font-medium text-blue-600">2.4%</span>
+                </div>
+              </div>
+              <div class="mt-4 p-3 bg-purple-50 rounded-lg">
+                <p class="text-sm text-purple-800">
+                  <strong>Trend:</strong> Consistent growth across all timeframes
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Predictive Analytics -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Predictive Analytics & Insights</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Revenue Forecast -->
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">Revenue Forecast (Next 6 Months)</h4>
+              <div class="h-48">
+                <canvas id="forecastChart"></canvas>
+              </div>
+              <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                <p class="text-sm text-blue-800">
+                  <strong>Prediction:</strong> Revenue expected to reach $65K by December 2024
+                </p>
+              </div>
+            </div>
+
+            <!-- Customer Behavior Insights -->
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">Customer Behavior Insights</h4>
+              <div class="space-y-4">
+                <div class="p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
+                  <p class="text-sm text-green-800">
+                    <strong>High-Value Customers:</strong> 23% of customers generate 67% of revenue
+                  </p>
+                </div>
+                
+                <div class="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                  <p class="text-sm text-blue-800">
+                    <strong>Seasonal Pattern:</strong> Q4 shows 15% higher conversion rates
+                  </p>
+                </div>
+                
+                <div class="p-3 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+                  <p class="text-sm text-purple-800">
+                    <strong>Retention:</strong> Customers with 3+ touchpoints have 89% retention
+                  </p>
+                </div>
+                
+                <div class="p-3 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+                  <p class="text-sm text-orange-800">
+                    <strong>Upsell Opportunity:</strong> 34% of customers ready for premium upgrade
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strategic Recommendations -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Strategic Recommendations</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Revenue Optimization -->
+            <div class="border border-gray-200 rounded-lg p-6">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <i class="fas fa-chart-line text-green-600"></i>
+                </div>
+                <h4 class="text-lg font-semibold text-gray-900">Revenue Optimization</h4>
+              </div>
+              <p class="text-sm text-gray-600 mb-4">Focus on mid-market segment expansion and premium service offerings.</p>
+              <div class="space-y-2 text-sm text-gray-600">
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Target mid-market customers</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Introduce premium tiers</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Optimize pricing strategy</span>
+                </div>
+              </div>
+              <div class="mt-4 p-2 bg-green-50 rounded text-center">
+                <span class="text-sm font-medium text-green-800">Expected Impact: +18% Revenue</span>
+              </div>
+            </div>
+            
+            <!-- Customer Retention -->
+            <div class="border border-gray-200 rounded-lg p-6">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <i class="fas fa-users text-blue-600"></i>
+                </div>
+                <h4 class="text-lg font-semibold text-gray-900">Customer Retention</h4>
+              </div>
+              <p class="text-sm text-gray-600 mb-4">Implement multi-touchpoint engagement strategy to improve retention.</p>
+              <div class="space-y-2 text-sm text-gray-600">
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Increase touchpoints</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Personalized communication</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Loyalty programs</span>
+                </div>
+              </div>
+              <div class="mt-4 p-2 bg-blue-50 rounded text-center">
+                <span class="text-sm font-medium text-blue-800">Expected Impact: -2% Churn</span>
+              </div>
+            </div>
+            
+            <!-- Market Expansion -->
+            <div class="border border-gray-200 rounded-lg p-6">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                  <i class="fas fa-globe text-purple-600"></i>
+                </div>
+                <h4 class="text-lg font-semibold text-gray-900">Market Expansion</h4>
+              </div>
+              <p class="text-sm text-gray-600 mb-4">Explore new geographic markets and industry verticals.</p>
+              <div class="space-y-2 text-sm text-gray-600">
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Geographic expansion</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Industry diversification</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>Partnership development</span>
+                </div>
+              </div>
+              <div class="mt-4 p-2 bg-purple-50 rounded text-center">
+                <span class="text-sm font-medium text-purple-800">Expected Impact: +25% Market Reach</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center mb-4">
+            <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto mr-3">
+            <span class="text-xl font-bold">Social Studio</span>
+          </div>
+          <p class="text-gray-300 mb-4">
+            Your trusted partner in digital marketing and web development.
+          </p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+            <li><a href="analytics-dashboard.html" class="text-gray-300 hover:text-white transition-colors">Analytics</a></li>
+            <li><a href="business-intelligence.html" class="text-gray-300 hover:text-white transition-colors">Business Intelligence</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><i class="fas fa-phone mr-2"></i>+91 93541 92151</li>
+            <li><i class="fas fa-envelope mr-2"></i>pv.socialstudio@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2024 Social Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 300,
+      easing: 'ease-out',
+      once: true,
+      offset: 50,
+      delay: 0,
+      disable: 'mobile'
+    });
+
+    // User menu toggle
+    document.getElementById("userMenuButton").addEventListener("click", function () {
+      const dropdown = document.getElementById("userDropdown");
+      dropdown.classList.toggle("opacity-0");
+      dropdown.classList.toggle("invisible");
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById("userDropdown");
+      const button = document.getElementById("userMenuButton");
+      
+      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add("opacity-0", "invisible");
+      }
+    });
+
+    // Load user data
+    function loadUserData() {
+      const userData = JSON.parse(localStorage.getItem('userData')) || {
+        name: 'User',
+        email: 'user@example.com'
+      };
+      
+      document.getElementById('userName').textContent = userData.name;
+    }
+
+    // Initialize charts
+    let revenueGrowthChart, cacChart, forecastChart;
+
+    function initializeCharts() {
+      // Revenue Growth Chart
+      const revenueCtx = document.getElementById('revenueGrowthChart').getContext('2d');
+      revenueGrowthChart = new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Revenue',
+            data: [32000, 35000, 38000, 42000, 45000, 45847],
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            }
+          }
+        }
+      });
+
+      // Customer Acquisition Cost Chart
+      const cacCtx = document.getElementById('cacChart').getContext('2d');
+      cacChart = new Chart(cacCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'CAC',
+            data: [450, 420, 380, 350, 320, 310],
+            backgroundColor: '#10b981'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            }
+          }
+        }
+      });
+
+      // Revenue Forecast Chart
+      const forecastCtx = document.getElementById('forecastChart').getContext('2d');
+      forecastChart = new Chart(forecastCtx, {
+        type: 'line',
+        data: {
+          labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'Actual',
+            data: [45847, null, null, null, null, null],
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            tension: 0.4,
+            fill: false
+          }, {
+            label: 'Forecast',
+            data: [null, 48500, 52000, 56000, 60000, 65000],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: false,
+            borderDash: [5, 5]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Update chart periods
+    function updateRevenuePeriod(period) {
+      // Update button states
+      document.querySelectorAll('[onclick*="updateRevenuePeriod"]').forEach(btn => {
+        btn.className = 'px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium';
+      });
+      event.target.className = 'px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg font-medium';
+      
+      // Update chart data based on period
+      let labels, data;
+      if (period === 'month') {
+        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        data = [32000, 35000, 38000, 42000, 45000, 45847];
+      } else if (period === 'quarter') {
+        labels = ['Q1', 'Q2'];
+        data = [105000, 132847];
+      } else {
+        labels = ['2023', '2024'];
+        data = [280000, 237847];
+      }
+      
+      revenueGrowthChart.data.labels = labels;
+      revenueGrowthChart.data.datasets[0].data = data;
+      revenueGrowthChart.update();
+    }
+
+    function updateCACPeriod(period) {
+      // Update button states
+      document.querySelectorAll('[onclick*="updateCACPeriod"]').forEach(btn => {
+        btn.className = 'px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium';
+      });
+      event.target.className = 'px-3 py-1 text-sm bg-green-100 text-green-700 rounded-lg font-medium';
+      
+      // Update chart data based on period
+      let labels, data;
+      if (period === 'month') {
+        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        data = [450, 420, 380, 350, 320, 310];
+      } else if (period === 'quarter') {
+        labels = ['Q1', 'Q2'];
+        data = [1250, 980];
+      } else {
+        labels = ['2023', '2024'];
+        data = [5200, 2230];
+      }
+      
+      cacChart.data.labels = labels;
+      cacChart.data.datasets[0].data = data;
+      cacChart.update();
+    }
+
+    // Simulate real-time updates
+    function updateMetrics() {
+      // Simulate changing metrics
+      const mrr = Math.floor(Math.random() * 5000) + 45000;
+      const clv = Math.floor(Math.random() * 500) + 2800;
+      const churn = (Math.random() * 2 + 2.5).toFixed(1);
+      const nps = Math.floor(Math.random() * 10) + 70;
+      
+      document.getElementById('mrr').textContent = `$${mrr.toLocaleString()}`;
+      document.getElementById('clv').textContent = `$${clv.toLocaleString()}`;
+      document.getElementById('churnRate').textContent = `${churn}%`;
+      document.getElementById('nps').textContent = nps;
+    }
+
+    // Update metrics every 30 seconds
+    setInterval(updateMetrics, 30000);
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('userData');
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserData();
+      initializeCharts();
+    });
+  </script>
+</body>
+</html>

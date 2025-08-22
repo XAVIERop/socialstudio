@@ -1,505 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics Dashboard | Social Studio</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
-    <link rel="shortcut icon" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#667eea',
-                        secondary: '#764ba2',
-                        dark: '#2d3748'
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Analytics Dashboard | Social Studio</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="ssl.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="ssl.jpeg">
+  <link rel="shortcut icon" href="ssl.jpeg">
+  <link rel="apple-touch-icon" href="ssl.jpeg">
+  
+  <!-- Stylesheets -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="mobile-optimization.css" rel="stylesheet">
+  
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#2563eb",
+            secondary: "#f97316",
+            dark: "#1e293b",
+            light: "#f8fafc",
+          }
+        },
+      },
+    };
+  </script>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex items-center">
-                        <img src="ssl.jpeg" alt="Social Studio Logo" class="h-10 w-auto">
-                    </a>
-                    <span class="ml-3 text-sm font-medium text-gray-500 bg-blue-100 px-2 py-1 rounded">Analytics</span>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Home</a>
-                    <a href="dashboard.html" class="text-gray-600 hover:text-primary transition-colors">Dashboard</a>
-                    <a href="admin-dashboard.html" class="text-gray-600 hover:text-primary transition-colors">Admin</a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="relative" id="user-menu-container">
-                        <button id="user-menu-btn" class="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors">
-                            <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center">
-                                <i class="fas fa-chart-line text-sm"></i>
-                            </div>
-                            <span id="user-name">Analytics</span>
-                            <i class="fas fa-chevron-down text-xs"></i>
-                        </button>
-                        <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                            <a href="dashboard.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Main Dashboard</a>
-                            <a href="admin-dashboard.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Admin Panel</a>
-                            <hr class="my-1">
-                            <button onclick="logout()" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <!-- Navigation Bar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 transition-all duration-300 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto">
+          <span class="ml-3 text-xl font-bold text-gray-900">Analytics</span>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Analytics Dashboard</h1>
-            <p class="text-gray-600">Comprehensive insights into user behavior, performance metrics, and system analytics</p>
+        
+        <!-- Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+          <a href="dashboard.html" class="text-gray-700 hover:text-primary font-medium">Dashboard</a>
+          <a href="user-analytics.html" class="text-gray-700 hover:text-primary font-medium">Users</a>
+          <a href="communication-center.html" class="text-gray-700 hover:text-primary font-medium">Messages</a>
+          <a href="reports.html" class="text-gray-700 hover:text-primary font-medium">Reports</a>
         </div>
-
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="100">
-                <div class="flex items-center">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-users text-blue-600 text-xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Total Users</p>
-                        <p class="text-2xl font-bold text-gray-900" id="total-users">0</p>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <span class="text-green-600 text-sm font-medium">
-                        <i class="fas fa-arrow-up mr-1"></i>12.5%
-                    </span>
-                    <span class="text-gray-500 text-sm">vs last month</span>
-                </div>
+        
+        <!-- User Menu -->
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <button id="userMenuButton" class="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:border-primary transition-colors">
+              <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=667eea&color=fff" alt="User" class="w-6 h-6 rounded-full">
+              <span id="userName" class="text-gray-700 font-medium">User</span>
+              <i class="fas fa-chevron-down text-gray-500"></i>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200">
+              <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-t-lg">
+                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+              </a>
+              <a href="security-settings.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-shield-alt mr-2"></i>Security
+              </a>
+              <hr class="my-1">
+              <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-50 rounded-b-lg">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+              </button>
             </div>
-
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="200">
-                <div class="flex items-center">
-                    <div class="p-3 bg-green-100 rounded-lg">
-                        <i class="fas fa-file-alt text-green-600 text-xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Applications</p>
-                        <p class="text-2xl font-bold text-gray-900" id="total-applications">0</p>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <span class="text-green-600 text-sm font-medium">
-                        <i class="fas fa-arrow-up mr-1"></i>8.2%
-                    </span>
-                    <span class="text-gray-500 text-sm">vs last month</span>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="300">
-                <div class="flex items-center">
-                    <div class="p-3 bg-purple-100 rounded-lg">
-                        <i class="fas fa-cube text-purple-600 text-xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Prototypes</p>
-                        <p class="text-2xl font-bold text-gray-900" id="total-prototypes">0</p>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <span class="text-green-600 text-sm font-medium">
-                        <i class="fas fa-arrow-up mr-1"></i>15.3%
-                    </span>
-                    <span class="text-gray-500 text-sm">vs last month</span>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="400">
-                <div class="flex items-center">
-                    <div class="p-3 bg-orange-100 rounded-lg">
-                        <i class="fas fa-chart-line text-orange-600 text-xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Conversion Rate</p>
-                        <p class="text-2xl font-bold text-gray-900" id="conversion-rate">0%</p>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <span class="text-green-600 text-sm font-medium">
-                        <i class="fas fa-arrow-up mr-1"></i>5.7%
-                    </span>
-                    <span class="text-gray-500 text-sm">vs last month</span>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </nav>
 
-        <!-- Charts Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <!-- User Growth Chart -->
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-lg font-semibold text-gray-900">User Growth</h3>
-                    <select id="user-growth-period" class="text-sm border border-gray-300 rounded-lg px-3 py-1">
-                        <option value="7">Last 7 days</option>
-                        <option value="30" selected>Last 30 days</option>
-                        <option value="90">Last 90 days</option>
-                    </select>
-                </div>
-                <canvas id="userGrowthChart" height="300"></canvas>
-            </div>
+  <!-- Main Content -->
+  <main class="pt-20">
+    <!-- Header Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          📊 Analytics Dashboard
+        </h1>
+        <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+          Comprehensive insights into your platform's performance, user behavior, and business metrics.
+        </p>
+      </div>
+    </section>
 
-            <!-- Application Status Chart -->
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-lg font-semibold text-gray-900">Application Status</h3>
-                    <div class="text-sm text-gray-500">Distribution</div>
-                </div>
-                <canvas id="applicationStatusChart" height="300"></canvas>
+    <!-- Quick Stats -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Active Users -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Active Users</p>
+                <p class="text-3xl font-bold text-gray-900" id="activeUsers">1,247</p>
+                <p class="text-sm text-green-600 flex items-center mt-1">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span id="activeUsersChange">+12%</span> from last week
+                </p>
+              </div>
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
+              </div>
             </div>
+          </div>
+
+          <!-- Revenue -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Revenue Today</p>
+                <p class="text-3xl font-bold text-gray-900" id="revenueToday">$2,847</p>
+                <p class="text-sm text-green-600 flex items-center mt-1">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span id="revenueChange">+8%</span> from yesterday
+                </p>
+              </div>
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Conversion Rate -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="200">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Conversion Rate</p>
+                <p class="text-3xl font-bold text-gray-900" id="conversionRate">3.2%</p>
+                <p class="text-sm text-green-600 flex items-center mt-1">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span id="conversionChange">+0.5%</span> from last month
+                </p>
+              </div>
+              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page Load Speed -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="300">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Page Load Speed</p>
+                <p class="text-3xl font-bold text-gray-900" id="pageLoadSpeed">1.2s</p>
+                <p class="text-sm text-green-600 flex items-center mt-1">
+                  <i class="fas fa-arrow-down mr-1"></i>
+                  <span id="speedChange">-0.3s</span> from last week
+                </p>
+              </div>
+              <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-tachometer-alt text-orange-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Performance Metrics -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <!-- Charts Section -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- User Growth Chart -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-semibold text-gray-900">User Growth</h3>
+              <div class="flex space-x-2">
+                <button class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg font-medium" onclick="updateChartPeriod('week')">Week</button>
+                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium" onclick="updateChartPeriod('month')">Month</button>
+                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium" onclick="updateChartPeriod('year')">Year</button>
+              </div>
+            </div>
+            <div class="h-64">
+              <canvas id="userGrowthChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Revenue Chart -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="100">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-semibold text-gray-900">Revenue Trends</h3>
+              <div class="flex space-x-2">
+                <button class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-lg font-medium" onclick="updateRevenuePeriod('week')">Week</button>
+                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium" onclick="updateRevenuePeriod('month')">Month</button>
+                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium" onclick="updateRevenuePeriod('year')">Year</button>
+              </div>
+            </div>
+            <div class="h-64">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Performance Metrics -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Performance Metrics</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Page Performance -->
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Page Performance</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Homepage</span>
-                        <div class="flex items-center">
-                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
-                                <div class="bg-green-500 h-2 rounded-full" style="width: 95%"></div>
-                            </div>
-                            <span class="text-sm font-medium">95%</span>
-                        </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">Page Performance</h4>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Homepage</span>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-green-500 rounded-full" style="width: 95%"></div>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Dashboard</span>
-                        <div class="flex items-center">
-                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
-                                <div class="bg-blue-500 h-2 rounded-full" style="width: 88%"></div>
-                            </div>
-                            <span class="text-sm font-medium">88%</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Forms</span>
-                        <div class="flex items-center">
-                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
-                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 92%"></div>
-                            </div>
-                            <span class="text-sm font-medium">92%</span>
-                        </div>
-                    </div>
+                    <span class="text-sm font-medium text-gray-900">95%</span>
+                  </div>
                 </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Dashboard</span>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-blue-500 rounded-full" style="width: 88%"></div>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">88%</span>
+                  </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Services</span>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-yellow-500 rounded-full" style="width: 92%"></div>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">92%</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- User Engagement -->
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">User Engagement</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Avg. Session Duration</span>
-                        <span class="text-sm font-medium">4m 32s</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Pages per Session</span>
-                        <span class="text-sm font-medium">3.8</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Bounce Rate</span>
-                        <span class="text-sm font-medium">23%</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Return Rate</span>
-                        <span class="text-sm font-medium">67%</span>
-                    </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">User Engagement</h4>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Session Duration</span>
+                  <span class="text-sm font-medium text-gray-900">4m 32s</span>
                 </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Pages per Session</span>
+                  <span class="text-sm font-medium text-gray-900">3.8</span>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Bounce Rate</span>
+                  <span class="text-sm font-medium text-gray-900">28%</span>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Return Rate</span>
+                  <span class="text-sm font-medium text-gray-900">42%</span>
+                </div>
+              </div>
             </div>
 
             <!-- System Health -->
-            <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-in-up">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">System Health</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Uptime</span>
-                        <span class="text-sm font-medium text-green-600">99.9%</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Response Time</span>
-                        <span class="text-sm font-medium">142ms</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Error Rate</span>
-                        <span class="text-sm font-medium text-green-600">0.1%</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Active Users</span>
-                        <span class="text-sm font-medium" id="active-users">0</span>
-                    </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">System Health</h4>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Server Uptime</span>
+                  <span class="text-sm font-medium text-green-600">99.9%</span>
                 </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Database</span>
+                  <span class="text-sm font-medium text-green-600">Healthy</span>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">Email Service</span>
+                  <span class="text-sm font-medium text-green-600">Active</span>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">API Response</span>
+                  <span class="text-sm font-medium text-green-600">Fast</span>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Recent Activity -->
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden" data-aos="fade-in-up">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+    <!-- Recent Activity -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">Recent Activity</h3>
+          
+          <div class="space-y-4">
+            <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+              <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-user-plus text-blue-600"></i>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">New user registered</p>
+                <p class="text-xs text-gray-600">john.doe@example.com joined the platform</p>
+              </div>
+              <span class="text-xs text-gray-500">2 minutes ago</span>
             </div>
-            <div class="p-6">
-                <div id="recent-activity-list" class="space-y-4">
-                    <!-- Activity items will be loaded here -->
-                </div>
+            
+            <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+              <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-shopping-cart text-green-600"></i>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">New order placed</p>
+                <p class="text-xs text-gray-600">Order #12345 for $299</p>
+              </div>
+              <span class="text-xs text-gray-500">15 minutes ago</span>
             </div>
+            
+            <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+              <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-envelope text-purple-600"></i>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Email campaign sent</p>
+                <p class="text-xs text-gray-600">Welcome email sent to 150 new users</p>
+              </div>
+              <span class="text-xs text-gray-500">1 hour ago</span>
+            </div>
+            
+            <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+              <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-chart-line text-orange-600"></i>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Performance alert</p>
+                <p class="text-xs text-gray-600">Page load time improved by 15%</p>
+              </div>
+              <span class="text-xs text-gray-500">2 hours ago</span>
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-blue-600 to-purple-700 rounded-2xl p-8 text-white" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold mb-6 text-center">Quick Actions</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <a href="user-analytics.html" class="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center hover:bg-white/30 transition-colors">
+              <i class="fas fa-users text-2xl mb-2"></i>
+              <p class="font-medium">User Analytics</p>
+            </a>
+            
+            <a href="communication-center.html" class="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center hover:bg-white/30 transition-colors">
+              <i class="fas fa-comments text-2xl mb-2"></i>
+              <p class="font-medium">Messages</p>
+            </a>
+            
+            <a href="reports.html" class="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center hover:bg-white/30 transition-colors">
+              <i class="fas fa-file-alt text-2xl mb-2"></i>
+              <p class="font-medium">Reports</p>
+            </a>
+            
+            <a href="business-intelligence.html" class="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center hover:bg-white/30 transition-colors">
+              <i class="fas fa-brain text-2xl mb-2"></i>
+              <p class="font-medium">Business Intelligence</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center mb-4">
+            <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto mr-3">
+            <span class="text-xl font-bold">Social Studio</span>
+          </div>
+          <p class="text-gray-300 mb-4">
+            Your trusted partner in digital marketing and web development.
+          </p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+            <li><a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors">Dashboard</a></li>
+            <li><a href="analytics-dashboard.html" class="text-gray-300 hover:text-white transition-colors">Analytics</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><i class="fas fa-phone mr-2"></i>+91 93541 92151</li>
+            <li><i class="fas fa-envelope mr-2"></i>pv.socialstudio@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2024 Social Studio. All rights reserved.</p>
+      </div>
     </div>
+  </footer>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 300,
+      easing: 'ease-out',
+      once: true,
+      offset: 50,
+      delay: 0,
+      disable: 'mobile'
+    });
 
-        // Check authentication
-        function checkAuth() {
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            const token = localStorage.getItem('token');
-            
-            if (!user.id || !token) {
-                window.location.href = 'login.html';
-                return;
+    // User menu toggle
+    document.getElementById("userMenuButton").addEventListener("click", function () {
+      const dropdown = document.getElementById("userDropdown");
+      dropdown.classList.toggle("opacity-0");
+      dropdown.classList.toggle("invisible");
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById("userDropdown");
+      const button = document.getElementById("userMenuButton");
+      
+      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add("opacity-0", "invisible");
+      }
+    });
+
+    // Load user data
+    function loadUserData() {
+      const userData = JSON.parse(localStorage.getItem('userData')) || {
+        name: 'User',
+        email: 'user@example.com'
+      };
+      
+      document.getElementById('userName').textContent = userData.name;
+    }
+
+    // Initialize charts
+    let userGrowthChart, revenueChart;
+
+    function initializeCharts() {
+      // User Growth Chart
+      const userCtx = document.getElementById('userGrowthChart').getContext('2d');
+      userGrowthChart = new Chart(userCtx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Active Users',
+            data: [1200, 1350, 1420, 1380, 1560, 1620, 1740],
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
             }
-            
-            document.getElementById('user-name').textContent = user.fullName || 'Analytics';
-        }
-
-        // User menu functionality
-        function setupUserMenu() {
-            const userMenuBtn = document.getElementById('user-menu-btn');
-            const userMenu = document.getElementById('user-menu');
-            
-            userMenuBtn.addEventListener('click', () => {
-                userMenu.classList.toggle('hidden');
-            });
-            
-            document.addEventListener('click', (e) => {
-                if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
-                    userMenu.classList.add('hidden');
-                }
-            });
-        }
-
-        // Load analytics data
-        async function loadAnalyticsData() {
-            try {
-                const response = await fetch('/api/analytics/dashboard', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    updateDashboardStats(data);
-                    updateCharts(data);
-                    updateRecentActivity(data.recentActivity);
-                } else {
-                    // Load demo data if API not available
-                    loadDemoData();
-                }
-            } catch (error) {
-                console.error('Error loading analytics:', error);
-                loadDemoData();
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
             }
+          }
         }
+      });
 
-        // Load demo data
-        function loadDemoData() {
-            const demoData = {
-                stats: {
-                    totalUsers: 1247,
-                    totalApplications: 89,
-                    totalPrototypes: 156,
-                    conversionRate: 23.5,
-                    activeUsers: 342
-                },
-                userGrowth: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    data: [850, 920, 1050, 1120, 1180, 1247]
-                },
-                applicationStatus: {
-                    labels: ['Pending', 'Under Review', 'Interview', 'Accepted', 'Rejected'],
-                    data: [23, 34, 12, 15, 5]
-                },
-                recentActivity: [
-                    { type: 'user', message: 'New user registered: john.doe@example.com', time: '2 minutes ago' },
-                    { type: 'application', message: 'Application submitted for Frontend Development', time: '5 minutes ago' },
-                    { type: 'prototype', message: 'Prototype request: E-commerce website', time: '12 minutes ago' },
-                    { type: 'admin', message: 'Admin reviewed application #1234', time: '1 hour ago' },
-                    { type: 'system', message: 'System backup completed successfully', time: '2 hours ago' }
-                ]
-            };
-            
-            updateDashboardStats(demoData);
-            updateCharts(demoData);
-            updateRecentActivity(demoData.recentActivity);
+      // Revenue Chart
+      const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+      revenueChart = new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Revenue',
+            data: [2100, 1850, 2300, 1950, 2800, 3200, 2847],
+            backgroundColor: '#10b981',
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            }
+          }
         }
+      });
+    }
 
-        // Update dashboard statistics
-        function updateDashboardStats(data) {
-            document.getElementById('total-users').textContent = data.stats.totalUsers.toLocaleString();
-            document.getElementById('total-applications').textContent = data.stats.totalApplications.toLocaleString();
-            document.getElementById('total-prototypes').textContent = data.stats.totalPrototypes.toLocaleString();
-            document.getElementById('conversion-rate').textContent = data.stats.conversionRate + '%';
-            document.getElementById('active-users').textContent = data.stats.activeUsers.toLocaleString();
-        }
+    // Update chart periods
+    function updateChartPeriod(period) {
+      // Update button states
+      document.querySelectorAll('[onclick*="updateChartPeriod"]').forEach(btn => {
+        btn.className = 'px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium';
+      });
+      event.target.className = 'px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg font-medium';
+      
+      // Update chart data based on period
+      let labels, data;
+      if (period === 'week') {
+        labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        data = [1200, 1350, 1420, 1380, 1560, 1620, 1740];
+      } else if (period === 'month') {
+        labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+        data = [5200, 5800, 6100, 6800];
+      } else {
+        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        data = [15000, 18000, 22000, 25000, 28000, 32000];
+      }
+      
+      userGrowthChart.data.labels = labels;
+      userGrowthChart.data.datasets[0].data = data;
+      userGrowthChart.update();
+    }
 
-        // Update charts
-        function updateCharts(data) {
-            // User Growth Chart
-            const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
-            new Chart(userGrowthCtx, {
-                type: 'line',
-                data: {
-                    labels: data.userGrowth.labels,
-                    datasets: [{
-                        label: 'Total Users',
-                        data: data.userGrowth.data,
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
+    function updateRevenuePeriod(period) {
+      // Update button states
+      document.querySelectorAll('[onclick*="updateRevenuePeriod"]').forEach(btn => {
+        btn.className = 'px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium';
+      });
+      event.target.className = 'px-3 py-1 text-sm bg-green-100 text-green-700 rounded-lg font-medium';
+      
+      // Update chart data based on period
+      let labels, data;
+      if (period === 'week') {
+        labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        data = [2100, 1850, 2300, 1950, 2800, 3200, 2847];
+      } else if (period === 'month') {
+        labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+        data = [8500, 9200, 10500, 11800];
+      } else {
+        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        data = [32000, 38000, 45000, 52000, 58000, 65000];
+      }
+      
+      revenueChart.data.labels = labels;
+      revenueChart.data.datasets[0].data = data;
+      revenueChart.update();
+    }
 
-            // Application Status Chart
-            const applicationStatusCtx = document.getElementById('applicationStatusChart').getContext('2d');
-            new Chart(applicationStatusCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: data.applicationStatus.labels,
-                    datasets: [{
-                        data: data.applicationStatus.data,
-                        backgroundColor: [
-                            '#fbbf24',
-                            '#3b82f6',
-                            '#8b5cf6',
-                            '#10b981',
-                            '#ef4444'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-        }
+    // Simulate real-time updates
+    function updateMetrics() {
+      // Simulate changing metrics
+      const activeUsers = Math.floor(Math.random() * 200) + 1200;
+      const revenue = Math.floor(Math.random() * 500) + 2500;
+      const conversion = (Math.random() * 2 + 2.5).toFixed(1);
+      const speed = (Math.random() * 0.5 + 1.0).toFixed(1);
+      
+      document.getElementById('activeUsers').textContent = activeUsers.toLocaleString();
+      document.getElementById('revenueToday').textContent = `$${revenue.toLocaleString()}`;
+      document.getElementById('conversionRate').textContent = `${conversion}%`;
+      document.getElementById('pageLoadSpeed').textContent = `${speed}s`;
+    }
 
-        // Update recent activity
-        function updateRecentActivity(activities) {
-            const container = document.getElementById('recent-activity-list');
-            container.innerHTML = '';
-            
-            activities.forEach(activity => {
-                const activityItem = document.createElement('div');
-                activityItem.className = 'flex items-center space-x-3';
-                
-                const iconClass = {
-                    user: 'fas fa-user-plus text-blue-500',
-                    application: 'fas fa-file-alt text-green-500',
-                    prototype: 'fas fa-cube text-purple-500',
-                    admin: 'fas fa-user-shield text-red-500',
-                    system: 'fas fa-cog text-gray-500'
-                }[activity.type] || 'fas fa-info-circle text-gray-500';
-                
-                activityItem.innerHTML = `
-                    <div class="flex-shrink-0">
-                        <i class="${iconClass}"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm text-gray-900">${activity.message}</p>
-                        <p class="text-xs text-gray-500">${activity.time}</p>
-                    </div>
-                `;
-                
-                container.appendChild(activityItem);
-            });
-        }
+    // Update metrics every 30 seconds
+    setInterval(updateMetrics, 30000);
 
-        // Logout function
-        function logout() {
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
-        }
+    // Logout function
+    function logout() {
+      localStorage.removeItem('userData');
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
 
-        // Initialize
-        checkAuth();
-        setupUserMenu();
-        loadAnalyticsData();
-
-        // Period selector
-        document.getElementById('user-growth-period').addEventListener('change', function() {
-            // In a real app, this would reload data for the selected period
-            console.log('Period changed to:', this.value);
-        });
-    </script>
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserData();
+      initializeCharts();
+    });
+  </script>
 </body>
 </html>

@@ -1789,6 +1789,216 @@ app.post('/api/email/resend-verification', async (req, res) => {
   }
 });
 
+// ===== PHASE 6: ANALYTICS & COMMUNICATION API ENDPOINTS =====
+
+// Analytics Dashboard Data
+app.get('/api/analytics/dashboard', authenticateToken, async (req, res) => {
+  try {
+    // Mock analytics data
+    const analyticsData = {
+      activeUsers: Math.floor(Math.random() * 200) + 1200,
+      revenueToday: Math.floor(Math.random() * 500) + 2500,
+      conversionRate: (Math.random() * 2 + 2.5).toFixed(1),
+      pageLoadSpeed: (Math.random() * 0.5 + 1.0).toFixed(1),
+      userGrowth: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        data: [1200, 1350, 1420, 1380, 1560, 1620, 1740]
+      },
+      revenue: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        data: [2100, 1850, 2300, 1950, 2800, 3200, 2847]
+      }
+    };
+    
+    res.json(analyticsData);
+  } catch (error) {
+    console.error('Analytics dashboard error:', error);
+    res.status(500).json({ error: 'Failed to fetch analytics data' });
+  }
+});
+
+// User Analytics Data
+app.get('/api/analytics/users', authenticateToken, async (req, res) => {
+  try {
+    // Mock user analytics data
+    const userAnalytics = {
+      totalUsers: Math.floor(Math.random() * 500) + 8000,
+      activeUsers: Math.floor(Math.random() * 200) + 1200,
+      newUsers: Math.floor(Math.random() * 100) + 300,
+      retentionRate: Math.floor(Math.random() * 10) + 75,
+      ageDistribution: {
+        labels: ['18-24', '25-34', '35-44', '45-54', '55+'],
+        data: [25, 35, 20, 15, 5]
+      },
+      geographicDistribution: {
+        labels: ['India', 'USA', 'UK', 'Canada', 'Australia', 'Others'],
+        data: [45, 25, 15, 8, 5, 2]
+      }
+    };
+    
+    res.json(userAnalytics);
+  } catch (error) {
+    console.error('User analytics error:', error);
+    res.status(500).json({ error: 'Failed to fetch user analytics' });
+  }
+});
+
+// Communication Analytics
+app.get('/api/analytics/communication', authenticateToken, async (req, res) => {
+  try {
+    // Mock communication analytics data
+    const communicationData = {
+      totalMessages: Math.floor(Math.random() * 100) + 2800,
+      unreadMessages: Math.floor(Math.random() * 10) + 20,
+      activeChats: Math.floor(Math.random() * 5) + 10,
+      responseTime: (Math.random() * 2 + 1.5).toFixed(1),
+      messageTrends: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        data: [120, 135, 142, 138, 156, 162, 174]
+      }
+    };
+    
+    res.json(communicationData);
+  } catch (error) {
+    console.error('Communication analytics error:', error);
+    res.status(500).json({ error: 'Failed to fetch communication analytics' });
+  }
+});
+
+// Business Intelligence Data
+app.get('/api/analytics/business', authenticateToken, async (req, res) => {
+  try {
+    // Mock business intelligence data
+    const businessData = {
+      mrr: Math.floor(Math.random() * 5000) + 45000,
+      clv: Math.floor(Math.random() * 500) + 2800,
+      churnRate: (Math.random() * 2 + 2.5).toFixed(1),
+      nps: Math.floor(Math.random() * 10) + 70,
+      revenueGrowth: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        data: [32000, 35000, 38000, 42000, 45000, 45847]
+      },
+      salesFunnel: {
+        visitors: 10000,
+        leads: 1200,
+        qualified: 480,
+        proposals: 240,
+        deals: 72
+      }
+    };
+    
+    res.json(businessData);
+  } catch (error) {
+    console.error('Business intelligence error:', error);
+    res.status(500).json({ error: 'Failed to fetch business intelligence data' });
+  }
+});
+
+// Report Generation
+app.post('/api/reports/generate', authenticateToken, async (req, res) => {
+  try {
+    const { reportType, period, format } = req.body;
+    
+    // Mock report generation
+    const report = {
+      id: `report-${Date.now()}`,
+      type: reportType,
+      period: period,
+      format: format || 'PDF',
+      generatedAt: new Date().toISOString(),
+      status: 'completed',
+      downloadUrl: `/api/reports/download/${Date.now()}`
+    };
+    
+    res.json({
+      success: true,
+      report: report
+    });
+  } catch (error) {
+    console.error('Report generation error:', error);
+    res.status(500).json({ error: 'Failed to generate report' });
+  }
+});
+
+// Messaging System
+app.get('/api/messaging/conversations', authenticateToken, async (req, res) => {
+  try {
+    // Mock conversations data
+    const conversations = [
+      {
+        id: 'john-doe',
+        name: 'John Doe',
+        status: 'Online',
+        lastMessage: 'Hey, I have a question about the prototype...',
+        unreadCount: 2,
+        lastActivity: '2 minutes ago'
+      },
+      {
+        id: 'jane-smith',
+        name: 'Jane Smith',
+        status: 'Away',
+        lastMessage: 'Thanks for the quick response!',
+        unreadCount: 0,
+        lastActivity: '1 hour ago'
+      }
+    ];
+    
+    res.json(conversations);
+  } catch (error) {
+    console.error('Conversations error:', error);
+    res.status(500).json({ error: 'Failed to fetch conversations' });
+  }
+});
+
+app.get('/api/messaging/messages/:conversationId', authenticateToken, async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+    
+    // Mock messages data
+    const messages = [
+      {
+        id: 1,
+        sender: 'them',
+        text: 'Hey, I have a question about the prototype we discussed last week.',
+        time: '2 minutes ago'
+      },
+      {
+        id: 2,
+        sender: 'me',
+        text: 'Hi John! Of course, what would you like to know?',
+        time: '1 minute ago'
+      }
+    ];
+    
+    res.json(messages);
+  } catch (error) {
+    console.error('Messages error:', error);
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
+
+app.post('/api/messaging/send', authenticateToken, async (req, res) => {
+  try {
+    const { conversationId, message } = req.body;
+    
+    // Mock message sending
+    const newMessage = {
+      id: Date.now(),
+      sender: 'me',
+      text: message,
+      time: 'Just now'
+    };
+    
+    res.json({
+      success: true,
+      message: newMessage
+    });
+  } catch (error) {
+    console.error('Send message error:', error);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
