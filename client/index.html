@@ -98,6 +98,39 @@
     };
   </script>
   <style>
+    /* Performance Optimizations for Smooth Scrolling */
+    * {
+      /* Optimize for smooth scrolling */
+      scroll-behavior: smooth;
+    }
+    
+    /* Reduce transition durations for better performance */
+    .transition-all {
+      transition-duration: 200ms !important; /* Reduced from 300ms */
+    }
+    
+    .duration-300 {
+      transition-duration: 200ms !important; /* Reduced from 300ms */
+    }
+    
+    /* Optimize transform animations */
+    .transform {
+      will-change: transform;
+    }
+    
+    /* Optimize hover effects for smoother feel */
+    .hover\:scale-105:hover {
+      transform: scale(1.02) !important; /* Reduced scale for smoother feel */
+    }
+    
+    .hover\:-translate-y-2:hover {
+      transform: translateY(-1px) !important; /* Reduced movement */
+    }
+    
+    .hover\:-translate-y-3:hover {
+      transform: translateY(-2px) !important; /* Reduced movement */
+    }
+    
     /* Enhanced Design Styles */
     .hero-gradient {
       background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
@@ -143,8 +176,8 @@
     }
     
     .service-card:hover {
-      transform: translateY(-12px) scale(1.03);
-      box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
+      transform: translateY(-8px) scale(1.02); /* Reduced movement for smoother feel */
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15); /* Reduced shadow for performance */
       border-color: rgba(37, 99, 235, 0.4);
     }
     
@@ -160,8 +193,8 @@
     }
     
     .service-card:hover .service-icon {
-      transform: scale(1.15) rotate(8deg);
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+      transform: scale(1.1) rotate(5deg); /* Reduced scale and rotation for smoother feel */
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); /* Reduced shadow for performance */
     }
     
     .testimonial-card {
@@ -172,8 +205,8 @@
     }
     
     .testimonial-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 50px rgba(37, 99, 235, 0.2);
+      transform: translateY(-6px); /* Reduced movement for smoother feel */
+      box-shadow: 0 15px 35px rgba(37, 99, 235, 0.15); /* Reduced shadow for performance */
     }
     
     .cta-button {
@@ -200,8 +233,8 @@
     }
     
     .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
+      transform: translateY(-2px); /* Reduced movement for smoother feel */
+      box-shadow: 0 12px 25px rgba(37, 99, 235, 0.3); /* Reduced shadow for performance */
     }
     
     .nav-link {
@@ -1726,12 +1759,14 @@
   </footer>
 
   <script>
-    // Initialize AOS (Animate On Scroll)
+    // Initialize AOS (Animate On Scroll) - Optimized for fast, smooth scrolling
     AOS.init({
-      duration: 800,
-      easing: 'ease-in-out',
+      duration: 300, // Reduced from 800ms to 300ms for much faster animations
+      easing: 'ease-out', // Changed to ease-out for snappier feel
       once: true,
-      offset: 100
+      offset: 50, // Reduced from 100px to 50px for earlier triggering
+      delay: 0, // No delay for immediate response
+      disable: 'mobile' // Disable on mobile for better performance
     });
 
     // Mobile menu toggle
@@ -1757,24 +1792,38 @@
       type();
     });
 
-    // Scroll progress indicator
-    window.addEventListener('scroll', () => {
+    // Throttle function for performance optimization
+    function throttle(func, limit) {
+      let inThrottle;
+      return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+          func.apply(context, args);
+          inThrottle = true;
+          setTimeout(() => inThrottle = false, limit);
+        }
+      }
+    }
+
+    // Scroll progress indicator - throttled for performance
+    window.addEventListener('scroll', throttle(() => {
       const scrollProgress = document.getElementById('scrollProgress');
       const scrollTop = window.pageYOffset;
       const docHeight = document.body.offsetHeight - window.innerHeight;
       const scrollPercent = (scrollTop / docHeight) * 100;
       scrollProgress.style.width = scrollPercent + '%';
-    });
+    }, 16)); // ~60fps
 
-    // Back to top button
-    window.addEventListener('scroll', () => {
+    // Back to top button - throttled for performance
+    window.addEventListener('scroll', throttle(() => {
       const backToTop = document.getElementById('backToTop');
       if (window.pageYOffset > 300) {
         backToTop.classList.add('visible');
       } else {
         backToTop.classList.remove('visible');
       }
-    });
+    }, 16)); // ~60fps
 
     function scrollToTop() {
       window.scrollTo({
@@ -1783,15 +1832,15 @@
       });
     }
 
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
+    // Navbar scroll effect - throttled for performance
+    window.addEventListener('scroll', throttle(() => {
       const navbar = document.getElementById('navbar');
       if (window.pageYOffset > 50) {
         navbar.classList.add('navbar-scrolled');
       } else {
         navbar.classList.remove('navbar-scrolled');
       }
-    });
+    }, 16)); // ~60fps
 
     // Prototype form submission handling
     document.getElementById("prototype-form").addEventListener("submit", async function (e) {
