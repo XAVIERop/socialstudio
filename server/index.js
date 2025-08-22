@@ -324,6 +324,15 @@ app.get('/mobile-apps', (req, res) => {
   res.redirect('/mobile-apps.html');
 });
 
+// Auth page redirects
+app.get('/login', (req, res) => {
+  res.redirect('/login.html');
+});
+
+app.get('/signup', (req, res) => {
+  res.redirect('/signup.html');
+});
+
 // Catch-all route to serve index.html for SPA routing
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
