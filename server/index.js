@@ -1999,6 +1999,262 @@ app.post('/api/messaging/send', authenticateToken, async (req, res) => {
   }
 });
 
+// ===== PHASE 7: ADVANCED FEATURES & AUTOMATION API ENDPOINTS =====
+
+// AI Insights Dashboard Data
+app.get('/api/ai/insights', authenticateToken, async (req, res) => {
+  try {
+    // Mock AI insights data
+    const aiInsights = {
+      accuracy: (Math.random() * 5 + 90).toFixed(1),
+      predictions: Math.floor(Math.random() * 200) + 1800,
+      automation: (Math.random() * 5 + 75).toFixed(1),
+      roi: (Math.random() * 5 + 20).toFixed(1),
+      trends: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        accuracy: [89.2, 91.5, 92.8, 93.1, 93.8, 94.2],
+        automation: [65, 68, 72, 75, 77, 78.5]
+      },
+      recommendations: [
+        {
+          type: 'Revenue Optimization',
+          confidence: 94,
+          impact: '+22%',
+          timeline: '3 months'
+        },
+        {
+          type: 'Customer Retention',
+          confidence: 91,
+          impact: '-3% churn',
+          timeline: '2 months'
+        },
+        {
+          type: 'Market Expansion',
+          confidence: 87,
+          impact: '+35% reach',
+          timeline: '6 months'
+        }
+      ]
+    };
+    
+    res.json(aiInsights);
+  } catch (error) {
+    console.error('AI insights error:', error);
+    res.status(500).json({ error: 'Failed to fetch AI insights' });
+  }
+});
+
+// AI Workflow Management
+app.get('/api/ai/workflows', authenticateToken, async (req, res) => {
+  try {
+    // Mock workflow data
+    const workflows = [
+      {
+        id: 1,
+        name: 'Email Marketing Campaign',
+        type: 'Marketing',
+        status: 'Active',
+        progress: 75,
+        description: 'Automated email sequence for new subscribers'
+      },
+      {
+        id: 2,
+        name: 'Customer Support Routing',
+        type: 'Support',
+        status: 'Active',
+        progress: 90,
+        description: 'Intelligent ticket assignment based on category'
+      },
+      {
+        id: 3,
+        name: 'Lead Qualification',
+        type: 'Sales',
+        status: 'Paused',
+        progress: 45,
+        description: 'AI-powered lead scoring and nurturing'
+      }
+    ];
+    
+    res.json(workflows);
+  } catch (error) {
+    console.error('AI workflows error:', error);
+    res.status(500).json({ error: 'Failed to fetch workflows' });
+  }
+});
+
+app.post('/api/ai/workflows', authenticateToken, async (req, res) => {
+  try {
+    const { name, type, description, triggerType } = req.body;
+    
+    // Mock workflow creation
+    const newWorkflow = {
+      id: Date.now(),
+      name: name || 'New Workflow',
+      type: type || 'Custom',
+      status: 'Active',
+      progress: 0,
+      description: description || 'Automated workflow',
+      triggerType: triggerType || 'Manual',
+      createdAt: new Date().toISOString()
+    };
+    
+    res.json({
+      success: true,
+      workflow: newWorkflow
+    });
+  } catch (error) {
+    console.error('Create workflow error:', error);
+    res.status(500).json({ error: 'Failed to create workflow' });
+  }
+});
+
+// AI Chatbot Management
+app.get('/api/ai/chatbot/stats', authenticateToken, async (req, res) => {
+  try {
+    // Mock chatbot statistics
+    const chatbotStats = {
+      totalConversations: Math.floor(Math.random() * 200) + 2700,
+      responseTime: (Math.random() * 0.5 + 0.5).toFixed(1),
+      resolutionRate: (Math.random() * 5 + 85).toFixed(1),
+      satisfaction: (Math.random() * 0.3 + 4.5).toFixed(1),
+      activeChats: Math.floor(Math.random() * 10) + 5,
+      languages: ['English', 'Spanish', 'French', 'German', 'Hindi'],
+      capabilities: [
+        'Natural Language Processing',
+        'Multi-language Support',
+        'Sentiment Analysis',
+        'Learning & Adaptation',
+        'Seamless Integration',
+        '24/7 Availability'
+      ]
+    };
+    
+    res.json(chatbotStats);
+  } catch (error) {
+    console.error('Chatbot stats error:', error);
+    res.status(500).json({ error: 'Failed to fetch chatbot stats' });
+  }
+});
+
+app.post('/api/ai/chatbot/configure', authenticateToken, async (req, res) => {
+  try {
+    const { personality, responseSpeed, language, autoResponse, smartSuggestions } = req.body;
+    
+    // Mock configuration update
+    const config = {
+      personality: personality || 'Professional',
+      responseSpeed: responseSpeed || 'Normal',
+      language: language || 'English',
+      autoResponse: autoResponse !== undefined ? autoResponse : true,
+      smartSuggestions: smartSuggestions !== undefined ? smartSuggestions : true,
+      updatedAt: new Date().toISOString()
+    };
+    
+    res.json({
+      success: true,
+      config: config
+    });
+  } catch (error) {
+    console.error('Chatbot config error:', error);
+    res.status(500).json({ error: 'Failed to update chatbot configuration' });
+  }
+});
+
+// AI Automation Rules
+app.get('/api/ai/automation/rules', authenticateToken, async (req, res) => {
+  try {
+    // Mock automation rules
+    const rules = [
+      {
+        id: 1,
+        name: 'High-Value Lead Alert',
+        condition: 'Lead score > 80',
+        action: 'Send notification to sales team',
+        status: 'Active',
+        priority: 'High'
+      },
+      {
+        id: 2,
+        name: 'Customer Churn Prevention',
+        condition: 'No activity for 30 days',
+        action: 'Send re-engagement email',
+        status: 'Active',
+        priority: 'Medium'
+      },
+      {
+        id: 3,
+        name: 'Performance Monitoring',
+        condition: 'Page load time > 3 seconds',
+        action: 'Send alert to dev team',
+        status: 'Active',
+        priority: 'High'
+      }
+    ];
+    
+    res.json(rules);
+  } catch (error) {
+    console.error('Automation rules error:', error);
+    res.status(500).json({ error: 'Failed to fetch automation rules' });
+  }
+});
+
+app.post('/api/ai/automation/rules', authenticateToken, async (req, res) => {
+  try {
+    const { name, condition, action, priority } = req.body;
+    
+    // Mock rule creation
+    const newRule = {
+      id: Date.now(),
+      name: name || 'New Rule',
+      condition: condition || 'Default condition',
+      action: action || 'Default action',
+      status: 'Active',
+      priority: priority || 'Medium',
+      createdAt: new Date().toISOString()
+    };
+    
+    res.json({
+      success: true,
+      rule: newRule
+    });
+  } catch (error) {
+    console.error('Create rule error:', error);
+    res.status(500).json({ error: 'Failed to create automation rule' });
+  }
+});
+
+// AI Performance Monitoring
+app.get('/api/ai/performance', authenticateToken, async (req, res) => {
+  try {
+    // Mock performance data
+    const performance = {
+      systemHealth: {
+        cpu: (Math.random() * 20 + 30).toFixed(1),
+        memory: (Math.random() * 15 + 45).toFixed(1),
+        responseTime: (Math.random() * 100 + 200).toFixed(0),
+        uptime: '99.9%'
+      },
+      aiMetrics: {
+        accuracy: (Math.random() * 3 + 92).toFixed(1),
+        latency: (Math.random() * 50 + 150).toFixed(0),
+        throughput: Math.floor(Math.random() * 1000) + 5000,
+        errorRate: (Math.random() * 2 + 0.5).toFixed(2)
+      },
+      businessImpact: {
+        costSavings: Math.floor(Math.random() * 5000) + 15000,
+        efficiencyGain: (Math.random() * 10 + 20).toFixed(1),
+        customerSatisfaction: (Math.random() * 0.5 + 4.5).toFixed(1),
+        revenueIncrease: (Math.random() * 8 + 15).toFixed(1)
+      }
+    };
+    
+    res.json(performance);
+  } catch (error) {
+    console.error('AI performance error:', error);
+    res.status(500).json({ error: 'Failed to fetch AI performance data' });
+  }
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
@@ -2029,11 +2285,6 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-// Catch-all route to serve index.html for SPA routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/index.html'));
-});
-
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${NODE_ENV}`);
@@ -2043,4 +2294,9 @@ app.listen(PORT, () => {
   console.log(`⚡ Rate limiting: ${RATE_LIMIT_MAX_REQUESTS} requests per ${RATE_LIMIT_WINDOW_MS/1000/60} minutes`);
   console.log(`🔐 JWT expiry: ${JWT_EXPIRES_IN}`);
   console.log(`🛡️ Bcrypt rounds: ${BCRYPT_ROUNDS}`);
+});
+
+// Catch-all route to serve index.html for SPA routing (must be last)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'));
 });

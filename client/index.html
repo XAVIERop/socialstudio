@@ -582,11 +582,25 @@
             class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow"
             >Services</a
           >
-          <a
-            href="#ai-automation"
-            class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow"
-            >AI & Automation</a
-          >
+          <div class="relative group">
+            <a
+              href="#ai-automation"
+              class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow"
+              >AI & Automation</a
+            >
+            <!-- Dropdown Menu -->
+            <div class="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <a href="ai-insights.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-t-lg">
+                <i class="fas fa-brain mr-2"></i>AI Insights
+              </a>
+              <a href="ai-workflows.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-cogs mr-2"></i>AI Workflows
+              </a>
+              <a href="ai-chatbot.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-b-lg">
+                <i class="fas fa-comments mr-2"></i>AI Chatbot
+              </a>
+            </div>
+          </div>
           <a
             href="#industries"
             class="text-dark hover:text-primary px-3 py-2 font-medium nav-link cursor-glow"
@@ -629,11 +643,24 @@
           class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
           >Services</a
         >
-        <a
-          href="#ai-automation"
-          class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
-          >AI & Automation</a
-        >
+        <div class="space-y-1">
+          <a
+            href="#ai-automation"
+            class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
+            >AI & Automation</a
+          >
+          <div class="ml-4 space-y-1">
+            <a href="ai-insights.html" class="block px-3 py-2 rounded-md text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition-all duration-300">
+              <i class="fas fa-brain mr-2"></i>AI Insights
+            </a>
+            <a href="ai-workflows.html" class="block px-3 py-2 rounded-md text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition-all duration-300">
+              <i class="fas fa-cogs mr-2"></i>AI Workflows
+            </a>
+            <a href="ai-chatbot.html" class="block px-3 py-2 rounded-md text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition-all duration-300">
+              <i class="fas fa-comments mr-2"></i>AI Chatbot
+            </a>
+          </div>
+        </div>
         <a
           href="#industries"
           class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-gray-50 transition-all duration-300"
