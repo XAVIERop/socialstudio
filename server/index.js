@@ -52,13 +52,33 @@ async function sendEmail(subject, htmlContent) {
 // In production, use a proper database like MongoDB, PostgreSQL, or Vercel KV
 let users = [];
 
-// Initialize with demo user
+// Initialize with demo users
 users.push({
-  id: 'demo-user',
-  fullName: 'Demo User',
+  id: 'demo-client',
+  fullName: 'Demo Client',
   email: 'demo@socialstudio.com',
   phone: '+1234567890',
   password: 'Demo123!',
+  userType: 'client',
+  profile: {
+    companyName: 'Demo Company',
+    industry: 'Technology'
+  },
+  createdAt: new Date().toISOString()
+});
+
+users.push({
+  id: 'demo-intern',
+  fullName: 'Demo Intern',
+  email: 'intern@socialstudio.com',
+  phone: '+1234567890',
+  password: 'Demo123!',
+  userType: 'intern',
+  profile: {
+    university: 'Demo University',
+    graduationYear: '2025',
+    skills: ['JavaScript', 'React', 'SEO']
+  },
   createdAt: new Date().toISOString()
 });
 
@@ -321,7 +341,18 @@ app.post('/api/contact-message', async (req, res) => {
 
 // Signup endpoint
 app.post('/api/signup', postLimiter, async (req, res) => {
-  const { fullName, email, phone, password } = req.body;
+  const { 
+    fullName, 
+    email, 
+    phone, 
+    password, 
+    userType,
+    companyName,
+    industry,
+    university,
+    graduationYear,
+    skills
+  } = req.body;
 
   // Validation
   if (!fullName || fullName.trim().length < 2) {
@@ -340,6 +371,30 @@ app.post('/api/signup', postLimiter, async (req, res) => {
     return res.status(400).json({ error: 'Password must be at least 8 characters long' });
   }
 
+  if (!userType || !['client', 'intern'].includes(userType)) {
+    return res.status(400).json({ error: 'Please select a valid user type' });
+  }
+
+  // Client-specific validation
+  if (userType === 'client') {
+    if (!companyName || companyName.trim().length < 2) {
+      return res.status(400).json({ error: 'Company name must be at least 2 characters' });
+    }
+    if (!industry) {
+      return res.status(400).json({ error: 'Please select your industry' });
+    }
+  }
+
+  // Intern-specific validation
+  if (userType === 'intern') {
+    if (!university || university.trim().length < 2) {
+      return res.status(400).json({ error: 'University name must be at least 2 characters' });
+    }
+    if (!graduationYear) {
+      return res.status(400).json({ error: 'Please select your graduation year' });
+    }
+  }
+
   try {
     const users = readUsers();
     
@@ -356,6 +411,15 @@ app.post('/api/signup', postLimiter, async (req, res) => {
       email: email.toLowerCase().trim(),
       phone: phone.trim(),
       password: password, // In production, use bcrypt to hash passwords
+      userType: userType,
+      profile: userType === 'client' ? {
+        companyName: companyName.trim(),
+        industry: industry
+      } : {
+        university: university.trim(),
+        graduationYear: graduationYear,
+        skills: skills ? skills.split(',').map(s => s.trim()) : []
+      },
       createdAt: new Date().toISOString()
     };
 
@@ -380,15 +444,16 @@ app.post('/api/signup', postLimiter, async (req, res) => {
 
     await sendEmail('Welcome to Social Studio!', htmlContent);
 
-    res.json({ 
-      success: true, 
-      message: 'Account created successfully! Welcome to Social Studio.',
-      user: {
-        id: newUser.id,
-        fullName: newUser.fullName,
-        email: newUser.email
-      }
-    });
+          res.json({ 
+        success: true, 
+        message: 'Account created successfully! Welcome to Social Studio.',
+        user: {
+          id: newUser.id,
+          fullName: newUser.fullName,
+          email: newUser.email,
+          userType: newUser.userType
+        }
+      });
   } catch (error) {
     console.error('Signup error:', error);
     res.status(500).json({ error: 'Something went wrong. Please try again.' });
@@ -429,9 +494,23 @@ app.post('/api/login', postLimiter, async (req, res) => {
         success: true,
         message: 'Login successful!',
         user: {
-          id: 'demo-user',
-          fullName: 'Demo User',
-          email: 'demo@socialstudio.com'
+          id: 'demo-client',
+          fullName: 'Demo Client',
+          email: 'demo@socialstudio.com',
+          userType: 'client'
+        }
+      });
+    }
+
+    if (email === 'intern@socialstudio.com' && password === 'Demo123!') {
+      return res.json({
+        success: true,
+        message: 'Login successful!',
+        user: {
+          id: 'demo-intern',
+          fullName: 'Demo Intern',
+          email: 'intern@socialstudio.com',
+          userType: 'intern'
         }
       });
     }
@@ -442,7 +521,8 @@ app.post('/api/login', postLimiter, async (req, res) => {
       user: {
         id: user.id,
         fullName: user.fullName,
-        email: user.email
+        email: user.email,
+        userType: user.userType
       }
     });
   } catch (error) {

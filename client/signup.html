@@ -89,6 +89,32 @@
             <!-- Sign Up Form -->
             <div class="bg-white rounded-xl shadow-lg p-8" data-aos="fade-in-up" data-aos-delay="200">
                 <form id="signup-form" class="space-y-6">
+                    <!-- User Type Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            I am a... <span class="text-red-500">*</span>
+                        </label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="user-type-option cursor-pointer">
+                                <input type="radio" name="userType" value="client" class="sr-only" required>
+                                <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-primary transition-all duration-300">
+                                    <i class="fas fa-building text-2xl text-gray-400 mb-2"></i>
+                                    <div class="font-medium text-gray-700">Client</div>
+                                    <div class="text-xs text-gray-500">Business Owner</div>
+                                </div>
+                            </label>
+                            <label class="user-type-option cursor-pointer">
+                                <input type="radio" name="userType" value="intern" class="sr-only" required>
+                                <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-primary transition-all duration-300">
+                                    <i class="fas fa-graduation-cap text-2xl text-gray-400 mb-2"></i>
+                                    <div class="font-medium text-gray-700">Intern</div>
+                                    <div class="text-xs text-gray-500">Student</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="userType-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                    </div>
+
                     <!-- Full Name -->
                     <div>
                         <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">
@@ -150,6 +176,124 @@
                             >
                         </div>
                         <div id="phone-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <!-- Client-specific fields -->
+                    <div id="client-fields" class="hidden space-y-4">
+                        <div>
+                            <label for="companyName" class="block text-sm font-medium text-gray-700 mb-2">
+                                Company Name <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-building text-gray-400"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="companyName" 
+                                    name="companyName" 
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                                    placeholder="Enter your company name"
+                                >
+                            </div>
+                            <div id="companyName-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                        </div>
+
+                        <div>
+                            <label for="industry" class="block text-sm font-medium text-gray-700 mb-2">
+                                Industry <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-industry text-gray-400"></i>
+                                </div>
+                                <select 
+                                    id="industry" 
+                                    name="industry" 
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                                >
+                                    <option value="">Select your industry</option>
+                                    <option value="Technology">Technology</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Retail">Retail</option>
+                                    <option value="Manufacturing">Manufacturing</option>
+                                    <option value="Real Estate">Real Estate</option>
+                                    <option value="Food & Beverage">Food & Beverage</option>
+                                    <option value="Fashion">Fashion</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div id="industry-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- Intern-specific fields -->
+                    <div id="intern-fields" class="hidden space-y-4">
+                        <div>
+                            <label for="university" class="block text-sm font-medium text-gray-700 mb-2">
+                                University/College <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-university text-gray-400"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="university" 
+                                    name="university" 
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                                    placeholder="Enter your university/college"
+                                >
+                            </div>
+                            <div id="university-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                        </div>
+
+                        <div>
+                            <label for="graduationYear" class="block text-sm font-medium text-gray-700 mb-2">
+                                Expected Graduation Year <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-calendar text-gray-400"></i>
+                                </div>
+                                <select 
+                                    id="graduationYear" 
+                                    name="graduationYear" 
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                                >
+                                    <option value="">Select graduation year</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="Graduated">Already Graduated</option>
+                                </select>
+                            </div>
+                            <div id="graduationYear-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                        </div>
+
+                        <div>
+                            <label for="skills" class="block text-sm font-medium text-gray-700 mb-2">
+                                Skills (Optional)
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-tools text-gray-400"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="skills" 
+                                    name="skills" 
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                                    placeholder="e.g., JavaScript, React, SEO, Content Writing"
+                                >
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">Separate skills with commas</div>
+                        </div>
                     </div>
 
                     <!-- Password -->
@@ -249,8 +393,6 @@
                     </div>
                 </form>
 
-
-
                 <!-- Login Link -->
                 <div class="mt-8 text-center bg-gray-50 rounded-lg p-4">
                     <p class="text-sm text-gray-600 mb-2">
@@ -302,6 +444,26 @@
 
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
+        });
+
+        // User type selection
+        const userTypeOptions = document.querySelectorAll('.user-type-option input');
+        const clientFields = document.getElementById('client-fields');
+        const internFields = document.getElementById('intern-fields');
+
+        userTypeOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                // Reset all fields
+                clientFields.classList.add('hidden');
+                internFields.classList.add('hidden');
+                
+                // Show relevant fields
+                if (this.value === 'client') {
+                    clientFields.classList.remove('hidden');
+                } else if (this.value === 'intern') {
+                    internFields.classList.remove('hidden');
+                }
+            });
         });
 
         // Password toggle functionality
@@ -410,11 +572,24 @@
                 phone: formData.get('phone'),
                 password: formData.get('password'),
                 confirmPassword: formData.get('confirmPassword'),
-                terms: formData.get('terms')
+                userType: formData.get('userType'),
+                terms: formData.get('terms'),
+                // Client-specific fields
+                companyName: formData.get('companyName'),
+                industry: formData.get('industry'),
+                // Intern-specific fields
+                university: formData.get('university'),
+                graduationYear: formData.get('graduationYear'),
+                skills: formData.get('skills')
             };
 
             // Validation
             let isValid = true;
+
+            if (!data.userType) {
+                showError('userType', 'Please select your user type');
+                isValid = false;
+            }
 
             if (data.fullName.trim().length < 2) {
                 showError('fullName', 'Full name must be at least 2 characters');
@@ -441,6 +616,30 @@
                 isValid = false;
             }
 
+            // Client-specific validation
+            if (data.userType === 'client') {
+                if (!data.companyName || data.companyName.trim().length < 2) {
+                    showError('companyName', 'Company name must be at least 2 characters');
+                    isValid = false;
+                }
+                if (!data.industry) {
+                    showError('industry', 'Please select your industry');
+                    isValid = false;
+                }
+            }
+
+            // Intern-specific validation
+            if (data.userType === 'intern') {
+                if (!data.university || data.university.trim().length < 2) {
+                    showError('university', 'University name must be at least 2 characters');
+                    isValid = false;
+                }
+                if (!data.graduationYear) {
+                    showError('graduationYear', 'Please select your graduation year');
+                    isValid = false;
+                }
+            }
+
             if (!data.terms) {
                 alert('Please agree to the Terms of Service and Privacy Policy');
                 isValid = false;
@@ -460,12 +659,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        fullName: data.fullName,
-                        email: data.email,
-                        phone: data.phone,
-                        password: data.password
-                    })
+                    body: JSON.stringify(data)
                 });
 
                 const result = await response.json();
@@ -476,6 +670,8 @@
                     
                     // Reset form
                     form.reset();
+                    clientFields.classList.add('hidden');
+                    internFields.classList.add('hidden');
                     
                     console.log('Account created successfully:', result.user);
                 } else {
