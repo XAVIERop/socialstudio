@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <link href="mobile-optimization.css" rel="stylesheet">
+
   <script>
     tailwind.config = {
       theme: {
@@ -97,39 +97,6 @@
     };
   </script>
   <style>
-    /* Performance Optimizations for Smooth Scrolling */
-    * {
-      /* Optimize for smooth scrolling */
-      scroll-behavior: smooth;
-    }
-    
-    /* Reduce transition durations for better performance */
-    .transition-all {
-      transition-duration: 200ms !important; /* Reduced from 300ms */
-    }
-    
-    .duration-300 {
-      transition-duration: 200ms !important; /* Reduced from 300ms */
-    }
-    
-    /* Optimize transform animations */
-    .transform {
-      will-change: transform;
-    }
-    
-    /* Optimize hover effects */
-    .hover\:scale-105:hover {
-      transform: scale(1.02) !important; /* Reduced scale for smoother feel */
-    }
-    
-    .hover\:-translate-y-2:hover {
-      transform: translateY(-1px) !important; /* Reduced movement */
-    }
-    
-    .hover\:-translate-y-3:hover {
-      transform: translateY(-2px) !important; /* Reduced movement */
-    }
-    
     /* Enhanced Design Styles */
     .hero-gradient {
       background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
@@ -1758,14 +1725,12 @@
   </footer>
 
   <script>
-    // Initialize AOS (Animate On Scroll) - Optimized for smooth scrolling
+    // Initialize AOS (Animate On Scroll)
     AOS.init({
-      duration: 400, // Reduced from 800ms to 400ms for faster animations
-      easing: 'ease-out', // Changed to ease-out for snappier feel
+      duration: 800,
+      easing: 'ease-in-out',
       once: true,
-      offset: 50, // Reduced offset for earlier triggering
-      delay: 0, // No delay for immediate response
-      disable: 'mobile' // Disable on mobile for better performance
+      offset: 100
     });
 
     // Mobile menu toggle
@@ -1791,38 +1756,24 @@
       type();
     });
 
-    // Throttle function for performance optimization
-    function throttle(func, limit) {
-      let inThrottle;
-      return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-          func.apply(context, args);
-          inThrottle = true;
-          setTimeout(() => inThrottle = false, limit);
-        }
-      }
-    }
-
-    // Scroll progress indicator - throttled for performance
-    window.addEventListener('scroll', throttle(() => {
+    // Scroll progress indicator
+    window.addEventListener('scroll', () => {
       const scrollProgress = document.getElementById('scrollProgress');
       const scrollTop = window.pageYOffset;
       const docHeight = document.body.offsetHeight - window.innerHeight;
       const scrollPercent = (scrollTop / docHeight) * 100;
       scrollProgress.style.width = scrollPercent + '%';
-    }, 16)); // ~60fps
+    });
 
-    // Back to top button - throttled for performance
-    window.addEventListener('scroll', throttle(() => {
+    // Back to top button
+    window.addEventListener('scroll', () => {
       const backToTop = document.getElementById('backToTop');
       if (window.pageYOffset > 300) {
         backToTop.classList.add('visible');
       } else {
         backToTop.classList.remove('visible');
       }
-    }, 16)); // ~60fps
+    });
 
     function scrollToTop() {
       window.scrollTo({
@@ -1831,15 +1782,15 @@
       });
     }
 
-    // Navbar scroll effect - throttled for performance
-    window.addEventListener('scroll', throttle(() => {
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
       const navbar = document.getElementById('navbar');
       if (window.pageYOffset > 50) {
         navbar.classList.add('navbar-scrolled');
       } else {
         navbar.classList.remove('navbar-scrolled');
       }
-    }, 16)); // ~60fps
+    });
 
     // Prototype form submission handling
     document.getElementById("prototype-form").addEventListener("submit", async function (e) {
