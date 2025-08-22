@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Security Settings | Social Studio</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="ssl.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="ssl.jpeg">
+  <link rel="shortcut icon" href="ssl.jpeg">
+  <link rel="apple-touch-icon" href="ssl.jpeg">
+  
+  <!-- Stylesheets -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="mobile-optimization.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#2563eb",
+            secondary: "#f97316",
+            dark: "#1e293b",
+            light: "#f8fafc",
+          }
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Navigation Bar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 transition-all duration-300 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto">
+          <span class="ml-3 text-xl font-bold text-gray-900">Security Settings</span>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+          <a href="dashboard.html" class="text-gray-700 hover:text-primary font-medium">Dashboard</a>
+          <a href="2fa-setup.html" class="text-gray-700 hover:text-primary font-medium">2FA Setup</a>
+        </div>
+        
+        <!-- User Menu -->
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <button id="userMenuButton" class="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:border-primary transition-colors">
+              <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=667eea&color=fff" alt="User" class="w-6 h-6 rounded-full">
+              <span id="userName" class="text-gray-700 font-medium">User</span>
+              <i class="fas fa-chevron-down text-gray-500"></i>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200">
+              <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-t-lg">
+                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+              </a>
+              <a href="#profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-user mr-2"></i>Profile
+              </a>
+              <hr class="my-1">
+              <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-50 rounded-b-lg">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="pt-20">
+    <!-- Header Section -->
+    <section class="bg-gradient-to-r from-red-600 to-orange-600 text-white py-16">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          🛡️ Security Settings
+        </h1>
+        <p class="text-xl text-red-100 max-w-2xl mx-auto">
+          Manage your account security settings, passwords, and authentication methods to keep your account safe.
+        </p>
+      </div>
+    </section>
+
+    <!-- Security Settings -->
+    <section class="py-12">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Security Overview -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8" data-aos="fade-in-up">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-shield-alt text-red-600 text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Security Status</h2>
+            <p class="text-gray-600">Overview of your current security settings</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- 2FA Status -->
+            <div class="text-center p-6 bg-gray-50 rounded-lg">
+              <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-mobile-alt text-green-600 text-2xl"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2">Two-Factor Auth</h3>
+              <div class="flex items-center justify-center space-x-2">
+                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                <span class="text-sm text-green-600 font-medium">Enabled</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">Last updated: Today</p>
+            </div>
+            
+            <!-- Password Status -->
+            <div class="text-center p-6 bg-gray-50 rounded-lg">
+              <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-key text-blue-600 text-2xl"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2">Password</h3>
+              <div class="flex items-center justify-center space-x-2">
+                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                <span class="text-sm text-green-600 font-medium">Strong</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">Last changed: 30 days ago</p>
+            </div>
+            
+            <!-- Email Status -->
+            <div class="text-center p-6 bg-gray-50 rounded-lg">
+              <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-envelope text-purple-600 text-2xl"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2">Email Verified</h3>
+              <div class="flex items-center justify-center space-x-2">
+                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                <span class="text-sm text-green-600 font-medium">Verified</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">Verified: 15 days ago</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Password Management -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8" data-aos="fade-in-up" data-aos-delay="100">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-lock text-blue-600 text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Password Management</h2>
+            <p class="text-gray-600">Change your password and update security preferences</p>
+          </div>
+          
+          <div class="max-w-md mx-auto">
+            <form id="passwordForm" class="space-y-6">
+              <div>
+                <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+                <input 
+                  type="password" 
+                  id="currentPassword" 
+                  name="currentPassword" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+              </div>
+              
+              <div>
+                <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                <input 
+                  type="password" 
+                  id="newPassword" 
+                  name="newPassword" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                <div class="mt-2">
+                  <div class="flex space-x-2">
+                    <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div id="passwordStrength" class="h-full bg-red-500 transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                  </div>
+                  <p id="passwordStrengthText" class="text-xs text-gray-500 mt-1">Password strength</p>
+                </div>
+              </div>
+              
+              <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                <input 
+                  type="password" 
+                  id="confirmPassword" 
+                  name="confirmPassword" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+              </div>
+              
+              <button 
+                type="submit" 
+                id="changePasswordBtn" 
+                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              >
+                <i class="fas fa-key mr-2"></i>Change Password
+              </button>
+            </form>
+            
+            <div id="passwordResult" class="mt-4 text-center hidden">
+              <!-- Success/Error messages will appear here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-Factor Authentication -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8" data-aos="fade-in-up" data-aos-delay="200">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-mobile-alt text-green-600 text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Two-Factor Authentication</h2>
+            <p class="text-gray-600">Manage your 2FA settings and backup codes</p>
+          </div>
+          
+          <div class="max-w-2xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- 2FA Status -->
+              <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="font-semibold text-gray-900 mb-4">Current Status</h3>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-gray-700">2FA Status:</span>
+                  <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Enabled</span>
+                </div>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-gray-700">Last Used:</span>
+                  <span class="text-sm text-gray-600">2 hours ago</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">Device:</span>
+                  <span class="text-sm text-gray-600">iPhone 14</span>
+                </div>
+              </div>
+              
+              <!-- 2FA Actions -->
+              <div class="space-y-4">
+                <a href="2fa-setup.html" class="w-full bg-green-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors text-center block">
+                  <i class="fas fa-cog mr-2"></i>Manage 2FA
+                </a>
+                <button id="generateBackupBtn" class="w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                  <i class="fas fa-download mr-2"></i>Generate Backup Codes
+                </button>
+                <button id="disable2FABtn" class="w-full bg-red-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                  <i class="fas fa-times mr-2"></i>Disable 2FA
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Security -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8" data-aos="fade-in-up" data-aos-delay="300">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-user-shield text-orange-600 text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Account Security</h2>
+            <p class="text-gray-600">Additional security settings and preferences</p>
+          </div>
+          
+          <div class="max-w-2xl mx-auto space-y-6">
+            <!-- Session Management -->
+            <div class="border border-gray-200 rounded-lg p-6">
+              <h3 class="font-semibold text-gray-900 mb-4">Active Sessions</h3>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div class="flex items-center space-x-3">
+                    <i class="fas fa-desktop text-blue-600"></i>
+                    <div>
+                      <p class="font-medium text-gray-900">MacBook Air (Current)</p>
+                      <p class="text-sm text-gray-600">Safari • Last active: Now</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Current</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div class="flex items-center space-x-3">
+                    <i class="fas fa-mobile-alt text-gray-600"></i>
+                    <div>
+                      <p class="font-medium text-gray-900">iPhone 14</p>
+                      <p class="text-sm text-gray-600">Safari • Last active: 2 hours ago</p>
+                    </div>
+                  </div>
+                  <button class="text-red-600 hover:text-red-800 text-sm font-medium">Terminate</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Security Preferences -->
+            <div class="border border-gray-200 rounded-lg p-6">
+              <h3 class="font-semibold text-gray-900 mb-4">Security Preferences</h3>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="font-medium text-gray-900">Login Notifications</p>
+                    <p class="text-sm text-gray-600">Get notified of new login attempts</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="font-medium text-gray-900">Account Recovery</p>
+                    <p class="text-sm text-gray-600">Allow account recovery via email</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="font-medium text-gray-900">Biometric Login</p>
+                    <p class="text-sm text-gray-600">Use fingerprint or face ID</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Tips -->
+        <div class="bg-blue-50 rounded-2xl border border-blue-200 p-8" data-aos="fade-in-up" data-aos-delay="400">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-lightbulb text-blue-600 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-blue-900 mb-2">Security Best Practices</h3>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-3">
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Use a strong, unique password for each account</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Enable two-factor authentication on all accounts</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Keep your authenticator app secure</p>
+              </div>
+            </div>
+            
+            <div class="space-y-3">
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Regularly review active sessions</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Be cautious of phishing attempts</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Update security settings regularly</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center mb-4">
+            <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto mr-3">
+            <span class="text-xl font-bold">Social Studio</span>
+          </div>
+          <p class="text-gray-300 mb-4">
+            Your trusted partner in digital marketing and web development.
+          </p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+            <li><a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors">Dashboard</a></li>
+            <li><a href="2fa-setup.html" class="text-gray-300 hover:text-white transition-colors">2FA Setup</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><i class="fas fa-phone mr-2"></i>+91 93541 92151</li>
+            <li><i class="fas fa-envelope mr-2"></i>pv.socialstudio@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2024 Social Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 300,
+      easing: 'ease-out',
+      once: true,
+      offset: 50,
+      delay: 0,
+      disable: 'mobile'
+    });
+
+    // User menu toggle
+    document.getElementById("userMenuButton").addEventListener("click", function () {
+      const dropdown = document.getElementById("userDropdown");
+      dropdown.classList.toggle("opacity-0");
+      dropdown.classList.toggle("invisible");
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById("userDropdown");
+      const button = document.getElementById("userMenuButton");
+      
+      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add("opacity-0", "invisible");
+      }
+    });
+
+    // Load user data
+    function loadUserData() {
+      const userData = JSON.parse(localStorage.getItem('userData')) || {
+        name: 'User',
+        email: 'user@example.com'
+      };
+      
+      document.getElementById('userName').textContent = userData.name;
+    }
+
+    // Password strength checker
+    document.getElementById('newPassword').addEventListener('input', function() {
+      const password = this.value;
+      const strengthBar = document.getElementById('passwordStrength');
+      const strengthText = document.getElementById('passwordStrengthText');
+      
+      let strength = 0;
+      let color = 'bg-red-500';
+      let text = 'Weak';
+      
+      if (password.length >= 8) strength++;
+      if (password.match(/[a-z]/)) strength++;
+      if (password.match(/[A-Z]/)) strength++;
+      if (password.match(/[0-9]/)) strength++;
+      if (password.match(/[^a-zA-Z0-9]/)) strength++;
+      
+      if (strength >= 4) {
+        color = 'bg-green-500';
+        text = 'Strong';
+      } else if (strength >= 3) {
+        color = 'bg-yellow-500';
+        text = 'Medium';
+      }
+      
+      strengthBar.className = `h-full ${color} transition-all duration-300`;
+      strengthBar.style.width = (strength * 20) + '%';
+      strengthText.textContent = text;
+    });
+
+    // Handle password change form
+    document.getElementById('passwordForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const resultDiv = document.getElementById('passwordResult');
+      
+      if (newPassword !== confirmPassword) {
+        resultDiv.innerHTML = `
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <strong>Error!</strong> New passwords do not match.
+          </div>
+        `;
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      if (newPassword.length < 8) {
+        resultDiv.innerHTML = `
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <strong>Error!</strong> Password must be at least 8 characters long.
+          </div>
+        `;
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      // Simulate password change
+      resultDiv.innerHTML = `
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
+          <i class="fas fa-spinner fa-spin mr-2"></i>
+          <strong>Updating...</strong> Please wait while we update your password.
+        </div>
+      `;
+      resultDiv.classList.remove('hidden');
+      
+      setTimeout(() => {
+        resultDiv.innerHTML = `
+          <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+            <i class="fas fa-check-circle mr-2"></i>
+            <strong>Success!</strong> Your password has been updated successfully.
+          </div>
+        `;
+        
+        // Clear form
+        document.getElementById('passwordForm').reset();
+        document.getElementById('passwordStrength').style.width = '0%';
+        document.getElementById('passwordStrengthText').textContent = 'Password strength';
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+          resultDiv.classList.add('hidden');
+        }, 5000);
+      }, 2000);
+    });
+
+    // Generate backup codes
+    document.getElementById('generateBackupBtn').addEventListener('click', function() {
+      const backupCodes = [];
+      for (let i = 0; i < 10; i++) {
+        backupCodes.push(Math.random().toString(36).substring(2, 8).toUpperCase());
+      }
+      
+      const content = `Social Studio - Backup Codes\n\n${backupCodes.join('\n')}\n\nGenerated on: ${new Date().toLocaleDateString()}`;
+      
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'backup-codes.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      // Show success message
+      this.innerHTML = '<i class="fas fa-check mr-2"></i>Codes Generated';
+      this.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+      this.classList.add('bg-green-600', 'hover:bg-green-700');
+      
+      setTimeout(() => {
+        this.innerHTML = '<i class="fas fa-download mr-2"></i>Generate Backup Codes';
+        this.classList.remove('bg-green-600', 'hover:bg-green-700');
+        this.classList.add('bg-purple-600', 'hover:bg-purple-700');
+      }, 3000);
+    });
+
+    // Disable 2FA
+    document.getElementById('disable2FABtn').addEventListener('click', function() {
+      if (confirm('Are you sure you want to disable two-factor authentication? This will make your account less secure.')) {
+        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Disabling...';
+        this.disabled = true;
+        
+        setTimeout(() => {
+          this.innerHTML = '<i class="fas fa-check mr-2"></i>2FA Disabled';
+          this.classList.remove('bg-red-600', 'hover:bg-red-700');
+          this.classList.add('bg-gray-600', 'hover:bg-gray-700');
+          
+          // Update status display
+          const statusElement = document.querySelector('.bg-green-100 .text-green-800');
+          if (statusElement) {
+            statusElement.textContent = 'Disabled';
+            statusElement.className = 'px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium';
+          }
+        }, 2000);
+      }
+    });
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('userData');
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserData();
+    });
+  </script>
+</body>
+</html>

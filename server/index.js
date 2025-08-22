@@ -1544,6 +1544,251 @@ app.use((req, res, next) => {
   next();
 });
 
+// 2FA Setup endpoint
+app.post('/api/2fa/setup', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = users.find(u => u.id === userId);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Generate TOTP secret
+    const secret = speakeasy.generateSecret({
+      name: `Social Studio (${user.email})`,
+      issuer: 'Social Studio'
+    });
+    
+    // Store secret temporarily (in production, store in database)
+    user.temp2FASecret = secret.base32;
+    
+    // Generate QR code
+    const qrCodeUrl = speakeasy.otpauthURL({
+      secret: secret.base32,
+      label: user.email,
+      issuer: 'Social Studio',
+      algorithm: 'sha1'
+    });
+    
+    res.json({
+      secret: secret.base32,
+      qrCode: qrCodeUrl
+    });
+  } catch (error) {
+    console.error('2FA setup error:', error);
+    res.status(500).json({ error: 'Failed to setup 2FA' });
+  }
+});
+
+// 2FA Verify and Enable endpoint
+app.post('/api/2fa/enable', authenticateToken, async (req, res) => {
+  try {
+    const { token, secret } = req.body;
+    const userId = req.user.id;
+    const user = users.find(u => u.id === userId);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    if (!user.temp2FASecret) {
+      return res.status(400).json({ error: 'No pending 2FA setup found' });
+    }
+    
+    // Verify TOTP token
+    const verified = speakeasy.totp.verify({
+      secret: user.temp2FASecret,
+      encoding: 'base32',
+      token: token,
+      window: 2 // Allow 2 time steps for clock skew
+    });
+    
+    if (!verified) {
+      return res.status(400).json({ error: 'Invalid verification code' });
+    }
+    
+    // Enable 2FA for user
+    user.twoFactorEnabled = true;
+    user.twoFactorSecret = user.temp2FASecret;
+    delete user.temp2FASecret;
+    
+    // Generate backup codes
+    const backupCodes = [];
+    for (let i = 0; i < 10; i++) {
+      backupCodes.push(Math.random().toString(36).substring(2, 8).toUpperCase());
+    }
+    user.backupCodes = backupCodes;
+    
+    res.json({
+      success: true,
+      message: 'Two-factor authentication enabled successfully',
+      backupCodes
+    });
+  } catch (error) {
+    console.error('2FA enable error:', error);
+    res.status(500).json({ error: 'Failed to enable 2FA' });
+  }
+});
+
+// 2FA Verify endpoint (for login)
+app.post('/api/2fa/verify', async (req, res) => {
+  try {
+    const { email, token } = req.body;
+    const user = users.find(u => u.email === email);
+    
+    if (!user || !user.twoFactorEnabled) {
+      return res.status(400).json({ error: 'Invalid request' });
+    }
+    
+    // Verify TOTP token
+    const verified = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: 'base32',
+      token: token,
+      window: 2
+    });
+    
+    if (!verified) {
+      return res.status(400).json({ error: 'Invalid verification code' });
+    }
+    
+    res.json({
+      success: true,
+      message: '2FA verification successful'
+    });
+  } catch (error) {
+    console.error('2FA verify error:', error);
+    res.status(500).json({ error: 'Failed to verify 2FA' });
+  }
+});
+
+// 2FA Backup Code Verify endpoint
+app.post('/api/2fa/backup-verify', async (req, res) => {
+  try {
+    const { email, backupCode } = req.body;
+    const user = users.find(u => u.email === email);
+    
+    if (!user || !user.twoFactorEnabled || !user.backupCodes) {
+      return res.status(400).json({ error: 'Invalid request' });
+    }
+    
+    // Check if backup code exists and remove it (one-time use)
+    const codeIndex = user.backupCodes.indexOf(backupCode);
+    if (codeIndex === -1) {
+      return res.status(400).json({ error: 'Invalid backup code' });
+    }
+    
+    // Remove used backup code
+    user.backupCodes.splice(codeIndex, 1);
+    
+    res.json({
+      success: true,
+      message: 'Backup code verification successful',
+      remainingCodes: user.backupCodes.length
+    });
+  } catch (error) {
+    console.error('Backup code verify error:', error);
+    res.status(500).json({ error: 'Failed to verify backup code' });
+  }
+});
+
+// Generate new backup codes
+app.post('/api/2fa/backup-codes', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = users.find(u => u.id === userId);
+    
+    if (!user || !user.twoFactorEnabled) {
+      return res.status(400).json({ error: '2FA not enabled' });
+    }
+    
+    // Generate new backup codes
+    const backupCodes = [];
+    for (let i = 0; i < 10; i++) {
+      backupCodes.push(Math.random().toString(36).substring(2, 8).toUpperCase());
+    }
+    
+    user.backupCodes = backupCodes;
+    
+    res.json({
+      success: true,
+      backupCodes
+    });
+  } catch (error) {
+    console.error('Generate backup codes error:', error);
+    res.status(500).json({ error: 'Failed to generate backup codes' });
+  }
+});
+
+// Disable 2FA
+app.post('/api/2fa/disable', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = users.find(u => u.id === userId);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Disable 2FA
+    user.twoFactorEnabled = false;
+    user.twoFactorSecret = null;
+    user.backupCodes = null;
+    
+    res.json({
+      success: true,
+      message: 'Two-factor authentication disabled successfully'
+    });
+  } catch (error) {
+    console.error('2FA disable error:', error);
+    res.status(500).json({ error: 'Failed to disable 2FA' });
+  }
+});
+
+// Email verification endpoint
+app.post('/api/email/verify', async (req, res) => {
+  try {
+    const { token } = req.body;
+    
+    // In production, verify token from database
+    // For demo, accept any token
+    if (!token || token.length < 6) {
+      return res.status(400).json({ error: 'Invalid verification token' });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Email verified successfully'
+    });
+  } catch (error) {
+    console.error('Email verification error:', error);
+    res.status(500).json({ error: 'Failed to verify email' });
+  }
+});
+
+// Resend email verification
+app.post('/api/email/resend-verification', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: 'Invalid email address' });
+    }
+    
+    // In production, generate and send new verification email
+    // For demo, just return success
+    
+    res.json({
+      success: true,
+      message: 'Verification email sent successfully'
+    });
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    res.status(500).json({ error: 'Failed to resend verification email' });
+  }
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });

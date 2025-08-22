@@ -1,169 +1,388 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Email | Social Studio</title>
-    <meta name="description" content="Verify your email address for your Social Studio account.">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
-    <link rel="shortcut icon" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#667eea',
-                        secondary: '#764ba2',
-                        dark: '#2d3748'
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Verification | Social Studio</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="ssl.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="ssl.jpeg">
+  <link rel="shortcut icon" href="ssl.jpeg">
+  <link rel="apple-touch-icon" href="ssl.jpeg">
+  
+  <!-- Stylesheets -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="mobile-optimization.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#2563eb",
+            secondary: "#f97316",
+            dark: "#1e293b",
+            light: "#f8fafc",
+          }
+        },
+      },
+    };
+  </script>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex items-center">
-                        <img src="ssl.jpeg" alt="Social Studio Logo" class="h-10 w-auto">
-                    </a>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Home</a>
-                    <a href="index.html#services" class="text-gray-600 hover:text-primary transition-colors">Services</a>
-                    <a href="index.html#about" class="text-gray-600 hover:text-primary transition-colors">About</a>
-                    <a href="index.html#contact" class="text-gray-600 hover:text-primary transition-colors">Contact</a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="login.html" class="text-gray-600 hover:text-primary transition-colors">Sign In</a>
-                    <a href="signup.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">Sign Up</a>
-                </div>
-            </div>
+  <!-- Navigation Bar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 transition-all duration-300 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto">
+          <span class="ml-3 text-xl font-bold text-gray-900">Email Verification</span>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8" data-aos="fade-in-up">
-            <div class="text-center">
-                <div class="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center mb-4">
-                    <i class="fas fa-envelope text-white text-xl"></i>
-                </div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
-                <p class="text-gray-600">We're verifying your email address...</p>
-            </div>
-
-            <!-- Loading State -->
-            <div id="loading-state" class="text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                <p class="text-gray-600">Verifying your email address...</p>
-            </div>
-
-            <!-- Success State -->
-            <div id="success-state" class="text-center hidden">
-                <div class="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                    <i class="fas fa-check text-green-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Email Verified!</h3>
-                <p class="text-gray-600 mb-6">Your email address has been successfully verified. You can now sign in to your account.</p>
-                <a href="login.html" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors inline-block">
-                    Sign In
-                </a>
-            </div>
-
-            <!-- Error State -->
-            <div id="error-state" class="text-center hidden">
-                <div class="mx-auto h-16 w-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Verification Failed</h3>
-                <p id="error-message" class="text-gray-600 mb-6">Something went wrong with the verification process.</p>
-                <div class="space-y-3">
-                    <a href="login.html" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors inline-block">
-                        Go to Sign In
-                    </a>
-                    <br>
-                    <a href="signup.html" class="text-primary hover:text-secondary text-sm font-medium">
-                        Create New Account
-                    </a>
-                </div>
-            </div>
+        
+        <!-- Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+          <a href="login.html" class="text-gray-700 hover:text-primary font-medium">Login</a>
+          <a href="signup.html" class="text-gray-700 hover:text-primary font-medium">Sign Up</a>
         </div>
+        
+        <!-- Contact Button -->
+        <div class="flex items-center space-x-4">
+          <a href="index.html#contact" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+            Contact Us
+          </a>
+        </div>
+      </div>
     </div>
+  </nav>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
+  <!-- Main Content -->
+  <main class="pt-20">
+    <!-- Header Section -->
+    <section class="bg-gradient-to-r from-green-600 to-blue-700 text-white py-16">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          ✉️ Email Verification
+        </h1>
+        <p class="text-xl text-green-100 max-w-2xl mx-auto">
+          Verify your email address to activate your account and access all features.
+        </p>
+      </div>
+    </section>
 
-        // Get token from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
+    <!-- Verification Process -->
+    <section class="py-12">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Email Sent Status -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8" data-aos="fade-in-up">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-envelope text-green-600 text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h2>
+            <p class="text-gray-600">We've sent a verification link to your email address</p>
+          </div>
+          
+          <div class="max-w-md mx-auto text-center">
+            <div class="bg-gray-50 rounded-lg p-6 mb-6">
+              <p class="text-sm text-gray-600 mb-2">Verification email sent to:</p>
+              <p id="userEmail" class="text-lg font-semibold text-gray-900">user@example.com</p>
+            </div>
+            
+            <div class="space-y-4">
+              <p class="text-sm text-gray-600">
+                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                Click the verification link in your email to activate your account
+              </p>
+              <p class="text-sm text-gray-600">
+                <i class="fas fa-clock text-orange-500 mr-2"></i>
+                The link will expire in 24 hours for security
+              </p>
+            </div>
+          </div>
+        </div>
 
-        // Check if token exists
-        if (!token) {
-            showError('No verification token found. Please check your email for the correct verification link.');
-            return;
+        <!-- Manual Verification -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8" data-aos="fade-in-up" data-aos-delay="100">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-key text-blue-600 text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Manual Verification</h2>
+            <p class="text-gray-600">Enter the verification code from your email</p>
+          </div>
+          
+          <div class="max-w-md mx-auto">
+            <form id="verificationForm" class="space-y-6">
+              <div>
+                <label for="verificationCode" class="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
+                <input 
+                  type="text" 
+                  id="verificationCode" 
+                  name="verificationCode" 
+                  maxlength="8" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-xl font-mono tracking-wider"
+                  placeholder="Enter code"
+                  required
+                >
+                <p class="text-sm text-gray-500 mt-2">Enter the verification code from your email</p>
+              </div>
+              
+              <button 
+                type="submit" 
+                id="verifyBtn" 
+                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              >
+                <i class="fas fa-check mr-2"></i>Verify Email
+              </button>
+            </form>
+            
+            <div id="verificationResult" class="mt-4 text-center hidden">
+              <!-- Success/Error messages will appear here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Resend Email -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8" data-aos="fade-in-up" data-aos-delay="200">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-redo text-purple-600 text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Didn't Receive Email?</h2>
+            <p class="text-gray-600">We can resend the verification email to your address</p>
+          </div>
+          
+          <div class="max-w-md mx-auto text-center">
+            <div class="space-y-4">
+              <p class="text-sm text-gray-600">
+                <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>
+                Check your spam/junk folder first
+              </p>
+              <p class="text-sm text-gray-600">
+                <i class="fas fa-envelope text-blue-500 mr-2"></i>
+                Make sure the email address is correct
+              </p>
+            </div>
+            
+            <button 
+              id="resendBtn" 
+              class="mt-6 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+            >
+              <i class="fas fa-paper-plane mr-2"></i>Resend Verification Email
+            </button>
+            
+            <div id="resendResult" class="mt-4 text-center hidden">
+              <!-- Resend result messages will appear here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Help & Support -->
+        <div class="bg-blue-50 rounded-2xl border border-blue-200 p-8" data-aos="fade-in-up" data-aos-delay="300">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-question-circle text-blue-600 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-blue-900 mb-2">Need Help?</h3>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-3">
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Check your email spam/junk folder</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Verify the email address is correct</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Wait a few minutes for delivery</p>
+              </div>
+            </div>
+            
+            <div class="space-y-3">
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Contact support if issues persist</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Check your email provider settings</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                <p class="text-sm text-blue-800">Try using a different email address</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-center mt-6">
+            <a href="index.html#contact" class="inline-flex items-center bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+              <i class="fas fa-headset mr-2"></i>Contact Support
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center mb-4">
+            <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto mr-3">
+            <span class="text-xl font-bold">Social Studio</span>
+          </div>
+          <p class="text-gray-300 mb-4">
+            Your trusted partner in digital marketing and web development.
+          </p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+            <li><a href="login.html" class="text-gray-300 hover:text-white transition-colors">Login</a></li>
+            <li><a href="signup.html" class="text-gray-300 hover:text-white transition-colors">Sign Up</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><i class="fas fa-phone mr-2"></i>+91 93541 92151</li>
+            <li><i class="fas fa-envelope mr-2"></i>pv.socialstudio@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2024 Social Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 300,
+      easing: 'ease-out',
+      once: true,
+      offset: 50,
+      delay: 0,
+      disable: 'mobile'
+    });
+
+    // Load user email from URL parameters or localStorage
+    function loadUserEmail() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get('email') || localStorage.getItem('userEmail') || 'user@example.com';
+      
+      document.getElementById('userEmail').textContent = email;
+      localStorage.setItem('userEmail', email);
+    }
+
+    // Handle verification form
+    document.getElementById('verificationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const code = document.getElementById('verificationCode').value.trim();
+      const resultDiv = document.getElementById('verificationResult');
+      
+      if (!code) {
+        resultDiv.innerHTML = `
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <strong>Error!</strong> Please enter the verification code.
+          </div>
+        `;
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      // Simulate verification process
+      resultDiv.innerHTML = `
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
+          <i class="fas fa-spinner fa-spin mr-2"></i>
+          <strong>Verifying...</strong> Please wait while we verify your email.
+        </div>
+      `;
+      resultDiv.classList.remove('hidden');
+      
+      // Simulate API call delay
+      setTimeout(() => {
+        if (code.length >= 6) {
+          // Success
+          resultDiv.innerHTML = `
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+              <i class="fas fa-check-circle mr-2"></i>
+              <strong>Success!</strong> Your email has been verified successfully.
+            </div>
+          `;
+          
+          // Redirect to login after 2 seconds
+          setTimeout(() => {
+            window.location.href = 'login.html?verified=true';
+          }, 2000);
+        } else {
+          // Error
+          resultDiv.innerHTML = `
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              <i class="fas fa-exclamation-circle mr-2"></i>
+              <strong>Error!</strong> Invalid verification code. Please try again.
+            </div>
+          `;
         }
+      }, 2000);
+    });
 
-        // Verify email
-        verifyEmail(token);
+    // Handle resend email
+    document.getElementById('resendBtn').addEventListener('click', function() {
+      const resultDiv = document.getElementById('resendResult');
+      const button = this;
+      
+      // Show loading state
+      button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+      button.disabled = true;
+      
+      // Simulate API call delay
+      setTimeout(() => {
+        resultDiv.innerHTML = `
+          <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+            <i class="fas fa-check-circle mr-2"></i>
+            <strong>Email Sent!</strong> A new verification email has been sent to your address.
+          </div>
+        `;
+        resultDiv.classList.remove('hidden');
+        
+        // Reset button
+        button.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Resend Verification Email';
+        button.disabled = false;
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+          resultDiv.classList.add('hidden');
+        }, 5000);
+      }, 2000);
+    });
 
-        async function verifyEmail(token) {
-            try {
-                const response = await fetch('/api/email/verify', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ token })
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    showSuccess();
-                } else {
-                    showError(result.error || 'Verification failed. Please try again.');
-                }
-            } catch (error) {
-                console.error('Verification error:', error);
-                showError('Network error. Please check your connection and try again.');
-            }
-        }
-
-        function showSuccess() {
-            document.getElementById('loading-state').classList.add('hidden');
-            document.getElementById('success-state').classList.remove('hidden');
-        }
-
-        function showError(message) {
-            document.getElementById('loading-state').classList.add('hidden');
-            document.getElementById('error-message').textContent = message;
-            document.getElementById('error-state').classList.remove('hidden');
-        }
-    </script>
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserEmail();
+    });
+  </script>
 </body>
 </html>
