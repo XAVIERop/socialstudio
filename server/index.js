@@ -5,7 +5,6 @@ const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 const path = require('path');
 const nodemailer = require('nodemailer');
-const fs = require('fs');
 
 // Load environment variables
 dotenv.config();
@@ -49,34 +48,29 @@ async function sendEmail(subject, htmlContent) {
   }
 }
 
-// User storage (in production, use a proper database)
-const USERS_FILE = path.join(__dirname, 'users.json');
+// In-memory user storage (for serverless compatibility)
+// In production, use a proper database like MongoDB, PostgreSQL, or Vercel KV
+let users = [];
 
-// Initialize users file if it doesn't exist
-if (!fs.existsSync(USERS_FILE)) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify([], null, 2));
-}
+// Initialize with demo user
+users.push({
+  id: 'demo-user',
+  fullName: 'Demo User',
+  email: 'demo@socialstudio.com',
+  phone: '+1234567890',
+  password: 'Demo123!',
+  createdAt: new Date().toISOString()
+});
 
 // Helper function to read users
 function readUsers() {
-  try {
-    const data = fs.readFileSync(USERS_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    console.error('Error reading users file:', error);
-    return [];
-  }
+  return users;
 }
 
 // Helper function to write users
-function writeUsers(users) {
-  try {
-    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-    return true;
-  } catch (error) {
-    console.error('Error writing users file:', error);
-    return false;
-  }
+function writeUsers(newUsers) {
+  users = newUsers;
+  return true;
 }
 
 // Middleware
@@ -366,35 +360,35 @@ app.post('/api/signup', postLimiter, async (req, res) => {
     };
 
     users.push(newUser);
+    writeUsers(users);
     
-    if (writeUsers(users)) {
-      // Send welcome email
-      const htmlContent = `
-        <h2>Welcome to Social Studio!</h2>
-        <p>Hi ${fullName},</p>
-        <p>Thank you for creating your account with Social Studio. You now have access to exclusive digital marketing resources and tools.</p>
-        <p><strong>Account Details:</strong></p>
-        <p><strong>Name:</strong> ${fullName}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p>You can now sign in to your account and start exploring our services.</p>
-        <p>Best regards,<br>The Social Studio Team</p>
-      `;
+    // Log the new user for debugging
+    console.log('New user created:', { id: newUser.id, email: newUser.email, fullName: newUser.fullName });
+    
+    // Send welcome email
+    const htmlContent = `
+      <h2>Welcome to Social Studio!</h2>
+      <p>Hi ${fullName},</p>
+      <p>Thank you for creating your account with Social Studio. You now have access to exclusive digital marketing resources and tools.</p>
+      <p><strong>Account Details:</strong></p>
+      <p><strong>Name:</strong> ${fullName}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p>You can now sign in to your account and start exploring our services.</p>
+      <p>Best regards,<br>The Social Studio Team</p>
+    `;
 
-      await sendEmail('Welcome to Social Studio!', htmlContent);
+    await sendEmail('Welcome to Social Studio!', htmlContent);
 
-      res.json({ 
-        success: true, 
-        message: 'Account created successfully! Welcome to Social Studio.',
-        user: {
-          id: newUser.id,
-          fullName: newUser.fullName,
-          email: newUser.email
-        }
-      });
-    } else {
-      res.status(500).json({ error: 'Failed to create account. Please try again.' });
-    }
+    res.json({ 
+      success: true, 
+      message: 'Account created successfully! Welcome to Social Studio.',
+      user: {
+        id: newUser.id,
+        fullName: newUser.fullName,
+        email: newUser.email
+      }
+    });
   } catch (error) {
     console.error('Signup error:', error);
     res.status(500).json({ error: 'Something went wrong. Please try again.' });
