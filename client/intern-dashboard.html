@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intern Dashboard | Social Studio</title>
+    <meta name="description" content="Track your internship applications, manage interviews, and access learning resources.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        dark: '#2d3748'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="ssl.jpeg" alt="Social Studio Logo" class="h-10 w-auto">
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Home</a>
+                    <a href="index.html#services" class="text-gray-600 hover:text-primary transition-colors">Services</a>
+                    <a href="index.html#about" class="text-gray-600 hover:text-primary transition-colors">About</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-primary transition-colors">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative" id="user-menu-container">
+                        <button id="user-menu-btn" class="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors">
+                            <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-sm"></i>
+                            </div>
+                            <span id="user-name">Loading...</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                            <a href="#profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+                            <a href="#settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                            <hr class="my-1">
+                            <button onclick="logout()" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="bg-gradient-to-r from-primary to-secondary rounded-xl p-8 text-white mb-8" data-aos="fade-in-up">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Welcome back, <span id="welcome-name">Intern</span>! 🎓</h1>
+                    <p class="text-lg opacity-90">Track your internship applications, prepare for interviews, and access exclusive learning resources.</p>
+                </div>
+                <div class="hidden md:block">
+                    <div class="text-right">
+                        <div class="text-2xl font-bold" id="application-count">0</div>
+                        <div class="text-sm opacity-90">Applications</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="100">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <i class="fas fa-file-alt text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-900" id="submitted-count">0</div>
+                        <div class="text-sm text-gray-500">Submitted</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="200">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <i class="fas fa-search text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-900" id="review-count">0</div>
+                        <div class="text-sm text-gray-500">Under Review</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="300">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <i class="fas fa-calendar-alt text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-900" id="interview-count">0</div>
+                        <div class="text-sm text-gray-500">Interviews</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg p-6 shadow-sm" data-aos="fade-in-up" data-aos-delay="400">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <i class="fas fa-check-circle text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-900" id="accepted-count">0</div>
+                        <div class="text-sm text-gray-500">Accepted</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Tabs -->
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <!-- Tab Navigation -->
+            <div class="border-b border-gray-200">
+                <nav class="flex space-x-8 px-6" aria-label="Tabs">
+                    <button class="tab-btn active py-4 px-1 border-b-2 border-primary text-sm font-medium text-primary" data-tab="overview">
+                        <i class="fas fa-home mr-2"></i>Overview
+                    </button>
+                    <button class="tab-btn py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="applications">
+                        <i class="fas fa-file-alt mr-2"></i>Applications
+                    </button>
+                    <button class="tab-btn py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="resources">
+                        <i class="fas fa-book mr-2"></i>Resources
+                    </button>
+                    <button class="tab-btn py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="profile">
+                        <i class="fas fa-user mr-2"></i>Profile
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-6">
+                <!-- Overview Tab -->
+                <div id="overview-tab" class="tab-content active">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Recent Activity -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                            <div class="space-y-4" id="recent-activity">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-900">Application submitted for Social Media Marketing</p>
+                                        <p class="text-xs text-gray-500">2 hours ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-900">Interview scheduled for Web Development</p>
+                                        <p class="text-xs text-gray-500">1 day ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-900">Application accepted for SEO Optimization</p>
+                                        <p class="text-xs text-gray-500">3 days ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                            <div class="space-y-3">
+                                <a href="#applications" class="block w-full bg-primary text-white py-3 px-4 rounded-lg text-center hover:bg-secondary transition-colors">
+                                    <i class="fas fa-plus mr-2"></i>Submit New Application
+                                </a>
+                                <a href="#resources" class="block w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg text-center hover:bg-gray-200 transition-colors">
+                                    <i class="fas fa-book mr-2"></i>Access Learning Resources
+                                </a>
+                                <a href="#profile" class="block w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg text-center hover:bg-gray-200 transition-colors">
+                                    <i class="fas fa-edit mr-2"></i>Update Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applications Tab -->
+                <div id="applications-tab" class="tab-content hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">My Applications</h3>
+                        <button onclick="openNewApplicationModal()" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">
+                            <i class="fas fa-plus mr-2"></i>New Application
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4" id="applications-list">
+                        <!-- Application items will be loaded here -->
+                        <div class="bg-gray-50 rounded-lg p-6 text-center text-gray-500">
+                            <i class="fas fa-file-alt text-3xl mb-3"></i>
+                            <p>No applications yet. Start by submitting your first application!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resources Tab -->
+                <div id="resources-tab" class="tab-content hidden">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Learning Resources</h3>
+                    <p class="text-gray-600">Access exclusive learning materials and resources for your internship track.</p>
+                </div>
+
+                <!-- Profile Tab -->
+                <div id="profile-tab" class="tab-content hidden">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Academic Profile</h3>
+                    <p class="text-gray-600">Manage your academic information and skills.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Global variables
+        let currentUser = null;
+        let userApplications = [];
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadUserData();
+            loadApplications();
+        });
+
+        // Authentication check
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.userType !== 'intern') {
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = user;
+            updateUI();
+        }
+
+        // Update UI with user data
+        function updateUI() {
+            if (!currentUser) return;
+            
+            document.getElementById('welcome-name').textContent = currentUser.fullName;
+            document.getElementById('user-name').textContent = currentUser.fullName;
+        }
+
+        // Load user data from server
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/user/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const userData = await response.json();
+                    currentUser = { ...currentUser, ...userData };
+                    updateUI();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        // Load applications
+        async function loadApplications() {
+            try {
+                const response = await fetch('/api/internship-applications', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    userApplications = await response.json();
+                    updateApplicationsUI();
+                }
+            } catch (error) {
+                console.error('Error loading applications:', error);
+                // For demo purposes, show sample data
+                userApplications = [
+                    {
+                        id: '1',
+                        track: 'Social Media Marketing',
+                        status: 'accepted',
+                        createdAt: '2024-01-15T10:00:00Z'
+                    },
+                    {
+                        id: '2',
+                        track: 'Web Development',
+                        status: 'interview_scheduled',
+                        createdAt: '2024-01-25T14:00:00Z'
+                    }
+                ];
+                updateApplicationsUI();
+            }
+        }
+
+        // Update applications UI
+        function updateApplicationsUI() {
+            const applicationsList = document.getElementById('applications-list');
+            const submittedCount = document.getElementById('submitted-count');
+            const reviewCount = document.getElementById('review-count');
+            const interviewCount = document.getElementById('interview-count');
+            const acceptedCount = document.getElementById('accepted-count');
+            const applicationCount = document.getElementById('application-count');
+
+            // Update counts
+            const submitted = userApplications.filter(a => a.status === 'submitted').length;
+            const underReview = userApplications.filter(a => a.status === 'under_review').length;
+            const interviewScheduled = userApplications.filter(a => a.status === 'interview_scheduled').length;
+            const accepted = userApplications.filter(a => a.status === 'accepted').length;
+
+            submittedCount.textContent = submitted;
+            reviewCount.textContent = underReview;
+            interviewCount.textContent = interviewScheduled;
+            acceptedCount.textContent = accepted;
+            applicationCount.textContent = userApplications.length;
+
+            // Update applications list
+            if (userApplications.length === 0) {
+                applicationsList.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-6 text-center text-gray-500">
+                        <i class="fas fa-file-alt text-3xl mb-3"></i>
+                        <p>No applications yet. Start by submitting your first application!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            applicationsList.innerHTML = userApplications.map(application => `
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">${application.track}</h4>
+                            <p class="text-sm text-gray-500">Application ID: ${application.id}</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(application.status)}">
+                            ${getStatusText(application.status)}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm text-gray-500">
+                        <span>Submitted: ${new Date(application.createdAt).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get status color
+        function getStatusColor(status) {
+            switch (status) {
+                case 'submitted': return 'bg-blue-100 text-blue-800';
+                case 'under_review': return 'bg-yellow-100 text-yellow-800';
+                case 'interview_scheduled': return 'bg-purple-100 text-purple-800';
+                case 'accepted': return 'bg-green-100 text-green-800';
+                case 'rejected': return 'bg-red-100 text-red-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            switch (status) {
+                case 'submitted': return 'Submitted';
+                case 'under_review': return 'Under Review';
+                case 'interview_scheduled': return 'Interview Scheduled';
+                case 'accepted': return 'Accepted';
+                case 'rejected': return 'Rejected';
+                default: return 'Unknown';
+            }
+        }
+
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active', 'border-primary', 'text-primary');
+                    b.classList.add('border-transparent', 'text-gray-500');
+                });
+                this.classList.add('active', 'border-primary', 'text-primary');
+                this.classList.remove('border-transparent', 'text-gray-500');
+                
+                // Update active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            });
+        });
+
+        // User menu toggle
+        document.getElementById('user-menu-btn').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const container = document.getElementById('user-menu-container');
+            if (!container.contains(event.target)) {
+                document.getElementById('user-menu').classList.add('hidden');
+            }
+        });
+
+        // New application modal
+        function openNewApplicationModal() {
+            alert('New application feature coming soon!');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

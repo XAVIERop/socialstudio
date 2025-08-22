@@ -669,8 +669,12 @@
                     localStorage.setItem('user', JSON.stringify(result.user));
                     localStorage.setItem('token', 'demo-token'); // In production, use actual JWT token
                     
-                    // Redirect to dashboard
-                    window.location.href = 'dashboard.html';
+                    // Redirect based on user type
+                    if (result.user.userType === 'intern') {
+                        window.location.href = 'intern-dashboard.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
                 } else {
                     // Show error message
                     const errorMessage = result.error || 'An error occurred during signup. Please try again.';

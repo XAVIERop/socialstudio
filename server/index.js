@@ -531,9 +531,13 @@ app.post('/api/login', postLimiter, async (req, res) => {
   }
 });
 
-// Dashboard redirect
+// Dashboard redirects
 app.get('/dashboard', (req, res) => {
   res.redirect('/dashboard.html');
+});
+
+app.get('/intern-dashboard', (req, res) => {
+  res.redirect('/intern-dashboard.html');
 });
 
 // User profile endpoint
@@ -674,6 +678,108 @@ app.post('/api/prototype-request', postLimiter, async (req, res) => {
     
   } catch (error) {
     console.error('Prototype request error:', error);
+    res.status(500).json({ error: 'Something went wrong. Please try again.' });
+  }
+});
+
+// Get internship applications endpoint
+app.get('/api/internship-applications', (req, res) => {
+  // In production, verify JWT token and get user-specific applications
+  const userId = req.headers.authorization?.split(' ')[1];
+  
+  if (!userId || userId === 'demo-token') {
+    // Return demo applications for intern user
+    const demoApplications = [
+      {
+        id: '1',
+        track: 'Social Media Marketing',
+        status: 'accepted',
+        createdAt: '2024-01-15T10:00:00Z'
+      },
+      {
+        id: '2',
+        track: 'Web Development',
+        status: 'interview_scheduled',
+        createdAt: '2024-01-25T14:00:00Z'
+      }
+    ];
+    
+    return res.json(demoApplications);
+  }
+  
+  res.status(401).json({ error: 'Unauthorized' });
+});
+
+// Submit internship application endpoint (for dashboard)
+app.post('/api/internship-application-dashboard', postLimiter, async (req, res) => {
+  const { name, email, phone, track, portfolio, about } = req.body;
+  
+  // Validation
+  if (!name || name.trim().length < 2) {
+    return res.status(400).json({ error: 'Name must be at least 2 characters' });
+  }
+  
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ error: 'Please provide a valid email address' });
+  }
+  
+  if (!phone || phone.trim().length < 10) {
+    return res.status(400).json({ error: 'Please provide a valid phone number' });
+  }
+  
+  if (!track) {
+    return res.status(400).json({ error: 'Please select an internship track' });
+  }
+  
+  if (!portfolio || !portfolio.includes('http')) {
+    return res.status(400).json({ error: 'Please provide a valid portfolio or LinkedIn URL' });
+  }
+  
+  if (!about || about.trim().length < 20) {
+    return res.status(400).json({ error: 'Please provide a detailed response (at least 20 characters)' });
+  }
+  
+  try {
+    // In production, get user from JWT token
+    const userId = req.headers.authorization?.split(' ')[1];
+    
+    // Create new application
+    const newApplication = {
+      id: Date.now().toString(),
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      track,
+      portfolio: portfolio.trim(),
+      about: about.trim(),
+      status: 'submitted',
+      createdAt: new Date().toISOString()
+    };
+    
+    // Send email notification
+    const htmlContent = `
+      <h2>New Internship Application (Dashboard)</h2>
+      <p><strong>Name:</strong> ${newApplication.name}</p>
+      <p><strong>Email:</strong> ${newApplication.email}</p>
+      <p><strong>Phone:</strong> ${newApplication.phone}</p>
+      <p><strong>Track:</strong> ${newApplication.track}</p>
+      <p><strong>Portfolio:</strong> <a href="${newApplication.portfolio}">${newApplication.portfolio}</a></p>
+      <p><strong>About:</strong></p>
+      <p>${newApplication.about}</p>
+      <p><strong>Status:</strong> Submitted</p>
+      <p><strong>Application ID:</strong> ${newApplication.id}</p>
+    `;
+    
+    await sendEmail('New Internship Application (Dashboard)', htmlContent);
+    
+    res.json({ 
+      success: true, 
+      message: 'Application submitted successfully!',
+      application: newApplication
+    });
+    
+  } catch (error) {
+    console.error('Internship application error:', error);
     res.status(500).json({ error: 'Something went wrong. Please try again.' });
   }
 });
