@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Chatbot | Social Studio</title>
+  <title>AI-Powered Chatbot | Social Studio</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="ssl.jpeg">
@@ -41,7 +41,7 @@
         <!-- Logo -->
         <div class="flex items-center">
           <img src="ssl.jpeg" alt="Social Studio" class="h-10 w-auto">
-          <span class="ml-3 text-xl font-bold text-gray-900">AI Chatbot</span>
+          <span class="ml-3 text-xl font-bold text-gray-900">AI-Powered Chatbot</span>
         </div>
         
         <!-- Navigation -->
@@ -49,32 +49,39 @@
           <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
           <a href="ai-insights.html" class="text-gray-700 hover:text-primary font-medium">AI Insights</a>
           <a href="ai-workflows.html" class="text-gray-700 hover:text-primary font-medium">AI Workflows</a>
-          <a href="communication-center.html" class="text-gray-700 hover:text-primary font-medium">Messages</a>
         </div>
         
-        <!-- User Menu -->
-        <div class="flex items-center space-x-4">
-          <div class="relative">
-            <button id="userMenuButton" class="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:border-primary transition-colors">
-              <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=667eea&color=fff" alt="User" class="w-6 h-6 rounded-full">
-              <span id="userName" class="text-gray-700 font-medium">User</span>
-              <i class="fas fa-chevron-down text-gray-500"></i>
-            </button>
-            
-            <!-- Dropdown Menu -->
-            <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200">
-              <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-t-lg">
-                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-              </a>
-              <a href="security-settings.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
-                <i class="fas fa-shield-alt mr-2"></i>Security
-              </a>
-              <hr class="my-1">
-              <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-50 rounded-b-lg">
-                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+        <!-- User Menu (Only shown when logged in) -->
+        <div id="userMenuContainer" class="hidden">
+          <div class="flex items-center space-x-4">
+            <div class="relative">
+              <button id="userMenuButton" class="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:border-primary transition-colors">
+                <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=667eea&color=fff" alt="User" class="w-6 h-6 rounded-full">
+                <span id="userName" class="text-gray-700 font-medium">User</span>
+                <i class="fas fa-chevron-down text-gray-500"></i>
               </button>
+              
+              <!-- Dropdown Menu -->
+              <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200">
+                <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-t-lg">
+                  <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </a>
+                <a href="security-settings.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                  <i class="fas fa-shield-alt mr-2"></i>Security
+                </a>
+                <hr class="my-1">
+                <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-50 rounded-b-lg">
+                  <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+              </div>
             </div>
           </div>
+        </div>
+        
+        <!-- Login/Signup Buttons (Only shown when not logged in) -->
+        <div id="authButtonsContainer" class="flex items-center space-x-4">
+          <a href="login.html" class="text-gray-700 hover:text-primary font-medium">Login</a>
+          <a href="signup.html" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">Sign Up</a>
         </div>
       </div>
     </div>
@@ -83,14 +90,27 @@
   <!-- Main Content -->
   <main class="pt-20">
     <!-- Header Section -->
-    <section class="bg-gradient-to-r from-pink-600 to-rose-700 text-white py-16">
+    <section class="bg-gradient-to-r from-purple-600 to-pink-700 text-white py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl md:text-5xl font-bold mb-4">
           💬 AI-Powered Chatbot
         </h1>
-        <p class="text-xl text-pink-100 max-w-2xl mx-auto">
-          Engage customers 24/7 with intelligent conversational AI that understands and helps instantly.
+        <p class="text-xl text-purple-100 max-w-2xl mx-auto">
+          Provide instant customer support, answer questions, and engage visitors 24/7 with intelligent AI conversations.
         </p>
+        
+        <!-- Call to Action for non-logged users -->
+        <div id="publicCTA" class="mt-8">
+          <p class="text-purple-200 mb-4">Experience the future of customer support</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="signup.html" class="px-8 py-3 bg-white text-purple-600 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+              <i class="fas fa-rocket mr-2"></i>Try AI Chatbot Free
+            </a>
+            <a href="login.html" class="px-8 py-3 border border-white text-white rounded-lg hover:bg-white hover:text-purple-600 transition-colors font-medium">
+              <i class="fas fa-sign-in-alt mr-2"></i>Already have an account?
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -106,11 +126,11 @@
                 <p class="text-3xl font-bold text-gray-900" id="totalConversations">2,847</p>
                 <p class="text-sm text-green-600 flex items-center mt-1">
                   <i class="fas fa-arrow-up mr-1"></i>
-                  <span id="conversationsChange">+234</span> this week
+                  <span>+156 this week</span>
                 </p>
               </div>
-              <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-comments text-pink-600 text-xl"></i>
+              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-comments text-purple-600 text-xl"></i>
               </div>
             </div>
           </div>
@@ -121,9 +141,9 @@
               <div>
                 <p class="text-sm font-medium text-gray-600">Avg Response Time</p>
                 <p class="text-3xl font-bold text-gray-900" id="responseTime">0.8s</p>
-                <p class="text-sm text-green-600 flex items-center mt-1">
-                  <i class="fas fa-arrow-down mr-1"></i>
-                  <span id="responseChange">-0.2s</span> from last week
+                <p class="text-sm text-blue-600 flex items-center mt-1">
+                  <i class="fas fa-clock mr-1"></i>
+                  <span>-0.2s from last week</span>
                 </p>
               </div>
               <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -137,10 +157,10 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm font-medium text-gray-600">Resolution Rate</p>
-                <p class="text-3xl font-bold text-gray-900" id="resolutionRate">89.4%</p>
+                <p class="text-3xl font-bold text-gray-900" id="resolutionRate">87.3%</p>
                 <p class="text-sm text-green-600 flex items-center mt-1">
-                  <i class="fas fa-arrow-up mr-1"></i>
-                  <span id="resolutionChange">+3.2%</span> from last month
+                  <i class="fas fa-check mr-1"></i>
+                  <span>+2.1% from last month</span>
                 </p>
               </div>
               <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -154,14 +174,14 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm font-medium text-gray-600">Satisfaction</p>
-                <p class="text-3xl font-bold text-gray-900" id="satisfaction">4.7/5</p>
-                <p class="text-sm text-green-600 flex items-center mt-1">
-                  <i class="fas fa-arrow-up mr-1"></i>
-                  <span id="satisfactionChange">+0.2</span> from last week
+                <p class="text-3xl font-bold text-gray-900" id="satisfaction">4.6/5</p>
+                <p class="text-sm text-orange-600 flex items-center mt-1">
+                  <i class="fas fa-star mr-1"></i>
+                  <span>+0.2 from last month</span>
                 </p>
               </div>
-              <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-star text-yellow-600 text-xl"></i>
+              <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-smile text-orange-600 text-xl"></i>
               </div>
             </div>
           </div>
@@ -169,298 +189,277 @@
       </div>
     </section>
 
-    <!-- Chat Interface -->
+    <!-- Live Chat Interface -->
     <section class="py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <!-- Chat Window -->
-          <div class="lg:col-span-2">
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up">
-              <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-semibold text-gray-900">AI Assistant</h3>
-                <div class="flex items-center space-x-2">
-                  <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-                  <span class="text-sm text-gray-600">Online</span>
-                </div>
-              </div>
-              
-              <!-- Chat Messages -->
-              <div id="chatMessages" class="h-96 overflow-y-auto mb-4 space-y-4">
-                <!-- Welcome Message -->
-                <div class="flex items-start space-x-3">
-                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-robot text-blue-600 text-sm"></i>
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">Live Chat Interface</h3>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Chat Window -->
+            <div class="lg:col-span-2">
+              <div class="bg-gray-50 rounded-lg border border-gray-200 h-96 flex flex-col">
+                <!-- Chat Header -->
+                <div class="bg-purple-600 text-white px-4 py-3 rounded-t-lg flex items-center justify-between">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                      <i class="fas fa-robot text-purple-600"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-semibold">AI Assistant</h4>
+                      <p class="text-purple-100 text-sm">Online • Responds instantly</p>
+                    </div>
                   </div>
-                  <div class="bg-blue-50 rounded-lg p-3 max-w-xs">
-                    <p class="text-sm text-blue-900">Hello! I'm your AI assistant. How can I help you today?</p>
-                  </div>
-                </div>
-                
-                <!-- User Message -->
-                <div class="flex items-start space-x-3 justify-end">
-                  <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                    <p class="text-sm text-gray-900">I need help with my website design</p>
-                  </div>
-                  <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-user text-gray-600 text-sm"></i>
+                  <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                    <span class="text-sm">Live</span>
                   </div>
                 </div>
                 
-                <!-- AI Response -->
-                <div class="flex items-start space-x-3">
-                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-robot text-blue-600 text-sm"></i>
+                <!-- Chat Messages -->
+                <div class="flex-1 p-4 space-y-4 overflow-y-auto" id="chatMessages">
+                  <!-- Messages will be populated here -->
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="border-t border-gray-200 p-4">
+                  <div class="flex space-x-3">
+                    <input type="text" id="chatInput" placeholder="Type your message here..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <button onclick="sendMessage()" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                      <i class="fas fa-paper-plane"></i>
+                    </button>
                   </div>
-                  <div class="bg-blue-50 rounded-lg p-3 max-w-xs">
-                    <p class="text-sm text-blue-900">I'd be happy to help with your website design! What specific aspects would you like to discuss? Are you looking for design inspiration, technical guidance, or help with a particular feature?</p>
+                  <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+                    <span>Press Enter to send</span>
+                    <span id="typingIndicator" class="hidden">AI is typing...</span>
                   </div>
                 </div>
               </div>
+            </div>
+            
+            <!-- Chat Settings -->
+            <div class="space-y-6">
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-900 mb-3">Quick Actions</h4>
+                <div class="space-y-2">
+                  <button onclick="resetChat()" class="w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm">
+                    <i class="fas fa-redo mr-2"></i>Reset Chat
+                  </button>
+                  <button onclick="exportChat()" class="w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm">
+                    <i class="fas fa-download mr-2"></i>Export Chat
+                  </button>
+                  <button onclick="clearHistory()" class="w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm">
+                    <i class="fas fa-trash mr-2"></i>Clear History
+                  </button>
+                </div>
+              </div>
               
-              <!-- Chat Input -->
-              <div class="flex space-x-3">
-                <input type="text" id="chatInput" placeholder="Type your message..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <button onclick="sendMessage()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  <i class="fas fa-paper-plane"></i>
-                </button>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-900 mb-3">Chat Status</h4>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Status:</span>
+                    <span class="text-green-600 font-medium">Active</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Language:</span>
+                    <span class="font-medium">English</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Response Mode:</span>
+                    <span class="font-medium">Smart</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <!-- Chatbot Settings -->
-          <div class="lg:col-span-1">
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="100">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4">Chatbot Settings</h3>
+    <!-- Chatbot Configuration -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">Chatbot Configuration</h3>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Basic Settings -->
+            <div class="space-y-6">
+              <h4 class="text-lg font-semibold text-gray-900">Basic Settings</h4>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Chatbot Name</label>
+                <input type="text" id="chatbotName" value="AI Assistant" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Personality</label>
+                <select id="chatbotPersonality" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                  <option value="professional">Professional & Formal</option>
+                  <option value="friendly">Friendly & Casual</option>
+                  <option value="technical">Technical & Detailed</option>
+                  <option value="humorous">Humorous & Light</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Response Speed</label>
+                <select id="responseSpeed" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                  <option value="instant">Instant (0.1s)</option>
+                  <option value="fast">Fast (0.5s)</option>
+                  <option value="normal" selected>Normal (1s)</option>
+                  <option value="slow">Slow (2s)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Language</label>
+                <select id="chatbotLanguage" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                  <option value="english" selected>English</option>
+                  <option value="hindi">Hindi</option>
+                  <option value="spanish">Spanish</option>
+                  <option value="french">French</option>
+                  <option value="german">German</option>
+                </select>
+              </div>
+            </div>
+            
+            <!-- Advanced Settings -->
+            <div class="space-y-6">
+              <h4 class="text-lg font-semibold text-gray-900">Advanced Settings</h4>
               
               <div class="space-y-4">
-                <!-- Personality -->
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Personality</label>
-                  <select id="personality" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="professional">Professional</option>
-                    <option value="friendly">Friendly</option>
-                    <option value="casual">Casual</option>
-                    <option value="humorous">Humorous</option>
-                  </select>
-                </div>
-                
-                <!-- Response Speed -->
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Response Speed</label>
-                  <select id="responseSpeed" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="instant">Instant</option>
-                    <option value="fast">Fast</option>
-                    <option value="normal">Normal</option>
-                    <option value="slow">Slow</option>
-                  </select>
-                </div>
-                
-                <!-- Language -->
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Language</label>
-                  <select id="language" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="english">English</option>
-                    <option value="spanish">Spanish</option>
-                    <option value="french">French</option>
-                    <option value="german">German</option>
-                    <option value="hindi">Hindi</option>
-                  </select>
-                </div>
-                
-                <!-- Auto-Response -->
                 <div class="flex items-center justify-between">
-                  <span class="text-sm font-medium text-gray-700">Auto-Response</span>
+                  <div>
+                    <label class="text-sm font-medium text-gray-700">Auto-Response Mode</label>
+                    <p class="text-xs text-gray-500">Automatically respond to common questions</p>
+                  </div>
                   <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" id="autoResponse" class="sr-only peer" checked>
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                   </label>
                 </div>
                 
-                <!-- Smart Suggestions -->
                 <div class="flex items-center justify-between">
-                  <span class="text-sm font-medium text-gray-700">Smart Suggestions</span>
+                  <div>
+                    <label class="text-sm font-medium text-gray-700">Smart Suggestions</label>
+                    <p class="text-xs text-gray-500">Show relevant suggestions during chat</p>
+                  </div>
                   <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" id="smartSuggestions" class="sr-only peer" checked>
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <div>
+                    <label class="text-sm font-medium text-gray-700">Learning Mode</label>
+                    <p class="text-xs text-gray-500">Improve responses based on conversations</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="learningMode" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <div>
+                    <label class="text-sm font-medium text-gray-700">Human Handoff</label>
+                    <p class="text-xs text-gray-500">Transfer complex queries to human agents</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="humanHandoff" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                   </label>
                 </div>
               </div>
               
-              <hr class="my-6">
-              
-              <!-- Quick Actions -->
-              <h4 class="text-sm font-medium text-gray-700 mb-3">Quick Actions</h4>
-              <div class="space-y-2">
-                <button onclick="resetChat()" class="w-full px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors">
-                  <i class="fas fa-redo mr-2"></i>Reset Chat
-                </button>
-                <button onclick="exportChat()" class="w-full px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors">
-                  <i class="fas fa-download mr-2"></i>Export Chat
-                </button>
-                <button onclick="clearHistory()" class="w-full px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors">
-                  <i class="fas fa-trash mr-2"></i>Clear History
-                </button>
-              </div>
+              <button onclick="saveChatbotSettings()" class="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                <i class="fas fa-save mr-2"></i>Save Settings
+              </button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Chatbot Capabilities -->
+    <!-- AI Capabilities -->
     <section class="py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">AI Capabilities</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Natural Language Processing -->
-          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up">
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-brain text-blue-600 text-xl"></i>
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8" data-aos="fade-in-up">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">AI Capabilities</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="border border-gray-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-brain text-blue-600 text-2xl"></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900">Natural Language</h3>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Natural Language Processing</h4>
+              <p class="text-sm text-gray-600">Understands context, slang, and complex queries in multiple languages.</p>
             </div>
-            <p class="text-gray-600 mb-4">Understands context, intent, and natural conversation flow.</p>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Context awareness</span>
+            
+            <div class="border border-gray-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-chart-line text-green-600 text-2xl"></i>
               </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Intent recognition</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Conversation memory</span>
-              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Sentiment Analysis</h4>
+              <p class="text-sm text-gray-600">Detects customer mood and adjusts responses accordingly.</p>
             </div>
-          </div>
-
-          <!-- Multi-language Support -->
-          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="100">
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-globe text-green-600 text-xl"></i>
+            
+            <div class="border border-gray-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-graduation-cap text-purple-600 text-2xl"></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900">Multi-language</h3>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Continuous Learning</h4>
+              <p class="text-sm text-gray-600">Improves responses based on conversation history and feedback.</p>
             </div>
-            <p class="text-gray-600 mb-4">Communicates fluently in multiple languages and dialects.</p>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>25+ languages</span>
+            
+            <div class="border border-gray-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-link text-orange-600 text-2xl"></i>
               </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Local dialects</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Cultural context</span>
-              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Seamless Integration</h4>
+              <p class="text-sm text-gray-600">Works with your existing website, CRM, and support systems.</p>
             </div>
-          </div>
-
-          <!-- Sentiment Analysis -->
-          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="200">
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-heart text-purple-600 text-xl"></i>
+            
+            <div class="border border-gray-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-clock text-red-600 text-2xl"></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900">Sentiment Analysis</h3>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">24/7 Availability</h4>
+              <p class="text-sm text-gray-600">Never miss a customer inquiry, even outside business hours.</p>
             </div>
-            <p class="text-gray-600 mb-4">Detects emotions and adjusts responses accordingly.</p>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Emotion detection</span>
+            
+            <div class="border border-gray-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-users text-indigo-600 text-2xl"></i>
               </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Tone adjustment</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Empathy responses</span>
-              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Multi-User Support</h4>
+              <p class="text-sm text-gray-600">Handles multiple conversations simultaneously without delays.</p>
             </div>
           </div>
-
-          <!-- Learning & Adaptation -->
-          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="300">
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-graduation-cap text-orange-600 text-xl"></i>
-              </div>
-              <h3 class="text-xl font-semibold text-gray-900">Learning & Adaptation</h3>
-            </div>
-            <p class="text-gray-600 mb-4">Continuously learns from conversations to improve responses.</p>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Conversation learning</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Pattern recognition</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Response optimization</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Integration -->
-          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="400">
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-plug text-indigo-600 text-xl"></i>
-              </div>
-              <h3 class="text-xl font-semibold text-gray-900">Seamless Integration</h3>
-            </div>
-            <p class="text-gray-600 mb-4">Integrates with your existing tools and platforms.</p>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>CRM systems</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Help desk tools</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Analytics platforms</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 24/7 Availability -->
-          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6" data-aos="fade-in-up" data-aos-delay="500">
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-clock text-red-600 text-xl"></i>
-              </div>
-              <h3 class="text-xl font-semibold text-gray-900">24/7 Availability</h3>
-            </div>
-            <p class="text-gray-600 mb-4">Always available to help customers anytime, anywhere.</p>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Round-the-clock support</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>Instant responses</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-check text-green-500 mr-2"></i>
-                <span>No waiting time</span>
-              </div>
-            </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Demo Notice for non-logged users -->
+    <section class="py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="demoNotice" class="bg-purple-50 border border-purple-200 rounded-2xl p-8 text-center">
+          <i class="fas fa-info-circle text-purple-600 text-4xl mb-4"></i>
+          <h4 class="text-2xl font-bold text-purple-900 mb-4">This is a Demo AI Chatbot</h4>
+          <p class="text-purple-800 mb-6 max-w-2xl mx-auto">
+            Experience how AI-powered chatbots can transform your customer support. 
+            Deploy your own chatbot, customize responses, and integrate with your website when you sign up.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="signup.html" class="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
+              <i class="fas fa-rocket mr-2"></i>Get Started Free
+            </a>
+            <a href="login.html" class="px-8 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors font-medium">
+              <i class="fas fa-sign-in-alt mr-2"></i>Login to Continue
+            </a>
           </div>
         </div>
       </div>
@@ -488,7 +487,7 @@
           <ul class="space-y-2">
             <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
             <li><a href="ai-insights.html" class="text-gray-300 hover:text-white transition-colors">AI Insights</a></li>
-            <li><a href="ai-chatbot.html" class="text-gray-300 hover:text-white transition-colors">AI Chatbot</a></li>
+            <li><a href="ai-workflows.html" class="text-gray-300 hover:text-white transition-colors">AI Workflows</a></li>
           </ul>
         </div>
         
@@ -547,64 +546,201 @@
     }
 
     // Chat functionality
+    let chatHistory = [];
+    let isTyping = false;
+
+    // Sample initial messages
+    const initialMessages = [
+      {
+        type: 'bot',
+        message: 'Hello! I\'m your AI assistant. How can I help you today?',
+        timestamp: new Date()
+      },
+      {
+        type: 'bot',
+        message: 'I can help with:\n• Product information\n• Order status\n• Technical support\n• General questions',
+        timestamp: new Date()
+      }
+    ];
+
+    // Initialize chat
+    function initializeChat() {
+      chatHistory = [...initialMessages];
+      displayChatMessages();
+    }
+
+    // Display chat messages
+    function displayChatMessages() {
+      const container = document.getElementById('chatMessages');
+      container.innerHTML = chatHistory.map(msg => `
+        <div class="flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}">
+          <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.type === 'user' ? 'bg-purple-600 text-white' : 'bg-white border border-gray-200'}">
+            <p class="text-sm whitespace-pre-line">${msg.message}</p>
+            <p class="text-xs ${msg.type === 'user' ? 'text-purple-100' : 'text-gray-500'} mt-1">
+              ${msg.timestamp.toLocaleTimeString()}
+            </p>
+          </div>
+        </div>
+      `).join('');
+      
+      // Scroll to bottom
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // Send message
     function sendMessage() {
       const input = document.getElementById('chatInput');
       const message = input.value.trim();
       
-      if (message) {
-        addMessage('user', message);
-        input.value = '';
-        
-        // Simulate AI response
-        setTimeout(() => {
-          const aiResponse = generateAIResponse(message);
-          addMessage('ai', aiResponse);
-        }, 1000);
-      }
+      if (!message) return;
+      
+      // Add user message
+      const userMessage = {
+        type: 'user',
+        message: message,
+        timestamp: new Date()
+      };
+      
+      chatHistory.push(userMessage);
+      displayChatMessages();
+      
+      // Clear input
+      input.value = '';
+      
+      // Show typing indicator
+      showTypingIndicator();
+      
+      // Simulate AI response
+      setTimeout(() => {
+        generateAIResponse(message);
+        hideTypingIndicator();
+      }, 1000 + Math.random() * 2000);
     }
 
-    function addMessage(type, text) {
-      const chatMessages = document.getElementById('chatMessages');
-      const messageDiv = document.createElement('div');
-      messageDiv.className = 'flex items-start space-x-3' + (type === 'user' ? ' justify-end' : '');
-      
-      const icon = type === 'user' ? 'fas fa-user' : 'fas fa-robot';
-      const bgColor = type === 'user' ? 'bg-gray-100' : 'bg-blue-50';
-      const textColor = type === 'user' ? 'text-gray-900' : 'text-blue-900';
-      const iconBg = type === 'user' ? 'bg-gray-200' : 'bg-blue-100';
-      const iconColor = type === 'user' ? 'text-gray-600' : 'text-blue-600';
-      
-      messageDiv.innerHTML = `
-        ${type === 'user' ? '' : `<div class="w-8 h-8 ${iconBg} rounded-full flex items-center justify-center flex-shrink-0">
-          <i class="${icon} ${iconColor} text-sm"></i>
-        </div>`}
-        <div class="${bgColor} rounded-lg p-3 max-w-xs">
-          <p class="text-sm ${textColor}">${text}</p>
-        </div>
-        ${type === 'user' ? `<div class="w-8 h-8 ${iconBg} rounded-full flex items-center justify-center flex-shrink-0">
-          <i class="${icon} ${iconColor} text-sm"></i>
-        </div>` : ''}
-      `;
-      
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
+    // Generate AI response
     function generateAIResponse(userMessage) {
       const responses = [
         "That's a great question! Let me help you with that.",
-        "I understand what you're looking for. Here's what I can tell you...",
-        "Based on your request, I'd recommend considering...",
-        "I'm here to help! Let me break this down for you...",
-        "That's an interesting point. Here's my perspective...",
-        "I'd be happy to assist you with that. Here are the details...",
-        "Great question! Let me provide you with some insights...",
-        "I understand your needs. Here's what I suggest...",
-        "That's a common concern. Here's how we can address it...",
-        "Excellent question! Let me walk you through this..."
+        "I understand what you're asking. Here's what I can tell you:",
+        "Thanks for reaching out! Based on your question, I'd recommend:",
+        "I'm here to help! Here's what I found for you:",
+        "Excellent question! Let me break this down for you:"
       ];
       
-      return responses[Math.floor(Math.random() * responses.length)];
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      
+      // Generate contextual response based on user message
+      let aiMessage = "";
+      
+      if (userMessage.toLowerCase().includes('product') || userMessage.toLowerCase().includes('service')) {
+        aiMessage = `${randomResponse}\n\nOur products and services are designed to meet your specific needs. I can provide detailed information about pricing, features, and implementation. What specific aspect would you like to know more about?`;
+      } else if (userMessage.toLowerCase().includes('price') || userMessage.toLowerCase().includes('cost')) {
+        aiMessage = `${randomResponse}\n\nOur pricing is competitive and transparent. We offer various packages to suit different business sizes and requirements. Would you like me to send you our pricing guide?`;
+      } else if (userMessage.toLowerCase().includes('support') || userMessage.toLowerCase().includes('help')) {
+        aiMessage = `${randomResponse}\n\nI'm here to provide immediate support! For technical issues, I can help troubleshoot. For complex matters, I can connect you with our human support team. What specific issue are you experiencing?`;
+      } else if (userMessage.toLowerCase().includes('contact') || userMessage.toLowerCase().includes('phone') || userMessage.toLowerCase().includes('email')) {
+        aiMessage = `${randomResponse}\n\nYou can reach us at:\n• Phone: +91 93541 92151\n• Email: pv.socialstudio@gmail.com\n• Website: socialstudio.in\n\nI'm also available 24/7 for instant support!`;
+      } else {
+        aiMessage = `${randomResponse}\n\nI'm here to assist you with any questions about our services, products, or general inquiries. Feel free to ask anything specific!`;
+      }
+      
+      const botMessage = {
+        type: 'bot',
+        message: aiMessage,
+        timestamp: new Date()
+      };
+      
+      chatHistory.push(botMessage);
+      displayChatMessages();
+    }
+
+    // Show typing indicator
+    function showTypingIndicator() {
+      isTyping = true;
+      document.getElementById('typingIndicator').classList.remove('hidden');
+    }
+
+    // Hide typing indicator
+    function hideTypingIndicator() {
+      isTyping = false;
+      document.getElementById('typingIndicator').classList.add('hidden');
+    }
+
+    // Chat actions
+    function resetChat() {
+      if (confirm('Are you sure you want to reset the chat? This will clear all conversation history.')) {
+        chatHistory = [...initialMessages];
+        displayChatMessages();
+      }
+    }
+
+    function exportChat() {
+      const chatText = chatHistory.map(msg => 
+        `[${msg.timestamp.toLocaleString()}] ${msg.type === 'user' ? 'You' : 'AI'}: ${msg.message}`
+      ).join('\n\n');
+      
+      const blob = new Blob([chatText], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `chat-export-${new Date().toISOString().split('T')[0]}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function clearHistory() {
+      if (confirm('Are you sure you want to clear chat history? This action cannot be undone.')) {
+        chatHistory = [];
+        displayChatMessages();
+      }
+    }
+
+    // Save chatbot settings
+    function saveChatbotSettings() {
+      const name = document.getElementById('chatbotName').value;
+      const personality = document.getElementById('chatbotPersonality').value;
+      const speed = document.getElementById('responseSpeed').value;
+      const language = document.getElementById('chatbotLanguage').value;
+      
+      const settings = {
+        name,
+        personality,
+        speed,
+        language,
+        autoResponse: document.getElementById('autoResponse').checked,
+        smartSuggestions: document.getElementById('smartSuggestions').checked,
+        learningMode: document.getElementById('learningMode').checked,
+        humanHandoff: document.getElementById('humanHandoff').checked
+      };
+      
+      localStorage.setItem('chatbotSettings', JSON.stringify(settings));
+      
+      // Show success message
+      const button = event.target;
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="fas fa-check mr-2"></i>Settings Saved!';
+      button.classList.add('bg-green-600', 'hover:bg-green-700');
+      
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('bg-green-600', 'hover:bg-green-700');
+        button.classList.add('bg-purple-600', 'hover:bg-purple-700');
+      }, 2000);
+    }
+
+    // Load saved settings
+    function loadChatbotSettings() {
+      const savedSettings = JSON.parse(localStorage.getItem('chatbotSettings'));
+      if (savedSettings) {
+        document.getElementById('chatbotName').value = savedSettings.name || 'AI Assistant';
+        document.getElementById('chatbotPersonality').value = savedSettings.personality || 'professional';
+        document.getElementById('responseSpeed').value = savedSettings.speed || 'normal';
+        document.getElementById('chatbotLanguage').value = savedSettings.language || 'english';
+        document.getElementById('autoResponse').checked = savedSettings.autoResponse !== false;
+        document.getElementById('smartSuggestions').checked = savedSettings.smartSuggestions !== false;
+        document.getElementById('learningMode').checked = savedSettings.learningMode !== false;
+        document.getElementById('humanHandoff').checked = savedSettings.humanHandoff !== false;
+      }
     }
 
     // Enter key to send message
@@ -613,48 +749,6 @@
         sendMessage();
       }
     });
-
-    // Chatbot actions
-    function resetChat() {
-      const chatMessages = document.getElementById('chatMessages');
-      chatMessages.innerHTML = `
-        <div class="flex items-start space-x-3">
-          <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-robot text-blue-600 text-sm"></i>
-          </div>
-          <div class="bg-blue-50 rounded-lg p-3 max-w-xs">
-            <p class="text-sm text-blue-900">Hello! I'm your AI assistant. How can I help you today?</p>
-          </div>
-        </div>
-      `;
-    }
-
-    function exportChat() {
-      alert('Chat export feature coming soon!');
-    }
-
-    function clearHistory() {
-      if (confirm('Are you sure you want to clear the chat history?')) {
-        resetChat();
-      }
-    }
-
-    // Simulate real-time updates
-    function updateMetrics() {
-      // Simulate changing metrics
-      const conversations = Math.floor(Math.random() * 200) + 2700;
-      const responseTime = (Math.random() * 0.5 + 0.5).toFixed(1);
-      const resolution = (Math.random() * 5 + 85).toFixed(1);
-      const satisfaction = (Math.random() * 0.3 + 4.5).toFixed(1);
-      
-      document.getElementById('totalConversations').textContent = conversations.toLocaleString();
-      document.getElementById('responseTime').textContent = `${responseTime}s`;
-      document.getElementById('resolutionRate').textContent = `${resolution}%`;
-      document.getElementById('satisfaction').textContent = `${satisfaction}/5`;
-    }
-
-    // Update metrics every 30 seconds
-    setInterval(updateMetrics, 30000);
 
     // Logout function
     function logout() {
@@ -666,6 +760,8 @@
     // Initialize page
     document.addEventListener('DOMContentLoaded', function() {
       loadUserData();
+      loadChatbotSettings();
+      initializeChat();
     });
   </script>
 </body>
