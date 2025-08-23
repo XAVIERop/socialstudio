@@ -38,6 +38,18 @@ function showLoggedInMode() {
   const demoNotice = document.getElementById('demoNotice');
   if (demoNotice) demoNotice.classList.add('hidden');
   
+  // Ensure all interactive content is visible for logged-in users too
+  const interactiveSections = document.querySelectorAll('[data-aos]');
+  interactiveSections.forEach(section => {
+    section.classList.remove('hidden');
+  });
+  
+  // Show all content sections
+  const demoContent = document.querySelectorAll('.bg-white.rounded-2xl');
+  demoContent.forEach(content => {
+    content.classList.remove('hidden');
+  });
+  
   // Load user data
   const userName = document.getElementById('userName');
   if (userName && userData) userName.textContent = userData.name;
@@ -60,6 +72,18 @@ function showPublicMode() {
   // Show demo notice
   const demoNotice = document.getElementById('demoNotice');
   if (demoNotice) demoNotice.classList.remove('hidden');
+  
+  // Ensure all interactive demo content is visible
+  const interactiveSections = document.querySelectorAll('[data-aos]');
+  interactiveSections.forEach(section => {
+    section.classList.remove('hidden');
+  });
+  
+  // Show all demo content sections
+  const demoContent = document.querySelectorAll('.bg-white.rounded-2xl');
+  demoContent.forEach(content => {
+    content.classList.remove('hidden');
+  });
 }
 
 // Handle quick actions based on auth status
